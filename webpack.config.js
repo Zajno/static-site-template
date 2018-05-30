@@ -3,10 +3,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const wrapPlugins = require('./webpack.wrapPlugins');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MinifyPlugin = require("babel-minify-webpack-plugin");
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
@@ -14,7 +13,7 @@ module.exports = {
         app: './app/js/main.js'
     },
     output: {
-        publicPath: '/',
+        // publicPath: 'dist/',
         path: path.join(__dirname, '/dist'),
         filename: '[name].bundle.js'
     },
@@ -29,9 +28,9 @@ module.exports = {
         rules: [
             {
                 test: /\.html$/,
-                loader: "underscore-template-loader",
+                loader: 'underscore-template-loader',
                 query: {
-                    attributes: ['img:src', 'x-img:src', 'object:data', 'source:src', 'img:data-src', 'source:data-src']
+                    attributes: ['img:src', 'x-img:src', 'object:data', 'source:src', 'img:data-src', 'source:data-src', 'link:href', 'source:srcset']
                 }
             },
             {
@@ -43,7 +42,7 @@ module.exports = {
                 exclude: [/node_modules/, /dist/],
             },
             {
-                test: /\.(png|jpg|gif|webp|svg)$/,
+                test: /\.(png|jpg|gif|webp|svg|ico|webmanifest)$/,
                 use: [{
                     loader: 'file-loader',
                     options: {

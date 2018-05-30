@@ -1,23 +1,41 @@
 # Static Site Template
 
-### Install packages ###
+## Requirements
 
+Node.js >= 8.10
+
+https://nodejs.org/
+
+## Install
+
+Install yarn:
+```
+npm i -g yarn
+```
+Install packages
 ```
 yarn
 ```
-### Run project (development) ###
 
+## Build project
+Output folder: `./dist`
+
+```
+npm run build
+```
+or fully minified and compressed:
+
+```
+npm run build:prod
+```
+
+## Run project
+
+Using webpack dev server
 ```
 npm run dev
 ```
-
-### Build project (dist folder) ###
-
-```javascript
-npm run build
+Or start Node.js that will use `./dist` as root
 ```
-
-Production version - fully minified
-```javascript
-npm run build:prod
+npm start
 ```
