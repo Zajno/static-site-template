@@ -1,6 +1,7 @@
 
 module.exports = {
-	"extends": ["airbnb", "prettier"],
+	"extends": ["airbnb"],
+	"parser": "babel-eslint",
 	"parserOptions": {
 		"ecmaVersion": 8,
 		"sourceType": "module",
@@ -10,7 +11,7 @@ module.exports = {
 			"globalReturn": false
 		}
 	},
-	"plugins": ["react", "prettier", "import"],
+	"plugins": ["react", "import"],
 	"rules": {
 		"camelcase": 2,
 		"indent": ["warn", 4, { "SwitchCase": 1 }],
@@ -38,7 +39,16 @@ module.exports = {
 		"import/no-unresolved": 1,
 		"no-param-reassign": 1,
 		"func-names": 0,
-		"prefer-arrow-callback": 0
+		"prefer-arrow-callback": 0,
+		"no-underscore-dangle": 0,
+		"class-methods-use-this": 1,
+		"no-unused-expressions": 1,
+		"arrow-parens": 0,
+		"nonblock-statement-body-position": 0,
+		"curly": 0,
+		"padded-blocks": 0,
+		"no-multi-spaces": 0,
+		"object-shorthand": 1,
 	},
 	"settings": {
 		"import/resolver": "webpack"

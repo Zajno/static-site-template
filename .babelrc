@@ -1,11 +1,13 @@
 {
     "presets":[
-        "env"
+        ["env", {
+            "targets": {
+                "browsers": ["last 2 versions", "safari >= 7"]
+            }
+        }]
     ],
     "plugins": [
-        [ "transform-runtime", {
-            "polyfill": false,
-            "regenerator": true
-        }]
+        "transform-runtime",
+        "syntax-dynamic-import"
     ]
 }
