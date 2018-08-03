@@ -1,0 +1,2 @@
+
+export const MOBILE_DEVICE_SCREEN_WIDTH = 690;

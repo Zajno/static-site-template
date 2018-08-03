@@ -1,63 +1,43 @@
 import Page from 'core/page';
 
-import initVideos from 'modules/initVideos';
-import stickyHeader from 'modules/stickyHeader';
-import imagesLazyLoad from 'modules/imagesLazyLoad';
-import mobileMenu from 'modules/mobile-menu';
-
-import ensureScripts from 'modules/ensureSripts';
-
 export default class CommonPage extends Page {
 
     _setup() {
         super._setup();
 
-        if (this.enabledImagesLazyLoad) {
-            imagesLazyLoad.doLoad();
+        if (this.enableVideoModals) {
+            videoModals.init();
         }
-
-        if (this.enabledMobileMenu) {
-            mobileMenu.init();
-        }
-
     }
 
-    async _loadModulesAsync() {
-        await super._loadModulesAsync();
+    start() {
+        super.start();
 
-        await ensureScripts.gsapAsync();
+        window.appReady(() => {
+            if (this.enableHeader || this.enabledImagesLazyLoad) {
+                imagesLazyLoad.doLoad();
+            }
+
+            addLoadClass();
+        });
+
+        // logger.log(document.querySelectorAll('input.-webkit-autofill'));
     }
 
     resize(width, height) {
         super.resize(width, height);
 
-        if (this.enabledVideosReplace) {
-            initVideos(width);
-        }
     }
 
     scroll(scrollDirection, scrollPosition) {
         super.scroll(scrollDirection, scrollPosition);
 
-        if (this.enabledStickyHeader) {
-            stickyHeader.update(scrollPosition);
-        }
+        this._header.scroll(scrollDirection, scrollPosition);
     }
 
-    get enabledVideosReplace() {
-        return true;
-    }
+    get enableHeader() { return true; }
 
-    get enabledStickyHeader() {
-        return true;
-    }
+    get enabledImagesLazyLoad() { return true; }
 
-    get enabledImagesLazyLoad() {
-        return true;
-    }
-
-    get enabledMobileMenu() {
-        return true;
-    }
-
+    get enableVideoModals() { return false; }
 }

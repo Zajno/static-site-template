@@ -4,8 +4,8 @@
   "description": "Static website",
   "private": true,
   "engines": {
-    "yarn": ">=1.7.0",
-    "node": ">=8.9"
+    "yarn": "^1.9.0",
+    "node": "^8.9 || ^10.7"
   },
   "scripts": {
     "start": "node index.js",
@@ -18,12 +18,13 @@
     "postinstall": "npm run build:staging:minify"
   },
   "dependencies": {
-    "autoprefixer": "^8.6.5",
+    "autoprefixer": "^9.1.0",
     "babel-runtime": "^6.26.0",
-    "compression": "^1.7.2",
+    "compression": "^1.7.3",
     "express": "^4.16.3",
     "gsap": "^2.0.1",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "reset-css": "^4.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -39,12 +40,12 @@
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
-    "eslint": "^5.1.0",
+    "eslint": "^5.2.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
@@ -52,16 +53,15 @@
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.3.1",
     "node-sass": "^4.9.2",
-    "optimize-css-assets-webpack-plugin": "^4.0.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.0",
     "raw-loader": "^0.5.1",
-    "reset-css": "^4.0.1",
     "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^7.0.3",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.21.0",
     "underscore-template-loader": "^1.0.0",
     "url-loader": "^1.0.1",
-    "webpack": "^4.16.0",
-    "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4"
+    "webpack": "^4.16.4",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }

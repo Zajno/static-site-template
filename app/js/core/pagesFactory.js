@@ -1,31 +1,19 @@
+let theMap = { };
 
-async function getDefaultPage(options) {
-    const module = await import(/* webpackChunkName: "default" */ 'pages/defaultPage');
-    const factory = module.default;
-
-    const type = factory(options);
-    return type;
+function initialize(pagesMap) {
+    theMap = pagesMap;
 }
 
 /** @returns {Promise} */
 async function getPageTypeAsync(pageId) {
 
-    switch (pageId) {
-        case 'HOME': {
-            // const module = await import(/* webpackChunkName: "home" */ 'pages/homePage');
-            // return module.default;
-            const type = await getDefaultPage({
-                sectionsNumber: 1,
-            });
-            return type;
-        }
+    const loader = theMap[pageId];
+    const type = loader && await loader();
 
-        default: {
-            throw new Error('invalid page ID');
-        }
-    }
+    return type;
 }
 
 export default {
+    initialize,
     getPageTypeAsync,
 };

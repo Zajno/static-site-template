@@ -40,3 +40,7 @@ if (typeof Object.assign !== 'function') {
         configurable: true,
     });
 }
+
+if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector;
+}

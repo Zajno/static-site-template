@@ -1,0 +1,6 @@
+<script>
+    let isld = false;
+    let rcb = [];
+    window.onload = function() { isld = true; rcb.forEach(function (cb) { try { cb(); } catch { } }); rcb = null; };
+    window.appReady = function(cb) { if (cb) { if (isld) { cb(); } else rcb.push(cb); } }
+</script>

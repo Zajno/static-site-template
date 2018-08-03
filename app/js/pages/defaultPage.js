@@ -1,20 +1,14 @@
-import ensureScripts from 'modules/ensureSripts';
-
 import Section from 'core/section';
 import CommonPage from './commonPage';
 
 const defaultOptions = {
     sectionsNumber: 1,
 
-    videosReplace: false,
-    stickyHeader: true,
+    header: true,
     imagesLazyLoad: true,
-    mobileMenu: true,
-
-    modules: {
-        bodymovin: false,
-    },
+    videoModals: false,
 };
+
 
 export default function CreateDefaultPage(options) {
     const opts = Object.assign({}, defaultOptions, options);
@@ -33,29 +27,14 @@ export default function CreateDefaultPage(options) {
             return this._sectionTypes;
         }
 
-        async _loadModulesAsync() {
-            await super._loadModulesAsync();
-
-            if (opts.modules.bodymovin) {
-                await ensureScripts.bodymovinAsync();
-            }
-        }
-
-        get enabledVideosReplace() {
-            return opts.videosReplace;
-        }
-
-        get enabledStickyHeader() {
-            return opts.stickyHeader;
-        }
+        get enableHeader() { return opts.header; }
 
         get enabledImagesLazyLoad() {
             return opts.imagesLazyLoad;
         }
 
-        get enabledMobileMenu() {
-            return opts.mobileMenu;
+        get enableVideoModals() {
+            return opts.videoModals;
         }
-
     };
 }

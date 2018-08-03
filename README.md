@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Node.js >= 8.10
+Node.js ^8.10 || ^10.7
 
 https://nodejs.org/
 

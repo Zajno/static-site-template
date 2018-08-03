@@ -17,16 +17,13 @@ export default class Page {
         this._defineSectionHelpersMethods();
     }
 
-    async setupAsync(root) {
+    setupAsync(root) {
         this._root = root;
 
-        await this._loadModulesAsync();
-
-        this._setup();
-    }
-
-    _loadModulesAsync() {
-        return Promise.resolve();
+        return new Promise(resolve => {
+            this._setup();
+            resolve();
+        });
     }
 
     _setup() {
@@ -50,7 +47,7 @@ export default class Page {
                 return;
             }
 
-            const instance = new Type({ element: section });
+            const instance = new Type({ element: section, page: this });
             this._sections.push(instance);
         });
 
@@ -58,6 +55,10 @@ export default class Page {
         // this._activeSection = this._sections[0];
 
         logger.log(`Sections (${this._sections.length}):`, this._sections);
+    }
+
+    start() {
+
     }
 
     /**
@@ -75,16 +76,9 @@ export default class Page {
         this._width = width;
         this._height = height;
 
-        let yPos = 0.0;
-        // console.clear();
-
-        this._sections.forEach((section) => {
-            section.resize(this._width, this._height, yPos);
-            // logger.log(yPos, section.height, section);
-
-            yPos += section.height;
-
-        });
+        for (let i = 0; i < this._sections.length; ++i) {
+            this._sections[i].resize(this._width, this._height);
+        }
     }
 
     _defineSectionHelpersMethods() {
@@ -113,18 +107,17 @@ export default class Page {
         for (let i = 0; i < sectionsNum; i++) {
             /** @type {Section} */
             const section = this._sections[i];
-            const sHeight = section.height;
+            const { rect } = section;
 
-            const top = section.y - this._scrollPosition;
-            const bottom = top + sHeight;
+            const { top, bottom, height } = rect;
 
             const coeffs = section.scrollCoeffs[coeffsDirection];
 
             let show = null;
 
             let showTreshold = this._height * coeffs.show;
-            if (sHeight < showTreshold)
-                showTreshold = sHeight * 0.5;
+            if (height < showTreshold)
+                showTreshold = height * 0.5;
 
             // show if top of next element is in range
             if (getIsShow(top, bottom, showTreshold)) {
@@ -132,8 +125,8 @@ export default class Page {
             }
 
             let hideTreshold = this._height * coeffs.hide;
-            if (sHeight < hideTreshold) {
-                hideTreshold = sHeight * 0.5;
+            if (height < hideTreshold) {
+                hideTreshold = height * 0.5;
             }
 
             if (getIsHide(top, bottom, hideTreshold)) {
@@ -146,6 +139,7 @@ export default class Page {
 
     _updateSectionActivation(show, section) {
         if (show != null) {
+            // logger.log('_updateSectionActivation', show, section);
             if (show) {
                 section.activate(0.0, this._scrollDirection);
             } else {

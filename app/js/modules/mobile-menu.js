@@ -1,5 +1,5 @@
 import jQuery from 'jquery';
-import TweenLite from 'gsap';
+import TweenLite from 'gsap/TweenLite';
 
 const $ = jQuery;
 const easings = {

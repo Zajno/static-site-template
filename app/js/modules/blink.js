@@ -1,5 +1,4 @@
-export default ({ el, delay = 0.0, count, interval, on, off, final }) =>
-{
+export default ({ el, delay = 0.0, count, interval, on, off, final }) => {
     let toggle = false;
 
     if (el.clearBlink)
@@ -25,7 +24,7 @@ export default ({ el, delay = 0.0, count, interval, on, off, final }) =>
         }, interval * 1000.0);
     }, delay * 1000.0);
 
-    el.clearBlink = ( opacity ) => {
+    el.clearBlink = (opacity) => {
 
         clearTimeout(el.blinkDelay);
         clearInterval(el.blink);

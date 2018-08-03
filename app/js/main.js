@@ -1,38 +1,41 @@
-import '../sass/main.sass';
+import '../styles/main.sass';
 
 import 'polyfills';
+import logger from 'logger';
 
+import './pages';
 import App from 'core/app';
 
 const _app = new App();
 
-_app.setupAsync();
-
-
-// WINDOW ----------------------------------------------------------------------
-
-const _resize = () => {
+function _resize()  {
     _app.resize();
-};
+}
 
-const _scroll = () => {
+function _scroll() {
     _app.scroll();
-};
+}
 
-// SETUP -----------------------------------------------------------------------
+function _update() {
+    _app.update();
+    window.requestAnimationFrame(_update);
+}
 
-window.onload = () => {
-
+function _initialize() {
     window.onresize = _resize;
     window.onscroll = _scroll;
 
-    // window.requestAnimationFrame(_update);
+    logger.log('[MAIN] Initialize');
+
     _app.start();
-};
+    // window.appReady(() => {
+    //     logger.log('[MAIN] Ready');
 
-// UPDATE ----------------------------------------------------------------------
+        // disabled - not needed for now
+        // window.requestAnimationFrame(_update);
+    // });
+}
 
-const _update = () => {
-    _app.update();
-    window.requestAnimationFrame(_update);
-};
+_app.setupAsync()
+    .then(_initialize)
+    .catch(err => console.error('[MAIN] Failed initialize APP:', err));

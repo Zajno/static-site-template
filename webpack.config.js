@@ -13,6 +13,7 @@ module.exports = env => {
 
     const noClear = env.noclear !== undefined;
     const fullMinify = !!env.fullminify;
+    const isProd = process.env.NODE_ENV === 'production';
 
     const PUBLIC_PATH_OVERRIDE = (env.public_path_override) || '';
     console.log('PUBLIC_PATH_OVERRIDE =', PUBLIC_PATH_OVERRIDE || '<undefined>');
@@ -58,9 +59,6 @@ module.exports = env => {
         },
         resolve: {
             modules: [path.resolve('./app/js'), 'node_modules'],
-        },
-        externals: {
-            jquery: 'jQuery',
         },
         module: {
             rules: [

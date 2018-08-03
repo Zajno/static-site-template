@@ -1,0 +1,151 @@
+@import '~reset-css/reset.css'
+@import './common/all.sass'
+
+*
+    box-sizing: border-box
+
+html, body
+    width: 100%
+    background: $color-body
+
+body,
+main
+    overflow-x: hidden
+
+body
+    display: flex
+    flex-direction: column
+    font-family: $main-font
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    text-rendering: optimizeLegibility
+    background: $color-body
+    min-height: 100vh
+    &.mobile-menu-open
+        overflow: hidden
+    &.modal-active
+        overflow: hidden
+
+main
+    position: relative
+    width: 100%
+    flex: 1 0 auto
+
+.footer
+    width: 100%
+    flex: 0 0 auto
+
+a
+    text-decoration: none
+    outline: none
+    transition: all 0.3s
+
+img
+    max-width: 100%
+    height: auto
+
+section
+    position: relative
+    background-repeat: no-repeat
+    background-position: center
+    background-size: cover
+    visibility: hidden
+
+.fluid-container
+    width: 100%
+    position: relative
+
+.container
+    position: relative
+    width: $container-md-width
+    min-width: $container-md-width
+    margin: 0 auto
+
+.row
+    display: flex
+    flex-direction: row
+
+.row-reverse
+    display: flex
+    flex-direction: row-reverse
+
+.column
+    display: flex
+    flex-direction: column
+
+.column-reverse
+    display: flex
+    flex-direction: column-reverse
+
+.s-visible,
+.xs-visible,
+.xxs-visible
+    display: none
+
+.lazy
+    opacity: 0
+    transition: opacity 0.4s ease
+    &Loaded
+         opacity: 1
+
+input
+    &::-webkit-input-placeholder,
+    &::placeholder
+        transition: all .3s
+    &:focus
+        &::-webkit-input-placeholder,
+        &::placeholder
+            color: transparent
+
+button[type='submit']
+    cursor: pointer
+
+@media only screen and (min-width : 1800px)
+
+    .container
+        width: $container-lg-width
+        min-width: $container-lg-width
+
+@media only screen and (max-width : 1024px)
+
+    .container
+        width: $container-tablet-width
+        min-width: $container-tablet-width
+
+    .s-hidden
+        display: none
+
+    .s-visible
+        display: block
+
+@media only screen and (max-width : 850px)
+
+    .container
+        width: $container-sm-width
+        min-width: $container-sm-width
+
+    .xs-hidden
+        display: none
+
+    .xs-visible
+        display: block
+
+@media only screen and (max-width : 690px)
+
+    body
+        &.modal-active
+            position: fixed
+
+
+    .container
+        width: $container-xs-width
+        min-width: $container-xs-width
+        padding: 0 30px
+
+    .xxs-visible
+        display: block
+
+    .xxs-hidden
+        display: none
+
+@import './pages/all.sass'
