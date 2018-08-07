@@ -18,7 +18,6 @@
     "postinstall": "npm run build:staging:minify"
   },
   "dependencies": {
-    "autoprefixer": "^9.1.0",
     "babel-runtime": "^6.26.0",
     "compression": "^1.7.3",
     "express": "^4.16.3",
@@ -27,6 +26,7 @@
     "reset-css": "^4.0.1"
   },
   "devDependencies": {
+    "autoprefixer": "^9.1.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
@@ -54,6 +54,7 @@
     "image-webpack-loader": "^4.3.1",
     "node-sass": "^4.9.2",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
+    "postcss-loader": "^2.1.6",
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^7.1.0",
