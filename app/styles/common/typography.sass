@@ -1,0 +1,52 @@
+
+@import './variables'
+
+@mixin typography($color, $font-family, $font-size, $font-weight,$letter-spacing:0, $line-height: normal)
+    color: $color
+    font-family: $font-family
+    font-size: $font-size
+    font-weight: $font-weight
+    letter-spacing: $letter-spacing
+    line-height: $line-height
+
+@mixin mixed-lbl($args...)
+    @include typography($args...)
+
+// // section title
+@mixin title
+    @include mixed-lbl($color-black, $main-font, $font-size-title, $font-weight-4, $letter-spacing-title, $line-height-title)
+
+
+html, body, div, span,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, small, strong, ul, li, form, label,
+article, footer, header, nav, section
+    &.center-text
+        text-align: center
+
+    &.left-text
+        text-align: left
+
+    &.right-text
+        text-align: right
+
+    &.cap-text
+        text-transform: capitalize
+
+    &.up-text
+        text-transform: uppercase
+
+    &.title
+        @include title
+
+// @media only screen and (max-width: 1080px)
+
+//     html, body, div, span,
+//     h1, h2, h3, h4, h5, h6, p, blockquote,
+//     a, small, strong, ul, li, form, label,
+//     article, footer, header, nav, section
+
+//         &.title
+//            font-size: 6.583rem
+//            line-height: 8.513rem
+//            letter-spacing: -0.064rem
