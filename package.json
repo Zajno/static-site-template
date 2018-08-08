@@ -1,10 +1,10 @@
 {
   "name": "static-website-template",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Static website",
   "private": true,
   "engines": {
-    "yarn": "^1.9.0",
+    "yarn": "^1.9",
     "node": "^8.9 || ^10.7"
   },
   "scripts": {
@@ -41,7 +41,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
-    "eslint": "^5.2.0",
+    "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.10.1",
@@ -60,10 +60,10 @@
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.22.1",
     "underscore-template-loader": "^1.0.0",
     "url-loader": "^1.0.1",
-    "webpack": "^4.16.4",
+    "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   }

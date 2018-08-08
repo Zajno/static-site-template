@@ -1,6 +1,4 @@
-<script>
-    let isld = false;
-    let rcb = [];
-    window.onload = function() { isld = true; rcb.forEach(function (cb) { try { cb(); } catch { } }); rcb = null; };
-    window.appReady = function(cb) { if (cb) { if (isld) { cb(); } else rcb.push(cb); } }
+<!-- window.appReady event -->
+<script id="window.appReady">
+    'use strict';var ild=!1,cbs=[],w=window;w.addEventListener('load',function(){ild=!0,cbs.forEach(function(a){try{a()}catch(b){}}),cbs=null}),w.appReady=function(a){a&&(ild?a():cbs.push(a))};
 </script>
