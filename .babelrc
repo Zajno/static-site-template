@@ -1,10 +1,7 @@
 {
     "presets":[
-        ["env", {
-            "targets": {
-                "browsers": ["last 2 versions", "safari >= 7"]
-            }
-        }]
+        "env",
+        "stage-2"
     ],
     "plugins": [
         "transform-runtime",

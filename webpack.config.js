@@ -86,10 +86,9 @@ module.exports = env => {
 
                 {
                     test: /\.js$/,
-                    use: [{
+                    use: {
                         loader: 'babel-loader',
-                        options: { presets: ['env', 'react'] },
-                    }],
+                    },
                     exclude: [/node_modules/, /dist/],
                 },
                 {
@@ -141,7 +140,7 @@ module.exports = env => {
                     use: ExtractTextPlugin.extract({
                         fallback: 'style-loader',
                         // resolve-url-loader may be chained before sass-loader if necessary
-                        use: ['css-loader', 'sass-loader', 'postcss-loader'],
+                        use: ['css-loader', 'postcss-loader', 'sass-loader'],
                     }),
                 },
             ],

@@ -31,8 +31,6 @@ export default class CommonPage extends Page {
 
     scroll(scrollDirection, scrollPosition) {
         super.scroll(scrollDirection, scrollPosition);
-
-        this._header.scroll(scrollDirection, scrollPosition);
     }
 
     get enableHeader() { return true; }
