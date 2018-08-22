@@ -1,19 +1,15 @@
 // import logger from 'logger';
 
-// core
-import Component from 'core/component';
-
-// libs
 import bodymovin from 'bodymovin';
 import TweenLite from 'gsap/TweenLite';
 
+import LazyLoadComponent from 'components/lazy/lazyLoadComponent';
 
-export default class BodymovinIcon extends Component {
+export default class BodymovinIcon extends LazyLoadComponent {
 
     // SETUP -------------------------------------------------------------------
 
     _setup(config) {
-        this._el = config.el;
 
         this._bodymovinParams = {
             container: this._el,
@@ -32,12 +28,19 @@ export default class BodymovinIcon extends Component {
 
         // this._checkAnimationLoaded();
         TweenLite.set(this._el, { alpha: 0.0, force3D: true });
+
+        if (config.register == null) {
+            config.register = true;
+        }
+
+        super._setup(config);
     }
 
-    _checkAnimationLoaded() {
-        if (this._animBodymovin) {
-            return;
-        }
+    get priority() {
+        return this._priority || 3;
+    }
+
+    _doLoading() {
 
         this._animBodymovin = bodymovin.loadAnimation(this._bodymovinParams);
 
@@ -46,7 +49,12 @@ export default class BodymovinIcon extends Component {
             this._isComplete = true;
         });
 
-        if (!this._animBodymovin.isLoaded) {
+        if (this._animBodymovin.isLoaded) {
+            this._isLoaded = true;
+            return Promise.resolve();
+        }
+
+        return new Promise(resolve => {
             this._animBodymovin.addEventListener('DOMLoaded', () => {
                 // logger.log('[BodymovinIcon] DOMLoaded', this);
 
@@ -59,10 +67,10 @@ export default class BodymovinIcon extends Component {
                         this._animBodymovin.play();
                     }, 500);
                 }
+
+                resolve();
             });
-        } else {
-            this._isLoaded = true;
-        }
+        });
     }
 
     _playBodymovin() {
@@ -81,10 +89,9 @@ export default class BodymovinIcon extends Component {
     // STATE -------------------------------------------------------------------
 
     _activate(delay, direction) {
-        this._checkAnimationLoaded();
-
         TweenLite.killTweensOf(this._el);
 
+        // TODO tweak me
         TweenLite.fromTo(this._el, 0.75, { alpha: 0.0 }, { alpha: 1.0, ease: 'Sine.easeInOut', delay: delay });
         TweenLite.fromTo(this._el, 2.56, { scale: 0.84 }, { scale: 1.0, force3D: true, ease: 'Sine.easeOut', delay: delay });
 
@@ -96,6 +103,7 @@ export default class BodymovinIcon extends Component {
     _deactivate(delay, direction) {
         TweenLite.killTweensOf(this._el);
 
+        // TODO tweak me
         TweenLite.to(this._el, 0.62, { alpha: 0.0, ease: 'Sine.easeInOut', delay: delay });
         TweenLite.to(this._el, 0.56, { scale: 0.76, force3D: true, ease: 'Cubic.easeIn', delay: delay });
 
