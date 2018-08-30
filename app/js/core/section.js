@@ -42,6 +42,9 @@ export default class Section extends Component {
     resize(width, height) {
     }
 
+    scroll(scrollPosition, scrollDirection) {
+    }
+
     // ACCESSORS ---------------------------------------------------------------
 
     get animateOnSetup() { return true; }

@@ -137,11 +137,16 @@ export default class Page {
         }
     }
 
+    /**
+     * @param {boolean=} show
+     * @param {Section} section
+     */
     _updateSectionActivation(show, section) {
         if (show != null) {
             // logger.log('_updateSectionActivation', show, section);
             if (show) {
                 section.activate(0.0, this._scrollDirection);
+                section.scroll(this._scrollPosition, this._scrollDirection);
             } else {
                 section.deactivate(0.0, this._scrollDirection);
             }
