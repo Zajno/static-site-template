@@ -9,6 +9,20 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     };
 }
 
+// NodeList.map
+if (window.NodeList && !NodeList.prototype.map) {
+    NodeList.prototype.map = function (callback, thisArg) {
+        thisArg = thisArg || window;
+        const result = new Array(this.length);
+        for (let i = 0; i < this.length; i++) {
+            const item = callback.call(thisArg, this[i], i, this);
+            result[i] = item;
+        }
+
+        return result;
+    };
+}
+
 // Object.assign for IE
 if (typeof Object.assign !== 'function') {
     // Must be writable: true, enumerable: false, configurable: true
