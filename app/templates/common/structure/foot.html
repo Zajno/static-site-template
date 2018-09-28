@@ -1,5 +1,15 @@
 
-<!-- include additional scripts here -->
+    <!-- include additional scripts here BEFORE app scripts will run -->
+
+    <%=
+        // Application JS files
+        htmlWebpackPlugin.files.js.map(src =>
+        `
+    <script type="text/javascript" src="${src}"></script>`
+      ).join("\n")
+    %>
+
+    <!-- include additional scripts here AFTER app scripts will run -->
 
 </body>
 

@@ -48,6 +48,7 @@ module.exports = env => {
                     cache: false,
                     template: path.resolve(__dirname, `${templateDir}/${item}`),
                     minify: minifyOptions,
+                    inject: false,
                 });
             })
             .filter(p => p);

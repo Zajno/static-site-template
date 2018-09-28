@@ -35,6 +35,14 @@
 
 	@require('../scripts/window.appReady.html')
 
+	<%=
+        // Application CSS files
+        htmlWebpackPlugin.files.css.map(src =>
+		`
+	<link href="${src}" rel="stylesheet">`
+      ).join("\n")
+    %>
+
 </head>
 
 <body>
