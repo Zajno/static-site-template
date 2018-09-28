@@ -10,12 +10,12 @@
   "scripts": {
     "start": "node index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear",
-    "build": "npm run build:staging",
-    "build:staging": "webpack --display-error-details --mode development",
-    "build:staging:minify": "npm run build:staging -- --env.fullminify",
+    "build": "webpack --display-error-details --mode development",
+    "build:minify": "npm run build -- --env.fullminify",
     "build:prod": "webpack --display-error-details --mode production",
     "build:prod:minify": "npm run build:prod -- --env.fullminify",
-    "postinstall": "npm run build:staging:minify"
+    "build:prod:minify:env": "cross-env NODE_ENV=production npm run build:prod:minify",
+    "postinstall": "npm run build:prod:minify"
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",

@@ -15,8 +15,13 @@ module.exports = env => {
     const fullMinify = !!env.fullminify;
     const isProd = process.env.NODE_ENV === 'production';
 
-    const PUBLIC_PATH_OVERRIDE = (env.public_path_override) || '';
-    console.log('PUBLIC_PATH_OVERRIDE =', PUBLIC_PATH_OVERRIDE || '<undefined>');
+    const PUBLIC_PATH_OVERRIDE = env.public_path_override || '';
+    console.log('Webpack config options:', {
+        PUBLIC_PATH_OVERRIDE,
+        noClear,
+        fullMinify,
+        isProd,
+    });
 
     function generateHtmlPlugins(templateDir = './app/templates/') {
         const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
@@ -55,10 +60,14 @@ module.exports = env => {
         output: {
             publicPath: PUBLIC_PATH_OVERRIDE || '/',
             path: path.join(__dirname, '/dist'),
-            filename: '[name].bundle.js',
+            filename: isProd ? '[hash:6].js' : '[name].js',
+            chunkFilename: isProd ? '[chunkhash:6].[id].js' : '[name].[id].js',
         },
         resolve: {
             modules: [path.resolve('./app/js'), 'node_modules'],
+            alias: {
+                app: path.resolve(__dirname, 'app/'),
+            },
         },
         module: {
             rules: [
@@ -168,7 +177,7 @@ module.exports = env => {
             ...generateHtmlPlugins(),
 
             new ExtractTextPlugin({
-                filename: getPath => getPath('[name].css'),
+                filename: getPath => getPath(isProd ? '[hash:6].css' : '[name].css'),
                 disable: false,
                 allChunks: true,
             }),
