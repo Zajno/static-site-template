@@ -23,7 +23,7 @@ module.exports = env => {
         isProd,
     });
 
-    function generateHtmlPlugins(templateDir = './app/templates/') {
+    function generateHtmlPlugins(templateDir = './app/html/') {
         const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
         const minifyOptions = fullMinify
             && {
