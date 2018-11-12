@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 
 // NodeList.forEach for IE
 if (window.NodeList && !NodeList.prototype.forEach) {

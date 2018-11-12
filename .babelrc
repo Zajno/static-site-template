@@ -1,9 +1,16 @@
 {
     "presets":[
-        "env",
-        "stage-2"
+        ["@babel/preset-env", {
+            "useBuiltIns": "entry",
+            "targets": {
+                "chrome": "58",
+                "ie": "11"
+            }
+        }],
     ],
     "plugins": [
-        "transform-runtime"
+        "@babel/plugin-syntax-dynamic-import",
+        ["@babel/plugin-syntax-decorators", { "decoratorsBeforeExport": false }],
+        "@babel/plugin-proposal-class-properties",
     ]
 }
