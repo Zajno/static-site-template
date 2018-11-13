@@ -1,29 +1,10 @@
+import { ConsoleLogger } from './utils/logger';
 
-function log(...args) {
-    if (process.env.NODE_ENV === 'production') {
-        return;
-    }
+/** @typedef {(import './utils/logger').LoggerInterface} LoggerInterface */
 
-    console.log(...args);
-}
+const isProd = process.env.NODE_ENV === 'production';
 
-function warn(...args) {
-    if (process.env.NODE_ENV === 'production') {
-        return;
-    }
+/** @type {LoggerInterface} */
+const theLogger = new ConsoleLogger('', !isProd);
 
-    console.warn(...args);
-}
-
-function error(...args) {
-    if (process.env.NODE_ENV === 'production') {
-        return;
-    }
-
-    console.error(...args);
-}
-export default {
-    log,
-    warn,
-    error,
-}
+export default theLogger;
