@@ -4,7 +4,10 @@
       "target": "ES6",
       "baseUrl": ".",
       "paths": {
-        "*": ["./app/js/*"]
+        "*": ["./app/js/*"],
+        "app": ["./app/js/*"],
+        "assets": ["./app/assets/*"],
+        "styles": ["./app/styles/*"],
       }
     },
     "exclude": [

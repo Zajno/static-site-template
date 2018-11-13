@@ -1,12 +1,12 @@
 const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const fs = require('fs');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const wrapPlugins = require('./webpack.wrapPlugins');
+const helpers = require('./webpack.helpers');
+
+// eslint-disable-next-line prefer-destructuring
+const pathResolve = helpers.pathResolve;
 
 module.exports = env => {
     env = env || {};
@@ -15,59 +15,35 @@ module.exports = env => {
     const fullMinify = !!env.fullminify;
     const isProd = process.env.NODE_ENV === 'production';
 
-    const PUBLIC_PATH_OVERRIDE = env.public_path_override || '';
+    const publicPath = env.public_path_override || '/';
+    const outputPath = pathResolve('./dist');
+
     console.log('Webpack config options:', {
-        PUBLIC_PATH_OVERRIDE,
+        publicPath,
+        outputPath,
         noClear,
         fullMinify,
         isProd,
     });
 
-    function generateHtmlPlugins(templateDir = './app/html/') {
-        const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
-        const minifyOptions = fullMinify
-            && {
-                removeAttributeQuotes: true,
-                collapseWhitespace: false,
-                html5: true,
-                minifyCSS: true,
-                removeComments: true,
-                removeEmptyAttributes: true,
-            };
-
-        return templateFiles
-            .map(item => {
-                const parts = item.split('.');
-
-                if (parts.pop() !== 'html')
-                    return null;
-                const name = parts.join().toLowerCase();
-
-                return new HtmlWebPackPlugin({
-                    filename: name === 'index' ? item : `${name}/index.html`,
-                    cache: false,
-                    template: path.resolve(__dirname, `${templateDir}/${item}`),
-                    minify: minifyOptions,
-                    inject: false,
-                });
-            })
-            .filter(p => p);
-    }
+    const htmlBuilder = new helpers.HtmlBuilder(fullMinify);
 
     return {
         entry: {
             app: './app/js/main.js',
         },
         output: {
-            publicPath: PUBLIC_PATH_OVERRIDE || '/',
-            path: path.join(__dirname, '/dist'),
+            publicPath: publicPath,
+            path: outputPath,
             filename: isProd ? '[hash:6].js' : '[name].js',
             chunkFilename: isProd ? '[chunkhash:6].[id].js' : '[name].[id].js',
         },
         resolve: {
-            modules: [path.resolve('./app/js'), 'node_modules'],
+            modules: [pathResolve('./app/js'), 'node_modules'],
             alias: {
-                app: path.resolve(__dirname, 'app/'),
+                app: pathResolve('./app/js/'),
+                assets: pathResolve('./app/assets/'),
+                styles: pathResolve('./app/styles/'),
             },
         },
         module: {
@@ -111,7 +87,6 @@ module.exports = env => {
                                 outputPath: 'assets/img',
                             },
                         },
-                        // , 'image-webpack-loader'
                     ],
                 },
                 {
@@ -155,10 +130,10 @@ module.exports = env => {
                 },
             ],
         },
-        plugins: wrapPlugins([
+        plugins: helpers.wrapPlugins([
             {
                 name: 'clean',
-                plugin: new CleanWebpackPlugin([path.resolve(__dirname, './dist')], { allowExternal: true }),
+                plugin: new CleanWebpackPlugin([outputPath], { allowExternal: true }),
                 enabled: !noClear,
             },
 
@@ -169,13 +144,13 @@ module.exports = env => {
                             process.env.NODE_ENV || 'development',
                         ),
                         PUBLIC_PATH_OVERRIDE: JSON.stringify(
-                            PUBLIC_PATH_OVERRIDE,
+                            publicPath,
                         ),
                     },
                 },
             }),
 
-            ...generateHtmlPlugins(),
+            ...htmlBuilder.generateHtmlPlugins(),
 
             new ExtractTextPlugin({
                 filename: getPath => getPath(isProd ? '[hash:6].css' : '[name].css'),
@@ -196,7 +171,7 @@ module.exports = env => {
             },
         ]),
         devServer: {
-            contentBase: path.join(__dirname, '/dist'),
+            contentBase: outputPath,
             compress: true,
             port: 8080,
             staticOptions: {
