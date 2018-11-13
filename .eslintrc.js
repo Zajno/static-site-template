@@ -49,6 +49,7 @@ module.exports = {
 		"padded-blocks": 0,
 		"no-multi-spaces": 0,
 		"object-shorthand": 1,
+		"max-len": ["error", { "comments": 150 }],
 	},
 	"settings": {
 		"import/resolver": "webpack"

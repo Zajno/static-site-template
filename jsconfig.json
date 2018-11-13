@@ -5,9 +5,9 @@
       "baseUrl": ".",
       "paths": {
         "*": ["./app/js/*"],
-        "app": ["./app/js/*"],
-        "assets": ["./app/assets/*"],
-        "styles": ["./app/styles/*"],
+        "app/*": ["./app/js/*"],
+        "assets/*": ["./app/assets/*"],
+        "styles/*": ["./app/styles/*"],
       }
     },
     "exclude": [

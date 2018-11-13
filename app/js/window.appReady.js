@@ -5,6 +5,7 @@
 let ild = false;
 let cbs = [];
 const w = window;
+const ercbs = [];
 
 w.addEventListener('load', function () {
     ild = true;
@@ -12,7 +13,7 @@ w.addEventListener('load', function () {
         try {
             cb();
         } catch (err) {
-            // no-op
+            ercbs.forEach(c => c(err));
         }
     });
     cbs = null;
@@ -27,3 +28,10 @@ w.appReady = function (cb) {
         }
     }
 };
+
+w.appReady.addErrorHandler = function (cb) {
+    ercbs.push(cb);
+};
+
+// require this module for fallback purposes;
+// if the code above was not added to the head, it can be imported in JS entry for preventing app from crashing

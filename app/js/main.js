@@ -6,6 +6,15 @@ import '../styles/main.sass';
 import './pages';
 import App from 'core/app';
 
+if (!window.appReady) {
+    logger.error('[MAIN] window.appReady is not set up. Will be used fallback version, but proper functioning not guranteed.');
+    require('./window.appReady');
+}
+
+window.appReady.addErrorHandler(err => {
+    logger.error('[MAIN][AppReady] ERROR:', err);
+});
+
 const _app = new App();
 
 function _resize()  {
@@ -28,6 +37,7 @@ function _initialize() {
     logger.log('[MAIN] Initialize');
 
     _app.start();
+
     // window.appReady(() => {
     //     logger.log('[MAIN] Ready');
 
@@ -35,6 +45,7 @@ function _initialize() {
         // window.requestAnimationFrame(_update);
     // });
 }
+
 
 _app.setupAsync()
     .then(_initialize)

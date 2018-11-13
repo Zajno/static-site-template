@@ -1,41 +1,27 @@
-import Page from 'core/page';
+import logger from 'logger';
+import Page from 'app/core/page';
+import LazyLoading from 'app/components/lazy';
 
 export default class CommonPage extends Page {
 
     _setup() {
         super._setup();
-
-        if (this.enableVideoModals) {
-            videoModals.init();
-        }
     }
 
     start() {
         super.start();
 
         window.appReady(() => {
-            if (this.enableHeader || this.enabledImagesLazyLoad) {
-                imagesLazyLoad.doLoad();
-            }
-
-            addLoadClass();
+            // add some logic on page loaded here
         });
-
-        // logger.log(document.querySelectorAll('input.-webkit-autofill'));
     }
 
-    resize(width, height) {
-        super.resize(width, height);
+    // resize(width, height) {
+    //     super.resize(width, height);
+    // }
 
-    }
+    // scroll(scrollDirection, scrollPosition) {
+    //     super.scroll(scrollDirection, scrollPosition);
+    // }
 
-    scroll(scrollDirection, scrollPosition) {
-        super.scroll(scrollDirection, scrollPosition);
-    }
-
-    get enableHeader() { return true; }
-
-    get enabledImagesLazyLoad() { return true; }
-
-    get enableVideoModals() { return false; }
 }

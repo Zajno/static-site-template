@@ -1,4 +1,4 @@
 <!-- window.appReady event -->
 <script id="window.appReady">
-    'use strict';var ild=!1,cbs=[],w=window;w.addEventListener('load',function(){ild=!0,cbs.forEach(function(a){try{a()}catch(b){}}),cbs=null}),w.appReady=function(a){a&&(ild?a():cbs.push(a))};
+    'use strict';var ild=!1,cbs=[],w=window,ercbs=[];w.addEventListener('load',function(){ild=!0,cbs.forEach(function(a){try{a()}catch(b){ercbs.forEach(function(d){return d(b)})}}),cbs=null}),w.appReady=function(a){a&&(ild?a():cbs.push(a))},w.appReady.addErrorHandler=function(a){ercbs.push(a)};
 </script>
