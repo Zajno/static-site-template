@@ -15,7 +15,7 @@ const Home = {
     title: 'Home',
     description: 'Home description',
     cannonical: hostname,
-    templateName: 'app/html/index.html',
+    templateName: 'app/html/index.ejs',
     image: hostname + '',
     sections: {
         Hero: {

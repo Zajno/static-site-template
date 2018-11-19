@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%
+	const page = htmlWebpackPlugin.options && htmlWebpackPlugin.options.page;
+	const title = (page && page.title) || 'Title';
+	const description = (page && page.description) || 'Description';
+%>
+
 <head>
 
 	<meta charset="utf-8">
 
-	<title>Static Site Template</title>
+	<title><%= title %></title>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<meta name="description" content="The description of the site.">
+	<meta name="description" content="<%= description %>">
 	<meta property="og:description" content="">
 
 	<!-- Open Graph -->
 	<!--<meta property="og:type" content="website">
 	<meta property=“og:url” content=“website url“>
-	<meta property="og:site_name" content="website name">
-	<meta property="og:title" content="website title">
-	<meta property="og:description" content="website description">
+	<meta property="og:site_name" content="<%= title %>">
+	<meta property="og:title" content="<%= title %>">
+	<meta property="og:description" content="<%= description %>">
 	<meta property="og:image" content="og-image">
 	<meta property="og:image:width" content="image width">
 	<meta property="og:image:height" content="image height">
@@ -26,8 +32,8 @@
 	<!--<meta name="twitter:card" content="summary">
 	<meta name="twitter:image" content="og-image">
 	<meta name="twitter:site" content="@twitter account">
-	<meta name="twitter:title" content="website title">
-	<meta name="twitter:description" content="website description">
+	<meta name="twitter:title" content="<%= title %>">
+	<meta name="twitter:description" content="<%= description %>">
 	-->
 
 	<!-- Fonts -->

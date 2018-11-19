@@ -55,7 +55,7 @@ module.exports = env => {
                     loader: 'raw-loader',
                 },
                 {
-                    test: /\.html$/,
+                    test: /\.(html|ejs)$/,
                     loader: 'underscore-template-loader',
                     query: {
                         attributes: [
