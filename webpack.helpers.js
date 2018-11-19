@@ -30,13 +30,14 @@ class HtmlBuilder {
     }
 
     /** @returns {HtmlWebPackPlugin} */
-    createHtmlPlugin(outputName, templatePath) {
+    createHtmlPlugin(outputName, templatePath, options = {}) {
         return new HtmlWebPackPlugin({
             filename: outputName,
             cache: false,
             template: templatePath,
             minify: this.htmlMinifyOptions,
             inject: false,
+            ...options,
         });
     }
 

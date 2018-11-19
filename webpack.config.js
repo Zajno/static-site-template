@@ -5,6 +5,8 @@ const MinifyPlugin = require('babel-minify-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const helpers = require('./webpack.helpers');
 
+const sitemapData = require('./app/sitemap');
+
 // eslint-disable-next-line prefer-destructuring
 const pathResolve = helpers.pathResolve;
 
@@ -150,7 +152,7 @@ module.exports = env => {
                 },
             }),
 
-            ...htmlBuilder.generateHtmlPlugins(),
+            ...sitemapData.pagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, { page: p })),
 
             new ExtractTextPlugin({
                 filename: getPath => getPath(isProd ? '[hash:6].css' : '[name].css'),

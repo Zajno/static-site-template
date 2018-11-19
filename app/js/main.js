@@ -1,8 +1,6 @@
 import 'polyfills';
 import logger from 'logger';
 
-import '../styles/main.sass';
-
 import './pages';
 import App from 'core/app';
 

@@ -1,3 +1,5 @@
+import 'styles/home.sass';
+
 import CommonPage from 'pages/commonPage';
 import Section from 'core/section';
 
