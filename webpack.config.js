@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -124,11 +124,11 @@ module.exports = env => {
                 },
                 {
                     test: /\.css$|\.sass$|\.scss$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        // resolve-url-loader may be chained before sass-loader if necessary
-                        use: ['css-loader', 'postcss-loader', 'sass-loader'],
-                    }),
+
+                    use: [
+                        isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+                        'css-loader', 'postcss-loader', 'sass-loader',
+                    ],
                 },
             ],
         },
@@ -154,10 +154,9 @@ module.exports = env => {
 
             ...sitemapData.pagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, { page: p })),
 
-            new ExtractTextPlugin({
-                filename: getPath => getPath(isProd ? '[hash:6].css' : '[name].css'),
-                disable: false,
-                allChunks: true,
+            new MiniCssExtractPlugin({
+                filename: isProd ? '[name].[hash:6].css' : '[name].css',
+                chunkFilename: isProd ? '[hash:6].[id].css' : '[name].[id].css',
             }),
 
             {
