@@ -8,21 +8,19 @@
     "node": "^8.9 || ^10.7"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node server/index.js",
     "dev": "webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear",
     "build": "webpack --display-error-details --mode development",
     "build:minify": "npm run build -- --env.fullminify",
     "build:prod": "webpack --display-error-details --mode production",
     "build:prod:minify": "npm run build:prod -- --env.fullminify",
     "build:prod:minify:env": "cross-env NODE_ENV=production npm run build:prod:minify",
-    "postinstall": "npm run build:prod:minify"
+    "postinstall": "npm run build:prod:minify && cd server && yarn"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "bodymovin": "^4.13.0",
-    "compression": "^1.7.3",
     "detect-browser": "^3.0.0",
-    "express": "^4.16.3",
     "gsap": "^2.0.1",
     "jquery": "^3.3.1",
     "reset-css": "^4.0.1"

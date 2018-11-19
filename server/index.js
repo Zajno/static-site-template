@@ -1,13 +1,16 @@
 const express = require('express');
 const compression = require('compression');
+const path = require('path');
 
 const app = express();
+
+const THE_PATH = path.resolve(__dirname, '../dist');
 
 app.set('port', (process.env.PORT || 5000));
 
 app.use(compression());
 
-app.use(express.static('dist', {
+app.use(express.static(THE_PATH, {
     etag: true,
     extensions: [
         'html',
