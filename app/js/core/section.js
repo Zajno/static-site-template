@@ -9,10 +9,6 @@ export default class Section extends Component {
     // SETUP -------------------------------------------------------------------
 
     _setup(config) {
-        // DOM
-
-        /** @type {HTMLElement} */
-        this._el = config.element;
         /** @type {Page} */
         this._page = config.page;
 
@@ -30,7 +26,10 @@ export default class Section extends Component {
 
         // setup
 
-        this._el.style.visibility = 'visible';
+        if (this._el && this._el.style) {
+            this._el.style.visibility = 'visible';
+        }
+
         this._setupSection(config);
     }
 

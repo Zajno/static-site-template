@@ -47,7 +47,7 @@ export default class Page {
                 return;
             }
 
-            const instance = new Type({ element: section, page: this });
+            const instance = new Type({ el: section, page: this });
             this._sections.push(instance);
         });
 
