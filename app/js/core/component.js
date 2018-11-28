@@ -20,25 +20,28 @@ export default class Component {
     // STATE -------------------------------------------------------------------
 
     activate(delay = 0.0, direction = 1.0) {
-        if (this._active)
-            return;
+        if (this._active) {
+            return true;
+        }
 
         this._active = true;
         if (this.logActivation) {
             logger.log('Activating:', this);
         }
-        this._activate(delay, direction);
+
+        return this._activate(delay, direction);
     }
 
     deactivate(delay = 0.0, direction = 1.0) {
         if (!this._active)
-            return;
+            return true;
 
         this._active = false;
         if (this.logActivation) {
             logger.log('Deactivating:', this);
         }
-        this._deactivate(delay, direction);
+
+        return this._deactivate(delay, direction);
     }
 
     /* abstract -- override in sub class to activate / deactivate component */
