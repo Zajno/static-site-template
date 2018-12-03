@@ -14,6 +14,8 @@ export default class Component {
         this._setup(config);
     }
 
+    get isActive() { return this._active; }
+
     /* abstract -- override in sub class to set up component */
     _setup(config) {}
 

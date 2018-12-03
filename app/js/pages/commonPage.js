@@ -1,3 +1,5 @@
+import 'styles/base.sass';
+
 import logger from 'logger';
 import Page from 'app/core/page';
 import LazyLoading from 'app/components/lazy';

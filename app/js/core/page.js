@@ -15,6 +15,7 @@ export default class Page {
         this._height = 0;
 
         this._defineSectionHelpersMethods();
+
     }
 
     setupAsync(root) {
@@ -37,6 +38,8 @@ export default class Page {
         throw new Error('abstract');
     }
 
+    _getSectionOptions(index, type, el) { return {}; }
+
     _setupSections(sections) {
         this._sections = [];
         const types = this.sectionTypes;
@@ -47,7 +50,7 @@ export default class Page {
                 return;
             }
 
-            const instance = new Type({ el: section, page: this });
+            const instance = new Type({ el: section, page: this, ...this._getSectionOptions(i, Type, section) });
             this._sections.push(instance);
         });
 
@@ -70,6 +73,15 @@ export default class Page {
         this._scrollPosition = scrollPosition;
 
         this._updateSections();
+    }
+
+    /**
+     * @param {number} deltaY
+     * @param {string} wheelDirection
+     */
+    wheel(deltaY, wheelDirection) {
+        this._deltaY = deltaY;
+        this._wheelDirection = wheelDirection;
     }
 
     resize(width, height) {
@@ -143,7 +155,6 @@ export default class Page {
      */
     _updateSectionActivation(show, section) {
         if (show != null) {
-            // logger.log('_updateSectionActivation', show, section);
             if (show) {
                 section.activate(0.0, this._scrollDirection);
                 section.scroll(this._scrollPosition, this._scrollDirection);

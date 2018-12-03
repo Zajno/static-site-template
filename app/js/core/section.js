@@ -44,6 +44,9 @@ export default class Section extends Component {
     scroll(scrollPosition, scrollDirection) {
     }
 
+    wheel(deltaY, wheelDirection) {
+    }
+
     // ACCESSORS ---------------------------------------------------------------
 
     get animateOnSetup() { return true; }

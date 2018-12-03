@@ -16,7 +16,12 @@ function span(text, classes = []) {
     return `<span class="${classes.join(' ')}" >${text}</span>`;
 }
 
+function p(text, classes = []) {
+    return `<p class="desc-1 ${classes.join(' ')}" >${text}</p>`;
+}
+
 module.exports = {
     a,
     span,
+    p,
 };

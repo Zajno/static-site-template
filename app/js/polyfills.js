@@ -59,3 +59,8 @@ if (typeof Object.assign !== 'function') {
 if (!Element.prototype.matches) {
     Element.prototype.matches = Element.prototype.msMatchesSelector;
 }
+
+// NodeList.indexOf
+if (window.NodeList && !NodeList.prototype.indexOf) {
+    NodeList.prototype.indexOf = Array.prototype.indexOf;
+}

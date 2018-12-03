@@ -28,22 +28,20 @@ function _update() {
     window.requestAnimationFrame(_update);
 }
 
+function _mouseWheel(e) {
+    _app.wheel(e);
+}
+
 function _initialize() {
     window.onresize = _resize;
     window.onscroll = _scroll;
 
+    document.addEventListener('wheel', _mouseWheel);
+
     logger.log('[MAIN] Initialize');
 
     _app.start();
-
-    // window.appReady(() => {
-    //     logger.log('[MAIN] Ready');
-
-        // disabled - not needed for now
-        // window.requestAnimationFrame(_update);
-    // });
 }
-
 
 _app.setupAsync()
     .then(_initialize)

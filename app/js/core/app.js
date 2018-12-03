@@ -28,6 +28,7 @@ export default class App {
         this._width = 0.0;
         this._height = 0.0;
         this._centerY = 0.0;
+        this._deltaY = 0.0;
 
         this._scrollPosition = 0.0;
         this._scrollDirection = -1.0;
@@ -70,7 +71,7 @@ export default class App {
     scroll() {
         const scrollPosition = window.pageYOffset;
 
-        if (this._scrollPosition == scrollPosition) {
+        if (this._scrollPosition === scrollPosition) {
             this._scrollDirection = 0.0;
         } else {
             this._scrollDirection = scrollPosition > this._scrollPosition
@@ -80,6 +81,13 @@ export default class App {
         this._scrollPosition = scrollPosition;
 
         this._page.scroll(this._scrollDirection, this._scrollPosition);
+    }
+
+    wheel(e) {
+        this._deltaY = e.deltaY ? e.deltaY : e.originalEvent && e.originalEvent.detail;
+        this._wheelDirection = this._deltaY > 0 ? 'down' : 'up';
+
+        this._page.wheel(this._deltaY, this._wheelDirection);
     }
 
     // STATE -------------------------------------------------------------------
