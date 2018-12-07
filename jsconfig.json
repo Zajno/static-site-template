@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
       "module": "commonjs",
+      "checkJs": true,
+      "experimentalDecorators": true,
       "target": "ES6",
       "baseUrl": ".",
       "paths": {

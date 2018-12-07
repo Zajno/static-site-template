@@ -2,7 +2,7 @@ import 'styles/base.sass';
 
 import logger from 'logger';
 import Page from 'app/core/page';
-import LazyLoading from 'app/components/lazy';
+import Breakpoints from 'app/appBreakpoints';
 
 export default class CommonPage extends Page {
 
@@ -18,9 +18,11 @@ export default class CommonPage extends Page {
         });
     }
 
-    // resize(width, height) {
-    //     super.resize(width, height);
-    // }
+    resize(width, height) {
+        Breakpoints.resize(width, height)
+
+        super.resize(width, height);
+    }
 
     // scroll(scrollDirection, scrollPosition) {
     //     super.scroll(scrollDirection, scrollPosition);

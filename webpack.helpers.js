@@ -64,7 +64,7 @@ class HtmlBuilder {
 }
 
 /**
- * @param {{name:string,plugin:Plugin,allowedEnv:string,enabled:boolean}[]} plugins
+ * @param {({name:string,plugin:Plugin,allowedEnv:string,enabled:boolean}|Plugin)[]} plugins
  * @returns {Plugin[]}
  */
 function wrapPlugins(plugins) {

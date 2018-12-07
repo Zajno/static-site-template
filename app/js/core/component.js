@@ -6,7 +6,7 @@ export default class Component {
 
     constructor(config) {
         // state
-        this._active  = false;
+        this._active = false;
         /** @type {HTMLElement} */
         this._el = config.el;
 

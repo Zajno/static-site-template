@@ -34,6 +34,10 @@ export default class App {
         this._scrollDirection = -1.0;
     }
 
+    get width() { return this._width; }
+
+    get height() { return this._height; }
+
     async setupAsync() {
         // store main div
         this._root = document.getElementById('main');
@@ -44,6 +48,7 @@ export default class App {
         // store page ID
         this._pageID = (this._root.dataset.pageId || '').toUpperCase();
 
+        logger.log('[APP] Loading Page ID =', this._pageID);
         const PageType = await PagesFactory.getPageTypeAsync(this._pageID);
         if (!PageType) {
             throw new Error(`[APP] Faied to initialize page. ID = ${this._pageID}`);
@@ -53,7 +58,7 @@ export default class App {
         this._page = new PageType(this._pageID);
         await this._page.setupAsync(this._root);
 
-        logger.log('[APP] Page ID =', this._pageID, this._page);
+        logger.log('[APP] Page setup completed ID =', this._pageID, this._page);
     }
 
     // WINDOW ------------------------------------------------------------------
@@ -93,8 +98,8 @@ export default class App {
     // STATE -------------------------------------------------------------------
 
     start() {
-        this._page.start();
         this.resize();
+        this._page.start();
     }
 
     // UPDATE ------------------------------------------------------------------

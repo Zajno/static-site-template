@@ -2,7 +2,7 @@
 import Component from 'core/component';
 
 /** @typedef {{show:number,hide:number}} ScrollCoeffs */
-/** @typedef {(import "core/page").default} Page */
+/** @typedef {(import ("core/page").default)} Page */
 
 export default class Section extends Component {
 

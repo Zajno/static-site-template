@@ -10,7 +10,7 @@
     ],
     "plugins": [
         "@babel/plugin-syntax-dynamic-import",
-        ["@babel/plugin-syntax-decorators", { "decoratorsBeforeExport": false }],
-        "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose": true }],
     ]
 }
