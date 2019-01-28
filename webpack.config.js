@@ -80,7 +80,7 @@ module.exports = env => {
                     exclude: [/node_modules/, /dist/],
                 },
                 {
-                    test: /\.(png|jpg|gif|webp|svg|ico|webmanifest)$/,
+                    test: /\.(png|jpg|gif|webp|svg|ico)$/,
                     use: [
                         {
                             loader: 'file-loader',
@@ -112,8 +112,8 @@ module.exports = env => {
                     }],
                 },
                 {
-                    type: 'javascript/auto',
                     test: /\.json$/,
+                    type: 'javascript/auto',
                     use: [{
                         loader: 'file-loader',
                         options: {
@@ -124,11 +124,24 @@ module.exports = env => {
                 },
                 {
                     test: /\.css$|\.sass$|\.scss$/,
-
                     use: [
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader', 'postcss-loader', 'sass-loader',
                     ],
+                },
+                {
+                    test: /\.glsl$/,
+                    use: 'raw-loader',
+                },
+                {
+                    test: /browserconfig\.xml$|\.webmanifest/,
+                    use: [{
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'assets',
+                        },
+                    }],
                 },
             ],
         },
@@ -144,6 +157,9 @@ module.exports = env => {
                     env: {
                         NODE_ENV: JSON.stringify(
                             process.env.NODE_ENV || 'development',
+                        ),
+                        HOSTNAME: JSON.stringify(
+                            process.env.HOSTNAME || 'http://localhost',
                         ),
                         PUBLIC_PATH_OVERRIDE: JSON.stringify(
                             publicPath,

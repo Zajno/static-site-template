@@ -5,6 +5,7 @@ const path = require('path');
 const app = express();
 
 const THE_PATH = path.resolve(__dirname, '../dist');
+const MAX_AGE = process.env.CONTENT_MAX_AGE || '24h';
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -16,7 +17,7 @@ app.use(express.static(THE_PATH, {
         'html',
     ],
     immutable: true,
-    maxAge: '24h',
+    maxAge: MAX_AGE,
 }));
 
 app.use((req, res) => {

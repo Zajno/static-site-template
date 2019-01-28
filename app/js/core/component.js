@@ -3,7 +3,7 @@ import logger from 'logger';
 export default class Component {
 
     // SETUP -------------------------------------------------------------------
-
+    /** @param {{el:HTMLElement}} config */
     constructor(config) {
         // state
         this._active = false;
@@ -14,9 +14,12 @@ export default class Component {
         this._setup(config);
     }
 
+    get element() { return this._el; }
+
     get isActive() { return this._active; }
 
     /* abstract -- override in sub class to set up component */
+    /** @param {{el:HTMLElement}} config */
     _setup(config) {}
 
     // STATE -------------------------------------------------------------------

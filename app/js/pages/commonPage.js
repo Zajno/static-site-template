@@ -19,7 +19,7 @@ export default class CommonPage extends Page {
     }
 
     resize(width, height) {
-        Breakpoints.resize(width, height)
+        Breakpoints.resize(width, height);
 
         super.resize(width, height);
     }
