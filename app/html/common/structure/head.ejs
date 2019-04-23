@@ -49,7 +49,15 @@
 	<link href="${src}" rel="stylesheet">`
       ).join("\n")
     %>
-
+	<style>
+		html{
+			--css-variable-test: 1;
+		}
+		#css-variable-test{
+			display: none;
+			opacity: var(--css-variable-test);
+		}
+	</style>
 </head>
 
 <body>

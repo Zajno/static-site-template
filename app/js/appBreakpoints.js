@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import Breakpoints from 'app/core/breakpoints';
 
-/** @typedef {(import 'app/core/breakpoints').Breakpoint} BreakpointBase */
+/** @typedef {(import ('app/core/breakpoints').Breakpoint)} BreakpointBase */
 
 /** @typedef {BreakpointBase} AppBreakpoint */
 
@@ -42,5 +42,9 @@ export default observable.object({
         _internal.height = height;
 
         Breakpoints.resize(width, height);
+    },
+
+    isActive(...breakpointsIds) {
+        return breakpointsIds.indexOf(this.Current.breakpoint.id) >= 0;
     },
 });

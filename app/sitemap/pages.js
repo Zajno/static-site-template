@@ -1,6 +1,9 @@
 
-/** @typedef {Object} SitePage
+/**
+ * @typedef {Object} SitePage
  * @property {string} id
+ * @property {string} pathName
+ * @property {string=} fileName
  * @property {string} title
  * @property {string} description
  * @property {string} cannonical
@@ -11,9 +14,9 @@ const hostname = process.env.HOST || process.env.HOSTNAME || 'http://localhost';
 
 const Home = {
     id: 'home',
-    fileName: 'index',
-    title: 'Home',
-    description: 'Home description',
+    pathName: 'index.html',
+    title: 'Zajno | Digital Design Agency',
+    description: 'Full-service digital design and development agency specializing in UX/UI design, crafting thought-out personalized experiences for web and mobile.',
     cannonical: hostname,
     templateName: 'app/html/index.ejs',
     image: hostname + '',

@@ -1,4 +1,5 @@
 import 'polyfills';
+import 'app/utils/checkBrowserSupport';
 import logger from 'logger';
 
 import './pages';

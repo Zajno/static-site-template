@@ -158,7 +158,7 @@ export default class Page {
             if (show) {
                 section.activate(0.0, this._scrollDirection);
                 section.scroll(this._scrollPosition, this._scrollDirection);
-            } else {
+            } else if (section._active) {
                 section.deactivate(0.0, this._scrollDirection);
             }
         }

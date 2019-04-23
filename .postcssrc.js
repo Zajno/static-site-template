@@ -1,9 +1,14 @@
+const postcssPresetEnv = require('postcss-preset-env');
 
 module.exports = {
   // parser: 'sugarss',
   map: false,
   plugins: [
     require('autoprefixer'),
-    require('postcss-preset-env'),
+    postcssPresetEnv({
+      features: {
+        'custom-properties': false,
+      }
+    }),
   ],
 };

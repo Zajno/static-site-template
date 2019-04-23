@@ -13,18 +13,22 @@ const defaultOptions = {
 export default function CreateDefaultPage(options) {
     const opts = Object.assign({}, defaultOptions, options);
 
+    const _sectionTypes = [];
+
+    for (let i = 0; i < opts.sectionsNumber; ++i) {
+        _sectionTypes.push(Section);
+    }
+
     return class DefaultPage extends CommonPage {
+        static SectionTypes = _sectionTypes;
+
         _setup() {
-            this._sectionTypes = [];
-            for (let i = 0; i < opts.sectionsNumber; ++i) {
-                this._sectionTypes.push(Section);
-            }
 
             super._setup();
         }
 
         get sectionTypes() {
-            return this._sectionTypes;
+            return DefaultPage.SectionTypes;
         }
 
         get enableHeader() { return opts.header; }

@@ -1,11 +1,19 @@
-import logger from 'logger';
 import { detect }  from 'detect-browser';
 
-export const browser = detect();
+/** @typedef {(import ('detect-browser').BrowserInfo)} BrowserInfo  */
 
-export default function DetectBrowser() {
+const browser = detect();
 
-    const version = browser.version.split('.', 1);
-    document.getElementById('main').classList.add(`browser-${browser.name}`);
-    document.getElementById('main').classList.add(`browser-version-${version}`);
+function ApplyNameAndVersion() {
+
+    if (browser) {
+        const version = browser.version.split('.', 1);
+        document.getElementById('main').classList.add('browser-' + browser.name);
+        document.getElementById('main').classList.add('browser-version-' + version);
+        return true;
+    }
+
+    return false;
 }
+
+export { browser, ApplyNameAndVersion };

@@ -1,0 +1,57 @@
+@import './gem.scss'
+
+main, header
+    opacity: 1
+
+.section-ie
+    visibility: visible
+    display: flex
+    align-items: center
+    z-index: initial
+    height: 100vh
+    .container
+        display: flex
+        flex-direction: column
+        align-items: center
+        margin-top: gem(-2)
+    .ie__text-block
+        text-align: center
+        margin-top: gem(-38)
+    .ie__text-block__title
+        margin-bottom: gem(65)
+    .ie__text-block__subtitle
+        margin-bottom: gem(48)
+    .ie-browsers
+        display: flex
+        justify-content: space-between
+        width: gem(560)
+        margin: 0 auto
+    .ie-browsers__item
+        .ie-browsers__item__image,
+        .ie-browsers__item__text
+            transition: all .3s ease
+        &:first-child
+            .ie-browsers__item__image
+                width: gem(63)
+                height: gem(63)
+    .ie-browsers__item__link
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: space-between
+        height: gem(91)
+        &:hover
+            .ie-browsers__item__image
+                transform: scale(1.2)
+            .ie-browsers__item__text
+                color: var(--color-mona-lisa)
+                line-height: gem(80)
+    .ie-browsers__item__image
+        width: gem(60)
+        height: gem(60)
+
+@media only screen and (max-width: 768px)
+
+    body.one-page-scroll
+        .section-ie
+            position: absolute

@@ -3,175 +3,28 @@
 import Component from 'core/component';
 import logger from 'logger';
 
+import { TabItem, HtmlTabItem } from './tabsComponent.tab';
+import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
+
 /** @callback DelayedOperation
+ * @param {number} direction
  * @returns {Promise|void}
  */
 
-/** @typedef {Object} TabItem
- * @property {string} tabId
- * @property {DelayedOperation} activate
- * @property {DelayedOperation} deactivate
- */
-
-/** @param {HTMLElement} item
- * @returns {TabItem} */
-function createHtmlTabItem(item, activateClass) {
-    return {
-        _original: item,
-        get tabId() { return this._original.dataset.navId; },
-        activate() {
-            this._original.classList.add(activateClass);
-            if (this._original.tabHooks && this._original.tabHooks.activate) {
-                this._original.tabHooks.activate();
-            }
-        },
-        deactivate() {
-            this._original.classList.remove(activateClass);
-            if (this._original.tabHooks && this._original.tabHooks.deactivate) {
-                this._original.tabHooks.deactivate();
-            }
-        },
-    };
-}
-
-export class TabLinkItem extends Component {
-    _setup(config) {
-        super._setup(config);
-
-        /** @type {TabItem[]} */
-        this._tabs = [];
-    }
-
-    /** @returns {string} */
-    get targetId() { throw new Error('not implemented'); }
-
-    get tabs() { return this._tabs; }
-
-    get item() { return this._el; }
-
-    /** @param {(link:TabLinkItem) => void} cb */
-    setActivateCallback(cb) {
-        this._activateCallback = cb;
-        return this;
-    }
-
-    setActivationChain(enabled) {
-        this._chainActivation = enabled;
-        return this;
-    }
-
-    init() {
-        return this;
-    }
-
-    _requestActivate() {
-        if (this._activateCallback) {
-            this._activateCallback(this);
-        }
-    }
-
-    _activate() {
-        if (this._chainActivation) {
-            let res = Promise.resolve(this._activateSelf());
-            this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.activate()));
-            });
-            return res;
-        }
-
-        this._tabs.forEach(t => t.activate());
-        this._activateSelf();
-        return true;
-    }
-
-    _activateSelf() {
-        if (this._el.linkHooks && this._el.linkHooks.onActivate) {
-            this._el.linkHooks.onActivate(this);
-        }
-    }
-
-    _deactivate() {
-        if (this._chainActivation) {
-            let res = Promise.resolve(this._deactivateSelf());
-            this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.deactivate()));
-            });
-            return res;
-        }
-
-        this._tabs.forEach(t => t.deactivate());
-        this._deactivateSelf();
-        return null;
-    }
-
-    _deactivateSelf() {
-        if (this._el.linkHooks && this._el.linkHooks.onDeactivate) {
-            this._el.linkHooks.onDeactivate(this);
-        }
-    }
-
-    /** @param {TabItem} tab */
-    registerTab(tab) {
-        this._tabs.push(tab);
-    }
-}
-
-export class HtmlTabLinkItem extends TabLinkItem {
-    /** @param {HTMLElement} item */
-    constructor(item, activeClass = 'active', clickEnabled = true) {
-        super({ el: item, activeClass, clickEnabled });
-    }
-
-    /** @param {{activeClass:string,clickEnabled:boolean}} config */
-    _setup(config) {
-        super._setup(config);
-
-        const { activeClass, clickEnabled } = config;
-
-        this._activeClass = activeClass;
-        this._clickEnabled = clickEnabled;
-
-        this._el.addEventListener('click', this._onClick.bind(this));
-    }
-
-    init() {
-        if (this._el.classList.contains(this._activeClass)) {
-            this.activate();
-        }
-        return super.init();
-    }
-
-    get targetId() { return this._el.dataset.navTarget; }
-
-    _onClick(e) {
-        e.preventDefault();
-        if (this._clickEnabled) {
-            this._requestActivate();
-        }
-    }
-
-    _activateSelf() {
-        this._el.classList.add(this._activeClass);
-        super._activateSelf();
-    }
-
-    _deactivateSelf() {
-        this._el.classList.remove(this._activeClass);
-        super._deactivateSelf();
-    }
-}
-
 /** @typedef {Object} TabsComponentConfig
+ * @property {HTMLElement} el
  * @property {TabItem[]} tabItems
  * @property {HTMLElement[]=} tabs
  * @property {TabLinkItem[]} linkItems
  * @property {HTMLElement[]=} links
  * @property {string=} linkActiveClass
  * @property {string=} tabActiveClass
- * @property {(prev:TabLinkItem,next:TabLinkItem) => void} onChanged
- * @property {(prev:TabLinkItem,next:TabLinkItem) => void} onChanging
+ * @property {(prev:TabLinkItem,next:TabLinkItem,direction:number) => void} onChanged
+ * @property {(prev:TabLinkItem,next:TabLinkItem,direction:Number) => void} onChanging
+ * @property {(prev:TabLinkItem,next:TabLinkItem,direction:Number) => void} onWillChange
  * @property {boolean=} syncActivate
  * @property {boolean=} clicksEnabled
+ * @property {boolean=} hoversEnabled
  */
 
 export default class TabsComponent extends Component {
@@ -183,28 +36,31 @@ export default class TabsComponent extends Component {
 
     /** @param {TabsComponentConfig} config */
     _setup(config) {
+        logger.log(config, '__config')
         /** @type {string} */
         this._linkActiveClass = config.linkActiveClass || 'active';
         this._tabActiveClass = config.tabActiveClass || 'active';
 
         /** @type {TabItem[]} */
         this._tabs = config.tabItems
-            || (config.tabs || []).map(t => createHtmlTabItem(t, this._tabActiveClass));
+            || (config.tabs || []).map(t => new HtmlTabItem({ el: t, activateClass: this._tabActiveClass }));
 
         /** @type {TabLinkItem[]} */
         this._links = config.linkItems
-            || (config.links || []).map(l => new HtmlTabLinkItem(l, config.linkActiveClass, config.clicksEnabled));
+            || (config.links || []).map(l => new HtmlTabLinkItem(l, config.linkActiveClass, config.clicksEnabled, config.hoversEnabled));
 
         /** @type {TabLinkItem} */
         this._currentActiveLink = null;
         this._currentActiveIndex = -1;
         this._isSwitching = false;
 
+        this._onLinkWillChange = config.onWillChange || (() => {});
         this._onLinkChanged = config.onChanged || (() => {});
         this._onLinkChanging = config.onChanging || (() => {});
         this._async = !config.syncActivate;
 
         this._clicksEnabled = config.clicksEnabled;
+        this._hoversEnabled = config.hoversEnabled;
 
         this._links.forEach((link, index) => {
             const targetID = link.targetId;
@@ -251,38 +107,50 @@ export default class TabsComponent extends Component {
         const prev = this._currentActiveLink;
         const next = link;
         const nextIndex = this._links.indexOf(link);
+        const prevIndex = this._links.indexOf(prev);
+
+        const direction = Math.sign(nextIndex - prevIndex);
+
+        const cbs = {
+            before: () => this._onLinkWillChange(prev, next, direction),
+            inside: () => this._onLinkChanging(prev, next, direction),
+            after: () => this._onLinkChanged(prev, next, direction),
+        };
 
         this._currentActiveLink = next;
         this._currentActiveIndex = nextIndex;
 
         if (this._async) {
+            cbs.before();
             if (prev) {
-                prev.deactivate();
+                prev.deactivate(direction);
             }
-            this._onLinkChanging(prev, next);
-            next.activate();
-            this._onLinkChanged(prev, next);
+            cbs.inside();
+            next.activate(direction);
+            cbs.after();
             this._isSwitching = false;
             return null;
         }
 
         return new Promise((resolve, reject) => {
             if (prev) {
-                return Promise.resolve(prev.deactivate())
-                    .then(() => this._onLinkChanging(prev, next))
-                    .then(() => next.activate())
+                cbs.before();
+                return Promise.resolve(prev.deactivate(direction))
+                    .then(cbs.inside)
+                    .then(() => next.activate(direction))
                     .then(() => {
                         this._isSwitching = false;
-                        this._onLinkChanged(prev, next);
+                        cbs.after();
                     })
                     .then(resolve)
                     .catch(reject);
             }
 
-            this._onLinkChanging(prev, next);
-            return Promise.resolve(next.activate())
+            cbs.before();
+            cbs.inside();
+            return Promise.resolve(next.activate(direction))
                 .then(() => {
-                    this._onLinkChanged(prev, next);
+                    cbs.after();
                     this._isSwitching = false;
                 });
         });
@@ -290,6 +158,7 @@ export default class TabsComponent extends Component {
 
     next(loop = true) {
         let nextIndex = this._currentActiveIndex + 1;
+
         if (nextIndex >= this._links.length) {
             nextIndex = loop ? 0 : this._links.length - 1;
         }
@@ -298,6 +167,7 @@ export default class TabsComponent extends Component {
 
     prev(loop = true) {
         let nextIndex = this._currentActiveIndex - 1;
+
         if (nextIndex < 0) {
             nextIndex = loop ? this._links.length - 1 : 0;
         }

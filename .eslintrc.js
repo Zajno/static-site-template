@@ -50,6 +50,10 @@ module.exports = {
 		"no-multi-spaces": 0,
 		"object-shorthand": 1,
 		"max-len": [1, { "comments": 150 }, {"code": 100}],
+		"object-curly-newline": ["error", {
+			"ObjectPattern": { "multiline": true },
+		}],
+		"import/prefer-default-export": 1,
 	},
 	"settings": {
 		"import/resolver": "webpack"

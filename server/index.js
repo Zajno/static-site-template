@@ -1,6 +1,7 @@
 const express = require('express');
 const compression = require('compression');
 const path = require('path');
+const httpsRedirect = require('./https');
 
 const app = express();
 
@@ -9,6 +10,7 @@ const MAX_AGE = process.env.CONTENT_MAX_AGE || '24h';
 
 app.set('port', (process.env.PORT || 5000));
 
+app.use(httpsRedirect);
 app.use(compression());
 
 app.use(express.static(THE_PATH, {

@@ -1,4 +1,4 @@
-export default ({ el, delay = 0.0, count, interval, on, off, final }) => {
+export default ({ el, delay = 0.0, count, interval, on, off, final, onComplete }) => {
     let toggle = false;
 
     if (el.clearBlink)
@@ -15,6 +15,9 @@ export default ({ el, delay = 0.0, count, interval, on, off, final }) => {
                 el.style.opacity = final;
                 clearInterval(el.blink);
 
+                if (onComplete) {
+                    onComplete();
+                }
             } else {
 
                 el.style.opacity = (toggle) ? on : off;

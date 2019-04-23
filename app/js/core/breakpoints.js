@@ -73,9 +73,12 @@ export default observable.object({
 
         const rem = calcRem(width, height, bp);
 
-        logger.log('Current breakpoint:', bp, '; rem =', rem);
+        logger.log('Current breakpoint:', `[${width}x${height}]`, bp, '; rem =', rem);
 
-        _internal.currentBreakpoint = bp;
+        if (!_internal.currentBreakpoint || _internal.currentBreakpoint.id !== bp.id) {
+            _internal.currentBreakpoint = bp;
+        }
+
         _internal.currentRem = rem;
     },
 });

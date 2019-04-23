@@ -16,6 +16,7 @@ module.exports = env => {
     const noClear = env.noclear !== undefined;
     const fullMinify = !!env.fullminify;
     const isProd = process.env.NODE_ENV === 'production';
+    const hmr = env.hmr !== undefined;
 
     const publicPath = env.public_path_override || '/';
     const outputPath = pathResolve('./dist');
@@ -125,7 +126,10 @@ module.exports = env => {
                 {
                     test: /\.css$|\.sass$|\.scss$/,
                     use: [
-                        isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: { hmr },
+                        },
                         'css-loader', 'postcss-loader', 'sass-loader',
                     ],
                 },
@@ -148,7 +152,7 @@ module.exports = env => {
         plugins: helpers.wrapPlugins([
             {
                 name: 'clean',
-                plugin: new CleanWebpackPlugin([outputPath], { allowExternal: true }),
+                plugin: new CleanWebpackPlugin(),
                 enabled: !noClear,
             },
 

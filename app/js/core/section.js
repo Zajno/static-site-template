@@ -42,6 +42,10 @@ export default class Section extends Component {
     }
 
     scroll(scrollPosition, scrollDirection) {
+        const rect = this.rect;
+        const totalHeight = this._page._height + rect.height;
+        const yPos = totalHeight - rect.bottom;
+        this.scrollCoef = yPos / totalHeight;
     }
 
     wheel(deltaY, wheelDirection) {

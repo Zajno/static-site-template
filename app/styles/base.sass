@@ -1,5 +1,6 @@
 @import '~reset-css/reset.css'
 @import './common/index.sass'
+@import './common/gem.scss'
 
 *
     box-sizing: border-box
@@ -14,7 +15,7 @@ main
 body
     display: flex
     flex-direction: column
-    font-family: $main-font
+    font-family: var(--main-font)
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
     text-rendering: optimizeLegibility
@@ -53,8 +54,8 @@ section
 
 .container
     position: relative
-    width: $container-md-width
-    min-width: $container-md-width
+    width: var(--container-width)
+    min-width: var(--container-width)
     margin: 0 auto
 
 .row
@@ -96,17 +97,7 @@ input
 button[type='submit']
     cursor: pointer
 
-@media only screen and (min-width : 1800px)
-
-    .container
-        width: $container-lg-width
-        min-width: $container-lg-width
-
 @media only screen and (max-width : 1024px)
-
-    .container
-        width: $container-tablet-width
-        min-width: $container-tablet-width
 
     .s-hidden
         display: none
@@ -115,10 +106,6 @@ button[type='submit']
         display: block
 
 @media only screen and (max-width : 850px)
-
-    .container
-        width: $container-sm-width
-        min-width: $container-sm-width
 
     .xs-hidden
         display: none
@@ -132,11 +119,6 @@ button[type='submit']
         &.modal-active
             position: fixed
 
-
-    .container
-        width: $container-xs-width
-        min-width: $container-xs-width
-        padding: 0 30px
 
     .xxs-visible
         display: block
