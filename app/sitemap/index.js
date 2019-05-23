@@ -1,16 +1,19 @@
 const pages = require('./pages');
 
+/** @typedef {pages.SitePage} SitePage */
+
 const hostname = process.env.HOST ||  process.env.HOSTNAME || 'http://localhost';
 
+/** @type {(SitePage & { output: string })[]} */
 const pagesFlatten = [];
 
 pages.forEach(page => {
     let path;
 
-    if (page.pathName) {
-        path = page.pathName;
+    if (page.outputFileName) {
+        path = page.outputFileName;
     } else {
-        path = `${page.fileName || page.id}/index.html`;
+        path = `${page.id}/index.html`;
     }
 
     pagesFlatten.push({

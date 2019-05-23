@@ -1,6 +1,8 @@
-import pagesFactory from 'core/pagesFactory';
+import * as pagesFactory from 'core/pagesFactory';
 
 import commonBundle from './pages.bundle.common';
+
+/** @typedef {pagesFactory.PagesMap} PagesMap */
 
 async function getPagesBundle1() {
     const module = await import(/* webpackChunkName: "pages1" */ './pages.bundle1');
@@ -12,6 +14,7 @@ function getDefaultPage(options) {
     return Promise.resolve(commonBundle.CreateDefaultPage(options));
 }
 
+/** @type {PagesMap} */
 const pages = {
     HOME: async () => (await getPagesBundle1()).homePage,
 };

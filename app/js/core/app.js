@@ -2,7 +2,7 @@ import logger from 'logger';
 
 // core
 // import Pages from 'core/pages';
-import PagesFactory from 'core/pagesFactory';
+import * as PagesFactory from 'core/pagesFactory';
 
 /**
  * @typedef {import('core/section').default} Section

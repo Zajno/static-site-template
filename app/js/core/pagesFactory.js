@@ -1,10 +1,17 @@
+
+/** @typedef {import('core/page').default} Page */
+
+/** @typedef {new (id: string) => Page} PageType */
+/** @typedef {{ [pageId: string]: (() => Promise<PageType>) }} PagesMap */
+
+/** @type {PagesMap} */
 let theMap = { };
 
+/** @arg {PagesMap} pagesMap */
 function initialize(pagesMap) {
     theMap = pagesMap;
 }
 
-/** @returns {Promise} */
 async function getPageTypeAsync(pageId) {
 
     const loader = theMap[pageId];
@@ -13,7 +20,7 @@ async function getPageTypeAsync(pageId) {
     return type;
 }
 
-export default {
+export {
     initialize,
     getPageTypeAsync,
 };
