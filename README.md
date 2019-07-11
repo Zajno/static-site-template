@@ -2,40 +2,48 @@
 
 ## Requirements
 
-Node.js ^8.10 || ^10.7
+Node.js ^10 || 12^
 
 https://nodejs.org/
 
 ## Install
 
 Install yarn:
-```
+
+```bash
 npm i -g yarn
 ```
+
 Install packages
-```
+
+```bash
 yarn
 ```
 
 ## Build project
+
 Output folder: `./dist`
 
+```bash
+yarn build
 ```
-npm run build
-```
+
 or fully minified and compressed:
 
-```
-npm run build:prod
+```bash
+yarn build:prod:minify:env
 ```
 
 ## Run project
 
 Using webpack dev server
+
+```bash
+yarn dev
 ```
-npm run dev
-```
+
 Or start Node.js that will use `./dist` as root
-```
-npm start
+
+```bash
+yarn start
 ```
