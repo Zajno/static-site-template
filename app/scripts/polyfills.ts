@@ -1,8 +1,19 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+declare global {
+    interface NodeList {
+        map<T>(callbackfn: (value: Node, key: number, parent: NodeList) => T, thisArg?: any): T[];
+        indexOf(searchElement: Node, fromIndex?: number): number;
+    }
+
+    interface Element {
+        msMatchesSelector?(selectors: string): boolean;
+    }
+}
+
 // NodeList.forEach for IE
-if (window.NodeList && !NodeList.prototype.forEach) {
+if (window.NodeList && !window.NodeList.prototype.forEach) {
     NodeList.prototype.forEach = function (callback, thisArg) {
         thisArg = thisArg || window;
         for (let i = 0; i < this.length; i++) {
@@ -12,8 +23,8 @@ if (window.NodeList && !NodeList.prototype.forEach) {
 }
 
 // NodeList.map
-if (window.NodeList && !NodeList.prototype.map) {
-    NodeList.prototype.map = function (callback, thisArg) {
+if (window.NodeList && !window.NodeList.prototype.map) {
+    NodeList.prototype.map = function (this: NodeList, callback, thisArg) {
         thisArg = thisArg || window;
         const result = new Array(this.length);
         for (let i = 0; i < this.length; i++) {
@@ -62,6 +73,6 @@ if (!Element.prototype.matches) {
 }
 
 // NodeList.indexOf
-if (window.NodeList && !NodeList.prototype.indexOf) {
+if (window.NodeList && !window.NodeList.prototype.indexOf) {
     NodeList.prototype.indexOf = Array.prototype.indexOf;
 }

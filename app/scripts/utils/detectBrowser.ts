@@ -1,7 +1,5 @@
 import { detect }  from 'detect-browser';
 
-/** @typedef {(import ('detect-browser').BrowserInfo)} BrowserInfo  */
-
 const browser = detect();
 
 function ApplyNameAndVersion() {

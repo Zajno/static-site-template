@@ -1,16 +1,16 @@
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MinifyPlugin = require('babel-minify-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const helpers = require('./webpack.helpers');
+import webpack from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+// import MinifyPlugin from 'babel-minify-webpack-plugin';
+import * as helpers from './webpack.helpers';
+import tsNameof from 'ts-nameof';
 
-const sitemapData = require('./app/sitemap');
+import * as sitemapData from './app/sitemap';
 
-// eslint-disable-next-line prefer-destructuring
 const pathResolve = helpers.pathResolve;
 
-module.exports = env => {
+const siteConfig = (env: any): webpack.Configuration => {
     env = env || {};
 
     const noClear = env.noclear !== undefined;
@@ -32,8 +32,9 @@ module.exports = env => {
     const htmlBuilder = new helpers.HtmlBuilder(fullMinify);
 
     return {
+        devtool: isProd ? undefined : 'inline-source-map',
         entry: {
-            app: './app/js/main.js',
+            app: './app/scripts/main.ts',
         },
         output: {
             publicPath: publicPath,
@@ -42,9 +43,10 @@ module.exports = env => {
             chunkFilename: isProd ? '[chunkhash:6].[id].js' : '[name].[id].js',
         },
         resolve: {
-            modules: [pathResolve('./app/js'), 'node_modules'],
+            extensions: ['.ts', '.tsx', '.svg', '.png', '.js', '.jsx', '.ejs', '.json', '.html', '.sass'],
+            modules: [pathResolve('./app'), 'node_modules'],
             alias: {
-                app: pathResolve('./app/js/'),
+                app: pathResolve('./app/scripts/'),
                 assets: pathResolve('./app/assets/'),
                 styles: pathResolve('./app/styles/'),
             },
@@ -72,9 +74,22 @@ module.exports = env => {
                         ],
                     },
                 },
-
                 {
-                    test: /\.js$/,
+                    test: /\.tsx?$/,
+                    use: [
+                        'babel-loader',
+                        {
+                            loader: 'ts-loader',
+                            options: {
+                                getCustomTransformers: () => ({ before: [tsNameof] }),
+                                configFile: 'tsconfig.json',
+                            },
+                        }
+                    ],
+                    exclude: [/node_modules/],
+                },
+                {
+                    test: /\.jsx?$/,
                     use: {
                         loader: 'babel-loader',
                     },
@@ -172,18 +187,18 @@ module.exports = env => {
                 },
             }),
 
-            ...sitemapData.pagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, { page: p })),
+            ...sitemapData.PagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, { page: p })),
 
             new MiniCssExtractPlugin({
                 filename: isProd ? '[name].[hash:6].css' : '[name].css',
                 chunkFilename: isProd ? '[hash:6].[id].css' : '[name].[id].css',
             }),
 
-            {
-                name: 'minify',
-                plugin: new MinifyPlugin({}, { comments: false }),
-                enabled: fullMinify,
-            },
+            // {
+            //     name: 'minify',
+            //     plugin: new MinifyPlugin({}, { comments: false }),
+            //     enabled: fullMinify,
+            // },
 
             {
                 name: 'minifycss',
@@ -206,3 +221,5 @@ module.exports = env => {
         },
     };
 };
+
+export default siteConfig;

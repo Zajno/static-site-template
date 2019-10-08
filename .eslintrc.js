@@ -11,7 +11,7 @@ module.exports = {
 			"globalReturn": false
 		}
 	},
-	"plugins": ["react", "import"],
+	"plugins": [ "import"],
 	"rules": {
 		"camelcase": 2,
 		"indent": ["warn", 4, { "SwitchCase": 1 }],

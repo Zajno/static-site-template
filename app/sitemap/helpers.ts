@@ -1,26 +1,21 @@
 
-/**
- *
- * @param {string} text
- * @returns {string}
- */
-function linkifyText(text) {
+function linkifyText(text: string) {
 
 }
 
-function a(text, href, classes = []) {
+function a(text: string, href: string, classes: string[] = []) {
     return `<a href="${href}" target="_blank" rel="noopener" class="${classes.join(' ')}" >${text}</a>`;
 }
 
-function span(text, classes = []) {
+function span(text: string, classes: string[] = []) {
     return `<span class="${classes.join(' ')}" >${text}</span>`;
 }
 
-function p(text, classes = []) {
+function p(text: string, classes: string[] = []) {
     return `<p class="desc-1 ${classes.join(' ')}" >${text}</p>`;
 }
 
-module.exports = {
+export {
     a,
     span,
     p,
