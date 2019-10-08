@@ -1,5 +1,5 @@
 
-import { browser } from './detectBrowser';
+import { browser, ApplyNameAndVersion } from './detectBrowser';
 
 const testElemId = 'css-variable-test';
 
@@ -7,6 +7,10 @@ console.log('[BrowserCheck]: starting...');
 
 function doesSupport() {
     const elTest = document.getElementById(testElemId);
+    if (!elTest) {
+        return undefined;
+    }
+
     const computedStyle = window.getComputedStyle(elTest, null);
     console.log('Browser name: ' + browser.name);
 
@@ -42,13 +46,22 @@ function doesSupport() {
     return true;
 }
 
-if (!doesSupport()) {
+const result = doesSupport();
+
+if (result == null) {
+    console.log('[BrowserCheck]: skipped');
+} else  if (!result) {
+
+    // HIDE ALL ELEMENTS
 
     const body = document.querySelector('body');
     const elems = body.querySelectorAll('main, header, footer, #mobile-menu, #preloader');
     elems.forEach(el => {
         el.parentNode.removeChild(el);
     });
+
+    // PLACE NOT SUPPORTED BROWSER PLACEHOLDER
+
     const ieMain = document.createElement('main');
     const ieScreen = require('app/modules/iePlaceholder').default;
 
@@ -59,4 +72,6 @@ if (!doesSupport()) {
     body.insertBefore(ieMain, body.firstChild).classList.add('ie__main');
 
     throw new Error('The browser is not supported. Follow links on the screen or contact site administrator.');
+} else {
+    ApplyNameAndVersion();
 }

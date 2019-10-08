@@ -1,28 +1,27 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-export default class Component {
+export interface ComponentConfig {
+    el: HTMLElement;
+}
 
-    // SETUP -------------------------------------------------------------------
-    /** @param {{el:HTMLElement}} config */
-    constructor(config) {
-        // state
-        this._active = false;
-        /** @type {HTMLElement} */
-        this._el = config.el;
+export default abstract class Component<TConfig extends ComponentConfig = ComponentConfig> {
 
-        // setup
-        this._setup(config);
+    private _active = false;
+    protected readonly _config: TConfig;
+
+    constructor(config: TConfig) {
+        this._config = config;
     }
 
-    get element() { return this._el; }
-
+    get element() { return this._config.el; }
     get isActive() { return this._active; }
 
-    /* abstract -- override in sub class to set up component */
-    /** @param {{el:HTMLElement}} config */
-    _setup(config) {}
+    public async setup() {
+        await this.doSetup();
+        return this;
+    }
 
-    // STATE -------------------------------------------------------------------
+    protected abstract doSetup(): Promise<void> | void;
 
     activate(delay = 0.0, direction = 1.0) {
         if (this._active) {
@@ -49,12 +48,11 @@ export default class Component {
         return this._deactivate(delay, direction);
     }
 
-    /* abstract -- override in sub class to activate / deactivate component */
-    _activate(delay, direction) {}
+    protected _activate(delay?: number, direction?: number) { }
 
-    _deactivate(delay, direction) {}
+    protected _deactivate(delay?: number, direction?: number) { }
 
-    get rect() { return this._el ? this._el.getBoundingClientRect() : {}; }
+    get rect() { return this.element ? this.element.getBoundingClientRect() : new ClientRect(); }
 
     get isOnScreen() {
         const r = this.rect;

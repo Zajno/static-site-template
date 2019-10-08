@@ -2,16 +2,24 @@ import { detect }  from 'detect-browser';
 
 const browser = detect();
 
-function ApplyNameAndVersion() {
+function ApplyNameAndVersion(el: HTMLElement = null) {
 
     if (browser) {
         const version = browser.version.split('.', 1);
-        document.getElementById('main').classList.add('browser-' + browser.name);
-        document.getElementById('main').classList.add('browser-version-' + version);
+
+        const target = el || document.getElementById('main');
+        if (target) {
+            target.classList.add('browser-' + browser.name);
+            target.classList.add('browser-version-' + version);
+        }
+
         return true;
     }
 
     return false;
 }
 
-export { browser, ApplyNameAndVersion };
+export {
+    browser,
+    ApplyNameAndVersion,
+};
