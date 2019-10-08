@@ -19,19 +19,23 @@ w.addEventListener('load', function () {
     cbs = null;
 });
 
-w.appReady = function (cb) {
-    if (cb) {
-        if (ild) {
-            cb();
-        } else {
-            cbs.push(cb);
+if (w.appReady) {
+    w.appReady = function (cb) {
+        if (cb) {
+            if (ild) {
+                cb();
+            } else {
+                cbs.push(cb);
+            }
         }
-    }
-};
+    } as typeof window.appReady;
+}
 
-w.appReady.addErrorHandler = function (cb) {
-    ercbs.push(cb);
-};
+if (!w.appReady.addErrorHandler) {
+    w.appReady.addErrorHandler = function (cb) {
+        ercbs.push(cb);
+    };
+}
 
 // require this module for fallback purposes;
 // if the code above was not added to the head, it can be imported in JS entry for preventing app from crashing

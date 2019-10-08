@@ -1,19 +1,26 @@
-// import 'app/polyfills';
+import 'app/polyfills';
 import 'app/utils/checkBrowserSupport';
 
-// import logger from 'logger';
+import logger from 'app/logger';
 
 // import './pages';
 // import App from 'core/app';
 
-// if (!window.appReady) {
-//     logger.error('[MAIN] window.appReady is not set up. Will be used fallback version, but proper functioning not guranteed.');
-//     require('./window.appReady');
-// }
+declare global {
+    export function appReady(cb: () => any): void;
+    export namespace appReady {
+        export function addErrorHandler(cb: (err: any) => void): void;
+    }
+}
 
-// window.appReady.addErrorHandler(err => {
-//     logger.error('[MAIN][AppReady] ERROR:', err);
-// });
+if (!window.appReady) {
+    logger.error('[MAIN] window.appReady is not set up. Will be used fallback version, but proper functioning not guranteed.');
+    require('./window.appReady');
+}
+
+window.appReady.addErrorHandler(err => {
+    logger.error('[MAIN][AppReady] ERROR:', err);
+});
 
 // const _app = new App();
 
