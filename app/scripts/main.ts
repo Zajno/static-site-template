@@ -6,21 +6,6 @@ import logger from 'app/logger';
 // import './pages';
 // import App from 'core/app';
 
-declare global {
-    export function appReady(cb: () => any): void;
-    export namespace appReady {
-        export function addErrorHandler(cb: (err: any) => void): void;
-    }
-}
-
-if (!window.appReady) {
-    logger.error('[MAIN] window.appReady is not set up. Will be used fallback version, but proper functioning not guranteed.');
-    require('./window.appReady');
-}
-
-window.appReady.addErrorHandler(err => {
-    logger.error('[MAIN][AppReady] ERROR:', err);
-});
 
 // const _app = new App();
 
