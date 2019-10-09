@@ -33,6 +33,9 @@ export default abstract class Page implements IPage {
     private _scrollPosition: number = 0.0;
     private _scrollDirection: number = -1.0;
 
+    private _deltaY: number = 0;
+    private _wheelDirection: Directions;
+
     private readonly _scrollHelpers: ScrollDirectionHelpers = {
         down: {
             show: (top, bottom, showTreshold) => top <= this._height - showTreshold,
@@ -65,12 +68,16 @@ export default abstract class Page implements IPage {
 
     get centerY() { return this._centerY; }
 
+    get deltaY() { return this._deltaY; }
+    get wheelDirection() { return this._wheelDirection; }
+
     public async setupAsync() {
         this._root = document.getElementById('main')
             || document.getElementsByTagName('body')[0];
 
         window.onresize = this.resize;
         window.onscroll = this.scroll;
+        window.onwheel = this.onWheel;
 
         await this._setupSections(this._root.querySelectorAll('section'));
         await this.setupPage();
@@ -139,6 +146,17 @@ export default abstract class Page implements IPage {
         }
 
         this.scroll();
+    }
+
+    private onWheel = e => {
+        this._deltaY = e.deltaY ? e.deltaY : e.originalEvent && e.originalEvent.detail;
+        this._wheelDirection = this._deltaY > 0 ? 'down' : 'up';
+
+        this.wheel();
+    }
+
+    protected wheel() {
+        /* override me if you want */
     }
 
     _updateSections() {
