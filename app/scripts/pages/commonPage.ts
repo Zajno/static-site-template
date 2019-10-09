@@ -1,14 +1,9 @@
 import 'styles/base.sass';
 
-import logger from 'logger';
 import Page from 'app/core/page';
 import Breakpoints from 'app/appBreakpoints';
 
-export default class CommonPage extends Page {
-
-    _setup() {
-        super._setup();
-    }
+export default abstract class CommonPage extends Page {
 
     start() {
         super.start();
@@ -18,11 +13,14 @@ export default class CommonPage extends Page {
         });
     }
 
-    resize(width, height) {
-        Breakpoints.resize(width, height);
-
-        super.resize(width, height);
+    resize() {
+        super.resize();
+        Breakpoints.resize(this.width, this.height);
     }
+
+    // async setupPageAsync() {
+    //     super.setupPageAsync();
+    // }
 
     // scroll(scrollDirection, scrollPosition) {
     //     super.scroll(scrollDirection, scrollPosition);

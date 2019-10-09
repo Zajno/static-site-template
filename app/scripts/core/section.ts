@@ -9,6 +9,11 @@ export type ActivationCoeffs = {
     hide: number,
 };
 
+// type A = { a: string, b: number };
+// type Aa = keyof A;
+
+// const t: Partial<A>;
+
 export type ActivationDirectCoeffs = {
     [k1 in Directions]: {
         [k2 in SectionActions]: number;

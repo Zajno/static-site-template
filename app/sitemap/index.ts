@@ -19,8 +19,20 @@ const PagesFlatten = Pages.map(p => {
     return res;
 });
 
+function getEntryPoint() {
+    const parseEntryPoint = {
+        polyfills: './app/scripts/polyfills',
+    };
+    Pages
+        .forEach(item => {
+            parseEntryPoint[`${item.id}`] = `${item.entryPoint}`;
+        });
+    return parseEntryPoint;
+}
+
 export {
     Pages,
     PagesFlatten,
     Hostname,
+    getEntryPoint,
 };

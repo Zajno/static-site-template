@@ -2,6 +2,7 @@ import 'app/utils/checkBrowserSupport';
 
 import logger from 'app/logger';
 import Section, { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
+import Breakpoints from 'app/appBreakpoints';
 
 export interface IPage {
     readonly width: number;
@@ -49,6 +50,7 @@ export default abstract class Page implements IPage {
 
     static async RunPage(PageType: PageCtor) {
         const page = new PageType();
+        console.log('entry run page');
         try {
             await page.setupAsync();
             page.start();
@@ -60,7 +62,7 @@ export default abstract class Page implements IPage {
     protected abstract get sectionTypes(): SectionCtor[];
     protected get root() { return this._root; }
 
-    get width() { return this.width; }
+    get width() { return this._width; }
     get height() { return this._height; }
 
     get scrollPosition() { return this._scrollPosition; }
@@ -75,16 +77,17 @@ export default abstract class Page implements IPage {
         this._root = document.getElementById('main')
             || document.getElementsByTagName('body')[0];
 
-        window.onresize = this.resize;
-        window.onscroll = this.scroll;
-        window.onwheel = this.onWheel;
-
+        window.onresize = this.resize.bind(this);
+        window.onscroll = this.scroll.bind(this);
+        window.onwheel = this.onWheel.bind(this);
+        await this.setupPageAsync();
         await this._setupSections(this._root.querySelectorAll('section'));
-        await this.setupPage();
+
     }
 
-    protected async setupPage() {
+    async setupPageAsync() {
         /* override me if you want */
+        console.log(this, 'setup page async');
     }
 
     protected getSectionOptions(index: number, type: SectionCtor, el: HTMLElement): any {
@@ -96,6 +99,7 @@ export default abstract class Page implements IPage {
         const types = this.sectionTypes;
 
         for (let i = 0; i < sections.length; ++i) {
+            console.log('enter to parse section')
             const section = sections[i];
             const Type = types[i];
             if (!Type) {
@@ -121,7 +125,7 @@ export default abstract class Page implements IPage {
         /* override me if you want */
     }
 
-    scroll = () => {
+    scroll() {
         // this._scrollDirection = scrollDirection;
         const scrollPosition = window.pageYOffset;
         if (this._scrollPosition === scrollPosition) {
@@ -136,7 +140,7 @@ export default abstract class Page implements IPage {
         this._updateSections();
     }
 
-    resize = () => {
+    protected resize() {
         this._width = document.body.clientWidth;
         this._height = window.innerHeight;
         this._centerY = this._height * 0.5;
@@ -144,11 +148,11 @@ export default abstract class Page implements IPage {
         for (let i = 0; i < this._sections.length; ++i) {
             this._sections[i].resize(this._width, this._height);
         }
-
+        Breakpoints.resize(this._width, this.height);
         this.scroll();
     }
 
-    private onWheel = e => {
+    private onWheel(e) {
         this._deltaY = e.deltaY ? e.deltaY : e.originalEvent && e.originalEvent.detail;
         this._wheelDirection = this._deltaY > 0 ? 'down' : 'up';
 

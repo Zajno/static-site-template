@@ -1,18 +1,17 @@
 import { observable } from 'mobx';
 import { createLogger } from 'app/logger';
 
-/** @typedef {Object} Breakpoint
- * @property {number} id as ID
- * @property {string} mediaQuery
- * @property {number} width
- * @property {number} height
- */
-
 const logger = createLogger('[Breakpoints]');
 
-/** @type {Breakpoint[]} */
-const Breakpoints = [
-    // default
+type BreakpointType = {
+        id: number;
+        mediaQuery: string;
+        width: number;
+        height: number;
+    }
+;
+
+const Breakpoints: [BreakpointType] = [
     {
         id: 500,
         mediaQuery: '',
@@ -21,12 +20,6 @@ const Breakpoints = [
     },
 ];
 
-/**
- * @param {number} width
- * @param {number} height
- * @param {Breakpoint} breakpoint
- * @returns {number}
- */
 function calcRem(width, height, breakpoint) {
     const ab = breakpoint.width / breakpoint.height;
     const avp = width / height;
@@ -38,18 +31,19 @@ function calcRem(width, height, breakpoint) {
     return rem;
 }
 
+type _internalType = {
+    currentBreakpoint: BreakpointType;
+    currentRem: number;
+};
 
-const _internal = observable.object({
-    /** @type {Breakpoint} */
+const _internal: _internalType = observable.object({
     currentBreakpoint: null,
-    /** @type {number} */
     currentRem: 0.0,
 });
 
 export default observable.object({
 
-    /** @param {Breakpoint} bp */
-    registerBreakpoint(bp) {
+    registerBreakpoint(bp: BreakpointType) {
         const existing = Breakpoints.findIndex(b => b.id === bp.id);
         if (existing >= 0) {
             Breakpoints[existing] = bp;
@@ -65,7 +59,7 @@ export default observable.object({
         get rem() { return _internal.currentRem; },
     },
 
-    resize(width, height) {
+    resize(width: number, height: number) {
         let bp = Breakpoints.find(b => window.matchMedia(b.mediaQuery).matches);
         if (!bp) {
             bp = Breakpoints[0];

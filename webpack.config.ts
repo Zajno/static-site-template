@@ -33,9 +33,7 @@ const siteConfig = (env: any): webpack.Configuration => {
 
     return {
         devtool: isProd ? undefined : 'inline-source-map',
-        entry: {
-            app: './app/scripts/main.ts',
-        },
+        entry: sitemapData.getEntryPoint(),
         output: {
             publicPath: publicPath,
             path: outputPath,
@@ -187,7 +185,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 },
             }),
 
-            ...sitemapData.PagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, { page: p })),
+            ...sitemapData.PagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, p.id, { page: p })),
 
             new MiniCssExtractPlugin({
                 filename: isProd ? '[name].[hash:6].css' : '[name].css',

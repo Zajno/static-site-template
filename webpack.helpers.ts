@@ -23,35 +23,37 @@ export class HtmlBuilder {
             } : null;
     }
 
-    createHtmlPlugin(outputName: string, templatePath: string, options = {}) {
+    createHtmlPlugin(outputName: string, templatePath: string, id: string, options = {}) {
         return new HtmlWebpackPlugin({
             filename: outputName,
             cache: false,
             template: templatePath,
             minify: this.htmlMinifyOptions,
             inject: false,
+            chunks: ['polyfills', `${id}`],
+            chunksSortMode: 'manual',
             ...options,
         });
     }
 
-    generateHtmlPlugins(templateDir: string = './app/html/') {
-        const templateFiles = fs.readdirSync(pathResolve(templateDir));
+    // generateHtmlPlugins(templateDir: string = './app/html/') {
+    //     const templateFiles = fs.readdirSync(pathResolve(templateDir));
 
-        return templateFiles
-            .map(item => {
-                const parts = item.split('.');
+    //     return templateFiles
+    //         .map(item => {
+    //             const parts = item.split('.');
 
-                if (parts.pop() !== 'html')
-                    return null;
-                const name = parts.join().toLowerCase();
+    //             if (parts.pop() !== 'html')
+    //                 return null;
+    //             const name = parts.join().toLowerCase();
 
-                const outputName = name === 'index' ? item : `${name}/index.html`;
-                const templatePath = pathResolve(`${templateDir}/${item}`);
+    //             const outputName = name === 'index' ? item : `${name}/index.html`;
+    //             const templatePath = pathResolve(`${templateDir}/${item}`);
 
-                return this.createHtmlPlugin(outputName, templatePath);
-            })
-            .filter(p => p);
-    }
+    //             return this.createHtmlPlugin(outputName, templatePath, item );
+    //         })
+    //         .filter(p => p);
+    // }
 }
 
 export type PluginOption = {

@@ -1,4 +1,4 @@
-import Section from 'core/section';
+import Section from '../core/section';
 import CommonPage from './commonPage';
 
 const defaultOptions = {
@@ -8,7 +8,6 @@ const defaultOptions = {
     imagesLazyLoad: true,
     videoModals: false,
 };
-
 
 export default function CreateDefaultPage(options) {
     const opts = Object.assign({}, defaultOptions, options);
@@ -21,11 +20,6 @@ export default function CreateDefaultPage(options) {
 
     return class DefaultPage extends CommonPage {
         static SectionTypes = _sectionTypes;
-
-        _setup() {
-
-            super._setup();
-        }
 
         get sectionTypes() {
             return DefaultPage.SectionTypes;

@@ -1,10 +1,6 @@
 import { observable } from 'mobx';
 import Breakpoints from 'app/core/breakpoints';
 
-/** @typedef {(import ('app/core/breakpoints').Breakpoint)} BreakpointBase */
-
-/** @typedef {BreakpointBase} AppBreakpoint */
-
 // TODO register additional breakpoints
 
 const AppBreakpoints = {
@@ -27,7 +23,7 @@ export default observable.object({
     get All() { return AppBreakpoints; },
 
     Current: {
-        /** @returns {AppBreakpoint} */
+
         get breakpoint() { return Breakpoints.Current.breakpoint; },
 
         get rem() { return Breakpoints.Current.rem; },
@@ -37,10 +33,10 @@ export default observable.object({
 
     get height() { return _internal.height; },
 
-    resize(width, height) {
+    resize(width: number, height: number) {
         _internal.width = width;
         _internal.height = height;
-
+        console.log('resize');
         Breakpoints.resize(width, height);
     },
 
