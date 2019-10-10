@@ -1,7 +1,8 @@
 export default function getUrlVars() {
     const vars = {};
-    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) => {
         vars[key] = value;
+        return null;
     });
     return vars;
 }

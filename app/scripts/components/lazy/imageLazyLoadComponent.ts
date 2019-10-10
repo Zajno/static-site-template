@@ -1,7 +1,7 @@
-import logger from 'logger';
-import createReadyPattern from 'utils/readyPattern';
+import logger from 'app/logger';
+import createReadyPattern from 'app/utils/readyPattern';
 
-import LazyLoadComponent from './lazyLoadComponent';
+import LazyLoadComponent, { LazyLoadConfig } from './lazyLoadComponent';
 
 const LOG_ENABLED = false;
 
@@ -13,14 +13,7 @@ function log(...args) {
 
 export default class ImageLazyLoadComponent extends LazyLoadComponent {
 
-    constructor(config) {
-        super(config);
-
-        /** @type {HTMLImageElement} */
-        this._el;
-    }
-
-    _setup(config) {
+    _setup() {
 
         /** @type {HTMLPictureElement} */
         this._picture = window.HTMLPictureElement && this._el.parentElement.tagName.toLowerCase() === 'picture'
@@ -31,7 +24,7 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
             this._el.classList.add('lazy');
         }
 
-        super._setup(config);
+        this.setup();
     }
 
     _doImageLoading() {
@@ -103,8 +96,11 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
      * @param {string} selector
      * @returns {ImageLazyLoadComponent[]}
      */
+
     static RegisterAll(selector = 'img.lazy') {
-        return document.querySelectorAll(selector)
+        const  arrImage: arrImageType =  Array.from(document.querySelectorAll(selector));
+        return arrImage
             .map(el => new ImageLazyLoadComponent({ el, register: true }));
     }
 }
+type arrImageType = HTMLElement[];

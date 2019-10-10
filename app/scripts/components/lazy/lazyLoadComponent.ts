@@ -1,5 +1,5 @@
-import logger from 'logger';
-import Component from 'core/component';
+import logger from 'app/logger';
+import Component, { ComponentConfig } from 'app/core/component';
 
 const classes = {
     show: 'lazyLoaded',
@@ -14,25 +14,26 @@ function log(...args) {
     }
 }
 
-/** @type {HTMLElement} */
-let mainElement;
+let mainElement: HTMLElement;
 
-class LoadGroup {
+class LoadGroup  {
+
+    priority: number;
+    leftToLoad: number;
 
     /** @type {Object.<number, LoadGroup>} */
     static current = {};
 
-    /** @type {number[]} */
-    static priorities = [];
+    static priorities: number[] = [];
 
     static currentPriorityIndex = -1;
 
     static loadingStarted = false;
+    targets: any;
+    _isLoading: boolean;
 
-    /** @param {number} priority */
-    constructor(priority) {
+    constructor(priority: number) {
         this.priority = priority;
-        /** @type {number} */
         this.leftToLoad = null;
         /** @type {LazyLoadComponent[]} */
         this.targets = [];
@@ -82,7 +83,9 @@ class LoadGroup {
             target._beginLoading();
         });
     }
-
+    protected doSetup(config: any): void | Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     /**
      * @param {LazyLoadComponent} comp
      * @returns {LoadGroup}
@@ -128,10 +131,19 @@ class LoadGroup {
         group.begin();
     }
 }
+export interface LazyLoadConfig extends ComponentConfig {
+    register: Boolean;
+};
 
-export default class LazyLoadComponent extends Component {
+export default class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig> extends Component<TConfig> {
+    loaded: boolean;
+    loading: boolean;
+    _priority: number;
+    _el: HTMLElement;
+    _loadClasses: string[];
+    _group: any;
 
-    _setup(config) {
+    protected doSetup(): void | Promise<void> {
         this.loaded = false;
         this.loading = false;
 
@@ -140,13 +152,13 @@ export default class LazyLoadComponent extends Component {
         this._loadClasses = [classes.show];
         this.populateAdditionalClasses();
 
-        if (config.register) {
+        if (this._config.register) {
             this.register();
         }
     }
 
     get priority() {
-        return this._priority || 0;
+        return this.priority || 0;
     }
 
     register() {
@@ -158,32 +170,12 @@ export default class LazyLoadComponent extends Component {
     }
 
     populateAdditionalClasses() {
-        const items = this._el.dataset.loadAddClass;
-
-        if (items) {
-            const customClasses = (items || '').split(',')
-                .map(s => s.trim())
-                .filter(s => s);
-
-            this._loadClasses.push(...customClasses);
-        }
-    }
-
-    _beginLoading() {
-        if (this.loading || this.loaded) {
-            return;
-        }
-
-        this.loading = true;
 
         this._doLoading()
             .then(this._finishLoading.bind(this));
     }
+    async _doLoading() {
 
-    /** @returns {Promise} */
-    _doLoading() {
-        logger.warn('[LazyLoadComponent] Component lazy loading is not implemented', this);
-        return Promise.resolve();
     }
 
     _finishLoading() {
@@ -202,9 +194,6 @@ export function BeginLoading() {
     LoadGroup.beginLoading();
 }
 
-/**
- * @param {HTMLElement} el
- */
-export function SetMainElememt(el) {
+export function SetMainElememt(el: HTMLElement) {
     mainElement = el;
 }
