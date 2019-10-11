@@ -18,10 +18,9 @@ let mainElement: HTMLElement;
 
 class LoadGroup  {
 
-    priority: number;
-    leftToLoad: number;
+    private priority: number;
+    private leftToLoad: number;
 
-    /** @type {Object.<number, LoadGroup>} */
     static current = {};
 
     static priorities: number[] = [];
@@ -67,7 +66,6 @@ class LoadGroup  {
         if (LoadGroup.loadingStarted && LoadGroup.currentPriorityIndex >= 0) {
             const currentLoadingPrio = LoadGroup.priorities[LoadGroup.currentPriorityIndex] || Number.MAX_VALUE;
             if (this.priority <= currentLoadingPrio) {
-                // do extra load
                 this.leftToLoad++;
                 log('[LazyLoadGroup] extra added', this.leftToLoad, comp._el);
                 comp._beginLoading();
@@ -84,7 +82,7 @@ class LoadGroup  {
         });
     }
     protected doSetup(config: any): void | Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
     /**
      * @param {LazyLoadComponent} comp
@@ -133,21 +131,21 @@ class LoadGroup  {
 }
 export interface LazyLoadConfig extends ComponentConfig {
     register: Boolean;
-};
+}
 
 export default class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig> extends Component<TConfig> {
-    loaded: boolean;
-    loading: boolean;
-    _priority: number;
-    _el: HTMLElement;
-    _loadClasses: string[];
-    _group: any;
+    private loaded: boolean;
+    private loading: boolean;
+    private _priority: number;
+    private _loadClasses: string[];
+    private _group: any;
 
-    protected doSetup(): void | Promise<void> {
+    protected async doSetup(): Promise<void> {
+
         this.loaded = false;
         this.loading = false;
-
-        this._priority = +this._el.dataset.loadPriority;
+        console.log('setup lazy load')
+        this._priority = +this.element.dataset.loadPriority;
 
         this._loadClasses = [classes.show];
         this.populateAdditionalClasses();
@@ -174,14 +172,18 @@ export default class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoad
         this._doLoading()
             .then(this._finishLoading.bind(this));
     }
-    async _doLoading() {
+
+    _doLoading(): Promise<void> {
+
+        logger.warn('[LazyLoadComponent] Component lazy loading is not implemented', this);
+        return Promise.resolve();
 
     }
 
     _finishLoading() {
         this.loading = false;
 
-        this._loadClasses.forEach(lc => this._el.classList.add(lc));
+        this._loadClasses.forEach(lc => this.element.classList.add(lc));
         // this._el.classList.add(...this._loadClasses);
 
         this._group._itemLoaded(this);
@@ -197,3 +199,5 @@ export function BeginLoading() {
 export function SetMainElememt(el: HTMLElement) {
     mainElement = el;
 }
+type a = {};
+type b = [];

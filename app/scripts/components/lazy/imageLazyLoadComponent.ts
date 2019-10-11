@@ -11,26 +11,31 @@ function log(...args) {
     }
 }
 
-export default class ImageLazyLoadComponent extends LazyLoadComponent {
+export interface ImageLazyLoadConfig extends LazyLoadConfig {
+    el: HTMLImageElement;
+}
 
+export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyLoadConfig> {
+   private _picture: HTMLPictureElement;
+
+    get image() { console.log(this._config.el);
+        return this._config.el; }
     _setup() {
-
-        /** @type {HTMLPictureElement} */
-        this._picture = window.HTMLPictureElement && this._el.parentElement.tagName.toLowerCase() === 'picture'
-            ? this._el.parentElement
+        console.log('start setup')
+        this._picture = window.HTMLPictureElement && this.element.parentElement.tagName.toLowerCase() === 'picture'
+            ? this.element.parentElement
             : null;
 
-        if (!this._el.classList.contains('lazy')) {
-            this._el.classList.add('lazy');
+        if (!this.element.classList.contains('lazy')) {
+            this.element.classList.add('lazy');
         }
 
         this.setup();
     }
 
-    _doImageLoading() {
-        /** @type {HTMLImageElement} */
-        const target = this._el;
-
+    _doImageLoading(): Promise<void> {
+        const target = this.image;
+        console.log(this.image, '_doImageLoading');
         const targetSrc = target.dataset.src;
         // log('[ImageLazyLoadComponent]', target.complete, targetSrc, target);
 
@@ -42,7 +47,7 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
 
         return new Promise(resolve => {
             const resolveWrapper = ok => {
-                log('resolve', ok, this._el);
+                log('resolve', ok, this.element);
                 resolve();
             };
 
@@ -54,10 +59,9 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
         });
     }
 
-    _doPictureLoading() {
+    _doPictureLoading(): Promise<void> {
 
-        /** @type {HTMLImageElement} */
-        const target = this._el;
+        const target = this.image;
 
         const onReady = createReadyPattern(target);
 
@@ -78,7 +82,7 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
 
         return new Promise(resolve => {
             const resolveWrapper = ok => {
-                log('picture resolve', ok, this._el.currentSrc, this._el);
+                log('picture resolve', ok, this.image.currentSrc, this.element);
                 resolve();
             };
 
@@ -86,10 +90,11 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
         });
     }
 
-    _doLoading() {
-        return this._picture
+    _doLoading(): Promise<void> {
+
+        return Promise.resolve(this._picture
             ? this._doPictureLoading()
-            : this._doImageLoading();
+            : this._doImageLoading());
     }
 
     /**
@@ -98,9 +103,8 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent {
      */
 
     static RegisterAll(selector = 'img.lazy') {
-        const  arrImage: arrImageType =  Array.from(document.querySelectorAll(selector));
+        const  arrImage = document.querySelectorAll(selector);
         return arrImage
-            .map(el => new ImageLazyLoadComponent({ el, register: true }));
+            .map(el => new ImageLazyLoadComponent({ el: el as HTMLImageElement, register: true }));
     }
 }
-type arrImageType = HTMLElement[];

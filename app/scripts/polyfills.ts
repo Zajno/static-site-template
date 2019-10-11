@@ -7,6 +7,10 @@ declare global {
         indexOf(searchElement: Node, fromIndex?: number): number;
     }
 
+    interface NodeListOf<TNode extends Node> {
+        map<T>(callbackfn: (value: TNode, key: number, parent: NodeListOf<TNode>) => T, thisArg?: any): T[];
+    }
+
     interface Element {
         msMatchesSelector?(selectors: string): boolean;
     }
