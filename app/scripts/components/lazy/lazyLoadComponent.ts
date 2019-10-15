@@ -125,9 +125,9 @@ export interface LazyLoadConfig extends ComponentConfig {
 export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig>
     extends Component<TConfig> implements ILazyLoadable {
 
-    private loaded: boolean;
-    private loading: boolean;
-    private _priority: number;
+    protected loaded: boolean;
+    protected loading: boolean;
+    protected _priority: number;
     private _loadClasses: string[];
     private _group: LoadGroup;
 
