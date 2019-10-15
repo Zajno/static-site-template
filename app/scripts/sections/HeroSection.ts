@@ -11,7 +11,7 @@ export default class HeroSection extends Section {
 
         this._visual = new BodymovinVisual({ el: this.element.querySelector('.bodymovin__wrap'), register: true });
         console.log(this._visual, 'visual start setup');
-        this._visual.activate();
+        this._visual.setup();
     }
 
     resize(width) {

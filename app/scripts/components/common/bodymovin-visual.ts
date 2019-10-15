@@ -7,7 +7,7 @@ import BodymovinIcon from 'app/components/common/bodymovin-icon';
 import { AnimationConfigWithPath } from 'lottie-web';
 
 export default class BodymovinVisual extends BodymovinIcon {
-    _bodymovinParams:AnimationConfigWithPath;
+    _bodymovinParams: AnimationConfigWithPath;
     _isComplete: boolean;
     // SETUP -------------------------------------------------------------------
 

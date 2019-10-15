@@ -132,7 +132,7 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
     private _group: LoadGroup;
 
     protected async doSetup(): Promise<void> {
-
+        console.log(this, 'setup bodimovin in lazy components')
         this.loaded = false;
         this.loading = false;
         this._priority = +this.element.dataset.loadPriority;

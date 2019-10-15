@@ -55,7 +55,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
     _doLoading(): Promise<void> {
 
         this._animBodymovin = lottie.loadAnimation(this._bodymovinParams);
-
+        console.log(this._animBodymovin,'загрузка анимации')
         this._animBodymovin.addEventListener('complete', () => {
             // this._animBodymovin.goToAndStop(0);
             this._isComplete = true;
