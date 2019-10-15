@@ -18,10 +18,11 @@ export interface ImageLazyLoadConfig extends LazyLoadConfig {
 export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyLoadConfig> {
    private _picture: HTMLPictureElement;
 
-    get image() { console.log(this._config.el);
-        return this._config.el; }
-    _setup() {
-        console.log('start setup')
+    get image() {
+        return this._config.el;
+    }
+
+    protected async doSetup() {
         this._picture = window.HTMLPictureElement && this.element.parentElement.tagName.toLowerCase() === 'picture'
             ? this.element.parentElement
             : null;
@@ -30,14 +31,13 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyL
             this.element.classList.add('lazy');
         }
 
-        this.setup();
+        await super.doSetup();
     }
 
     _doImageLoading(): Promise<void> {
         const target = this.image;
-        console.log(this.image, '_doImageLoading');
         const targetSrc = target.dataset.src;
-        // log('[ImageLazyLoadComponent]', target.complete, targetSrc, target);
+        log('[ImageLazyLoadComponent]', target.complete, targetSrc, target);
 
         if (!targetSrc && target.complete) {
             return Promise.resolve();
@@ -67,7 +67,6 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyL
 
         let hasTargetSrc = false;
 
-        /** @type {HTMLSourceElement[]} */
         const sources = this._picture.querySelectorAll('source');
         sources.forEach(s => {
             if (s.dataset.srcset) {
@@ -90,21 +89,15 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyL
         });
     }
 
-    _doLoading(): Promise<void> {
-
+    protected _doLoading(): Promise<void> {
         return Promise.resolve(this._picture
             ? this._doPictureLoading()
             : this._doImageLoading());
     }
 
-    /**
-     * @param {string} selector
-     * @returns {ImageLazyLoadComponent[]}
-     */
-
     static RegisterAll(selector = 'img.lazy') {
         const  arrImage = document.querySelectorAll(selector);
-        return arrImage
-            .map(el => new ImageLazyLoadComponent({ el: el as HTMLImageElement, register: true }));
+        return Promise.all(arrImage
+            .map(el => new ImageLazyLoadComponent({ el: el as HTMLImageElement, register: true }).setup()));
     }
 }

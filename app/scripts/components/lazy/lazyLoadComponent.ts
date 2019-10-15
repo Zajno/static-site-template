@@ -14,40 +14,37 @@ function log(...args) {
     }
 }
 
+interface ILazyLoadable extends Component {
+    readonly priority: number;
+    beginLoading(): void;
+}
+
 let mainElement: HTMLElement;
 
-class LoadGroup  {
+class LoadGroup {
 
-    private priority: number;
-    private leftToLoad: number;
+    private leftToLoad: number = null;
+    private _isLoading: boolean = false;
+    private targets: ILazyLoadable[] = [];
 
-    static current = {};
+    static current: { [priority: number]: LoadGroup } = {};
 
     static priorities: number[] = [];
 
     static currentPriorityIndex = -1;
 
     static loadingStarted = false;
-    targets: any;
-    _isLoading: boolean;
 
-    constructor(priority: number) {
-        this.priority = priority;
-        this.leftToLoad = null;
-        /** @type {LazyLoadComponent[]} */
-        this.targets = [];
-
-        this._isLoading = false;
+    constructor(private priority: number) {
     }
 
-    /** @param {LazyLoadComponent} comp */
-    _itemLoaded(comp) {
+    _itemLoaded(comp: ILazyLoadable) {
         if (this.leftToLoad <= 0) {
             return;
         }
 
         this.leftToLoad--;
-        log('[LazyLoadGroup] this.leftToLoad =', this.leftToLoad, comp._el);
+        log('[LazyLoadGroup] this.leftToLoad =', this.leftToLoad, comp.element);
 
         if (this.leftToLoad <= 0) {
             log('[LazyLoadGroup] Group loading finished, prio =', this.priority, ', targets count =', this.targets.length);
@@ -59,16 +56,15 @@ class LoadGroup  {
         }
     }
 
-    /** @param {LazyLoadComponent} comp */
-    add(comp) {
+    add(comp: ILazyLoadable) {
         this.targets.push(comp);
 
         if (LoadGroup.loadingStarted && LoadGroup.currentPriorityIndex >= 0) {
             const currentLoadingPrio = LoadGroup.priorities[LoadGroup.currentPriorityIndex] || Number.MAX_VALUE;
             if (this.priority <= currentLoadingPrio) {
                 this.leftToLoad++;
-                log('[LazyLoadGroup] extra added', this.leftToLoad, comp._el);
-                comp._beginLoading();
+                log('[LazyLoadGroup] extra added', this.leftToLoad, comp.element);
+                comp.beginLoading();
             }
         }
     }
@@ -78,19 +74,12 @@ class LoadGroup  {
         log('[LazyLoadGroup] Loading group with prio =', this.priority, ', targets count =', this.leftToLoad);
 
         this.targets.forEach(target => {
-            target._beginLoading();
+            target.beginLoading();
         });
     }
-    protected doSetup(config: any): void | Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-    /**
-     * @param {LazyLoadComponent} comp
-     * @returns {LoadGroup}
-     */
-    static register(comp) {
-        const { priority } = comp;
 
+    static register(comp: ILazyLoadable) {
+        const { priority } = comp;
         let group = LoadGroup.current[priority];
         if (!group) {
             group = new LoadGroup(priority);
@@ -133,33 +122,34 @@ export interface LazyLoadConfig extends ComponentConfig {
     register: Boolean;
 }
 
-export default class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig> extends Component<TConfig> {
+export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig>
+    extends Component<TConfig> implements ILazyLoadable {
+
     private loaded: boolean;
     private loading: boolean;
     private _priority: number;
     private _loadClasses: string[];
-    private _group: any;
+    private _group: LoadGroup;
 
     protected async doSetup(): Promise<void> {
 
         this.loaded = false;
         this.loading = false;
-        console.log('setup lazy load')
         this._priority = +this.element.dataset.loadPriority;
 
         this._loadClasses = [classes.show];
         this.populateAdditionalClasses();
-
+        this.beginLoading();
         if (this._config.register) {
             this.register();
         }
     }
 
     get priority() {
-        return this.priority || 0;
+        return this._priority || 0;
     }
 
-    register() {
+    protected register() {
         if (this._group) {
             return;
         }
@@ -167,22 +157,34 @@ export default class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoad
         this._group = LoadGroup.register(this);
     }
 
-    populateAdditionalClasses() {
+    protected populateAdditionalClasses() {
+        const items = this.element.dataset.loadAddClass;
+
+        if (items) {
+            const customClasses = (items || '').split(',')
+                .map(s => s.trim())
+                .filter(s => s);
+
+            this._loadClasses.push(...customClasses);
+        }
+    }
+
+    beginLoading() {
+        if (this.loading || this.loaded) {
+            return;
+        }
+
+        this.loading = true;
 
         this._doLoading()
             .then(this._finishLoading.bind(this));
     }
 
-    _doLoading(): Promise<void> {
+    protected abstract _doLoading(): Promise<void>;
 
-        logger.warn('[LazyLoadComponent] Component lazy loading is not implemented', this);
-        return Promise.resolve();
-
-    }
-
-    _finishLoading() {
+    private _finishLoading() {
         this.loading = false;
-
+        log(this._group, 'group of image ');
         this._loadClasses.forEach(lc => this.element.classList.add(lc));
         // this._el.classList.add(...this._loadClasses);
 
@@ -199,5 +201,3 @@ export function BeginLoading() {
 export function SetMainElememt(el: HTMLElement) {
     mainElement = el;
 }
-type a = {};
-type b = [];
