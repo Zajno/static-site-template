@@ -27,7 +27,6 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
         if (this._active) {
             return true;
         }
-        console.log('activ component')
 
         this._active = true;
         if (this.logActivation) {

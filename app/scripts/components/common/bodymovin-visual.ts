@@ -6,21 +6,13 @@ import BodymovinIcon from 'app/components/common/bodymovin-icon';
 import { AnimationConfigWithPath } from 'lottie-web';
 
 export default class BodymovinVisual extends BodymovinIcon {
-    _bodymovinParams: AnimationConfigWithPath;
     _isComplete: boolean;
 
     async doSetup() {
-
         super.doSetup();
 
-        this._bodymovinParams = {
-            container: this.element,
-            renderer: 'svg',
-            loop: true,
-            autoplay: false,
-            path: this.element.dataset.bodymovinPath,
-        };
-        TweenMax.set(this.element, { opacity: 0 });
+        this._bodymovinParams.loop = true;
+        this._bodymovinParams.autoplay = false;
     }
 
     _stopBodymovin() {
@@ -29,9 +21,8 @@ export default class BodymovinVisual extends BodymovinIcon {
     }
 
     _activate(delay, direction) {
-        console.log('activate')
-        TweenMax.set(this._playBodymovin, { opacity: 1 });
-       this._playBodymovin();
+        TweenMax.set(this.element, { opacity: 1 });
+        this._playBodymovin();
     }
 
     _deactivate(delay, direction) {

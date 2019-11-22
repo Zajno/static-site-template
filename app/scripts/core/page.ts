@@ -50,7 +50,7 @@ export default abstract class Page implements IPage {
 
     static async RunPage(PageType: PageCtor) {
         const page = new PageType();
-        console.log('entry run page');
+        // console.log('entry run page');
         try {
             await page.setupAsync();
             page.start();
@@ -87,7 +87,7 @@ export default abstract class Page implements IPage {
 
     async setupPageAsync() {
         /* override me if you want */
-        console.log(this, 'setup page async');
+        // console.log(this, 'setup page async');
     }
 
     protected getSectionOptions(index: number, type: SectionCtor, el: HTMLElement): any {
@@ -99,7 +99,7 @@ export default abstract class Page implements IPage {
         const types = this.sectionTypes;
 
         for (let i = 0; i < sections.length; ++i) {
-            console.log('enter to parse section')
+            // console.log('enter to parse section')
             const section = sections[i];
             const Type = types[i];
             if (!Type) {
@@ -127,7 +127,6 @@ export default abstract class Page implements IPage {
 
     scroll() {
         // this._scrollDirection = scrollDirection;
-        console.log('____scroll');
         const scrollPosition = window.pageYOffset;
         if (this._scrollPosition === scrollPosition) {
             this._scrollDirection = 0.0;
@@ -195,7 +194,7 @@ export default abstract class Page implements IPage {
                     hideTreshold = height * 0.5;
                 }
 
-                console.log(coeffsDirection,'coeffsDirection',top,'top',bottom,'bottom',hideTreshold,'hideTreshold')
+                // console.log(coeffsDirection,'coeffsDirection',top,'top',bottom,'bottom',hideTreshold,'hideTreshold')
             if (getIsHide(top, bottom, hideTreshold)) {
                 show = false;
             }
@@ -204,7 +203,7 @@ export default abstract class Page implements IPage {
     }
 
     _updateSectionActivation(show: boolean, section: Section) {
-        console.log(show,"show section", section,'this section');
+        // console.log(show,"show section", section,'this section');
         if (show != null) {
             if (show) {
                 section.activate(0.0, this._scrollDirection);

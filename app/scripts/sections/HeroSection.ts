@@ -2,7 +2,7 @@
 import Section from 'app/core/section';
 
 // components
-import BodymovinVisual    from 'app/components/common/bodymovin-visual';
+import BodymovinVisual from 'app/components/common/bodymovin-visual';
 
 export default class HeroSection extends Section {
     _visual: BodymovinVisual;
@@ -11,21 +11,13 @@ export default class HeroSection extends Section {
 
         this._visual = await new BodymovinVisual({ el: this.element.querySelector('.bodymovin__wrap'), register: true })
             .setup();
-        console.log(this._visual, 'visual start setup');
     }
 
-    resize(width) {
-
-    }
-    // STATE -------------------------------------------------------------------
-
-    _activate() {
-        console.log('active')
+    protected _activate() {
         this._visual.activate();
-        console.log('active section')
     }
 
-    _deactivate() {
+    protected _deactivate() {
         this._visual.deactivate(0, 30);
     }
 }

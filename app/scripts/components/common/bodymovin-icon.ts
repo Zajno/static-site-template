@@ -1,37 +1,36 @@
-// import logger from 'logger';
 
-import lottie, { AnimationConfigWithPath, AnimationConfig, AnimationItem } from 'lottie-web';
+import lottie, { AnimationConfigWithPath, AnimationConfig, AnimationItem as AnimationItemLottie } from 'lottie-web';
 import TweenLite from 'gsap/TweenLite';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
 import { ImageLazyLoadConfig } from '../lazy/imageLazyLoadComponent';
+import { createLogger } from 'app/logger';
 
 export type AnimationConfigWithPath = AnimationConfig & {
     path?: string;
 };
 
-type animBodymovinT = AnimationItem & {
-    isComplete?: boolean ;
-    isLoaded?: boolean ;
-    playPending?: boolean;
+type AnimationItem = AnimationItemLottie & {
+    isLoaded?: boolean;
 };
 
+const logger = createLogger('[BodymovinIcon]');
+
 export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig> {
-    _bodymovinParams: AnimationConfigWithPath;
+    protected _bodymovinParams: AnimationConfigWithPath;
     protected _isComplete: boolean = true;
     private _isLoaded: boolean = false;
     private _playPending: boolean = false;
-    _animBodymovin: animBodymovinT;
+    protected _animBodymovin: AnimationItem;
 
     // SETUP -------------------------------------------------------------------
 
     async doSetup() {
-
         this._bodymovinParams = {
             container: this.element,
             renderer: 'svg',
             loop: false,
-            autoplay: false,
+            autoplay: true,
             path: this.element.dataset.bodymovinPath,
         };
 
@@ -55,7 +54,6 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
     _doLoading(): Promise<void> {
 
         this._animBodymovin = lottie.loadAnimation(this._bodymovinParams);
-        console.log(this._animBodymovin,'загрузка анимации')
         this._animBodymovin.addEventListener('complete', () => {
             // this._animBodymovin.goToAndStop(0);
             this._isComplete = true;
@@ -68,7 +66,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
 
         return new Promise(resolve => {
             this._animBodymovin.addEventListener('DOMLoaded', () => {
-                // logger.log('[BodymovinIcon] DOMLoaded', this);
+                logger.log('DOMLoaded', this._playPending, this._animBodymovin);
 
                 this._isLoaded = true;
                 if (this._playPending) {
@@ -105,11 +103,9 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
 
         // TODO tweak me
         TweenLite.fromTo(this.element, 0.75, { alpha: 0.0 }, { alpha: 1.0, ease: 'Sine.easeInOut', delay: delay });
-        TweenLite.fromTo(this.element, 2.56, { scale: 0.84 }, { scale: 1.0, force3D: true, ease: 'Sine.easeOut', delay: delay });
+        // TweenLite.fromTo(this.element, 2.56, { scale: 0.84 }, { scale: 1.0, force3D: true, ease: 'Sine.easeOut', delay: delay });
 
         setTimeout(this._playBodymovin, 500);
-
-        this.element.addEventListener('mouseenter', this._playBodymovin);
     }
 
     _deactivate(delay, direction) {
@@ -117,8 +113,6 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
 
         // TODO tweak me
         TweenLite.to(this.element, 0.62, { alpha: 0.0, ease: 'Sine.easeInOut', delay: delay });
-        TweenLite.to(this.element, 0.56, { scale: 0.76, force3D: true, ease: 'Cubic.easeIn', delay: delay });
-
-        this.element.removeEventListener('mouseenter', this._playBodymovin);
+        // TweenLite.to(this.element, 0.56, { scale: 0.76, force3D: true, ease: 'Cubic.easeIn', delay: delay });
     }
 }

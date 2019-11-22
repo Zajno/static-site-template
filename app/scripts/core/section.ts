@@ -68,7 +68,7 @@ export default class Section<TConfig extends SectionConfig = SectionConfig>
         const totalHeight = this.page.height + rect.height;
         const yPos = totalHeight - rect.bottom;
         this._scrollPosition = yPos / totalHeight;
-        console.log(this,'___scrol section')
+        // console.log(this,'___scrol section')
         /* override me if you want */
     }
 
