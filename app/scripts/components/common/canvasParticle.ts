@@ -1,32 +1,41 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-/** @typedef {Object} ParticleSettings
- * @property {number[]} scale
- * @property {number} baseSpeed
- * @property {number} particleSizeX
- * @property {number} particleSizeY
- * @property {number=} floatAmplitude
- * @property {number} canvasWidth
- * @property {number} canvasHeight
- * @property {number} mouseX
- * @property {number} mouseY
- * @property {number} mouseParallaxCoef
- */
+export type ParticleSettings = {
+    scale: number[];
+    baseSpeed: number;
+    particleSizeX: number;
+    particleSizeY: number;
+    floatAmplitude?: number;
+    canvasWidth: number;
+    canvasHeight: number;
+    mouseX: number;
+    mouseY: number;
+    mouseParallaxCoef: number;
+};
 
 export default class Particle {
 
-    /** @param {ParticleSettings} settings */
-    constructor(settings) {
+    protected scale: number;
+    protected speed: number;
+    protected width: number;
+    protected height: number;
+
+    protected x: number;
+    protected y: number;
+
+    protected _prevDeltaTime = 0;
+
+    private doPrepareDraw: (ctx: CanvasRenderingContext2D) => void;
+
+    constructor(protected readonly settings: ParticleSettings) {
         this.scale = settings.scale[Math.floor(Math.random() * settings.scale.length)];
         this.speed = settings.baseSpeed * this.scale;
         this.width = settings.particleSizeX * this.scale;
         this.height = settings.particleSizeY * this.scale;
 
-        /** @type {ParticleSettings} */
-        this.settings = settings;
         this.initializePosition();
 
-        this.doPrepareDraw = context => this.prepareDraw(context);
+        this.doPrepareDraw = ctx => this.prepareDraw(ctx);
     }
 
     initializePosition() {
@@ -34,27 +43,29 @@ export default class Particle {
         this.y = 0;
     }
 
-    update(deltaTime) {
+    update(deltaTime: number) {
         this._prevDeltaTime = deltaTime;
-        // this._float(deltaTime);
     }
 
-    /** @param {CanvasRenderingContext2D} context */
-    draw(context) {
+    draw(context: CanvasRenderingContext2D) {
         this.doPrepareDraw(context);
     }
 
     // will be called before first draw. Override it (and call super!) to make some initialization
-    /** @param {CanvasRenderingContext2D} context */
-    prepareDraw(context) {
-        this.doPrepareDraw = () => { };
+    protected prepareDraw(context: CanvasRenderingContext2D) {
+        this.doPrepareDraw = () => { /* no-op */ };
     }
 }
 
 export class FloatingParticle extends Particle {
+    private baseX: number;
+    private baseY: number;
 
-    /** @param {ParticleSettings} settings */
-    constructor(settings) {
+    private dy = 0;
+    private floatAmplitude: number;
+
+    /** @param {} settings */
+    constructor(settings: ParticleSettings) {
         super(settings);
 
         this.dy = 0;
@@ -78,14 +89,14 @@ export class FloatingParticle extends Particle {
         return Math.floor((this.settings.canvasHeight / 2) - (this.height * Math.random()));
     }
 
-    update(deltaTime) {
+    update(deltaTime: number) {
         this._float(deltaTime);
 
         super.update(deltaTime);
     }
 
     // Just an example of particle floating
-    _float(deltaTime) {
+    private _float(deltaTime: number) {
         this.dy += this.speed * deltaTime;
         let offsetY = Math.sin(this.dy) * this.floatAmplitude;
         let offsetX = 0;
