@@ -11,7 +11,6 @@ export default class HomePage extends CommonPage {
 
     async setupPageAsync() {
         super.setupPageAsync();
-        //
     }
 
     get sectionTypes() {

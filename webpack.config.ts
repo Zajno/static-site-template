@@ -5,8 +5,9 @@ import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 // import MinifyPlugin from 'babel-minify-webpack-plugin';
 import * as helpers from './webpack.helpers';
 import tsNameof from 'ts-nameof';
-
+import * as Path from 'path';
 import * as sitemapData from './app/sitemap';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 const pathResolve = helpers.pathResolve;
 
@@ -132,7 +133,13 @@ const siteConfig = (env: any): webpack.Configuration => {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            outputPath: 'assets/bodymovin',
+                            outputPath: (url, resourcePath, context) => {
+                                const split = resourcePath.split(Path.sep);
+                                const page = split[split.length - 3];
+                                const section = split[split.length - 2];
+                                // console.log('JSON output path', resourcePath, page, section, url);
+                                return Path.join('assets', 'bodymovin', page, section, url);
+                            },
                         },
                     }],
                 },
@@ -203,6 +210,9 @@ const siteConfig = (env: any): webpack.Configuration => {
                 plugin: new OptimizeCssAssetsPlugin(),
                 enabled: fullMinify,
             },
+            new CopyWebpackPlugin([
+                { from: './app/bodymovin/', to: 'assets/bodymovin/', ignore: ['*.json'] },
+            ]),
         ]),
         devServer: {
             contentBase: outputPath,

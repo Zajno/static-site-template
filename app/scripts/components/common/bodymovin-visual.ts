@@ -2,14 +2,12 @@
 // libs
 import { TweenMax, Power1 } from 'gsap';
 
-import Breakpoints from  'app/appBreakpoints';
 import BodymovinIcon from 'app/components/common/bodymovin-icon';
 import { AnimationConfigWithPath } from 'lottie-web';
 
 export default class BodymovinVisual extends BodymovinIcon {
     _bodymovinParams: AnimationConfigWithPath;
     _isComplete: boolean;
-    // SETUP -------------------------------------------------------------------
 
     async doSetup() {
 
@@ -30,10 +28,10 @@ export default class BodymovinVisual extends BodymovinIcon {
         this._isComplete = false;
     }
 
-    // STATE -------------------------------------------------------------------
-
     _activate(delay, direction) {
-        setTimeout(this._playBodymovin, 500);
+        console.log('activate')
+        TweenMax.set(this._playBodymovin, { opacity: 1 });
+       this._playBodymovin();
     }
 
     _deactivate(delay, direction) {

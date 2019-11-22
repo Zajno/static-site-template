@@ -26,8 +26,8 @@ export default abstract class Page implements IPage {
     private _root: HTMLElement = null;
     private _sections: Section[];
 
-    private _width: number;
-    private _height: number;
+    private _width: number = 0;
+    private _height: number = 0;
 
     private _centerY: number = 0.0;
 
@@ -76,12 +76,12 @@ export default abstract class Page implements IPage {
     public async setupAsync() {
         this._root = document.getElementById('main')
             || document.getElementsByTagName('body')[0];
-
         window.onresize = this.resize.bind(this);
         window.onscroll = this.scroll.bind(this);
         window.onwheel = this.onWheel.bind(this);
         await this.setupPageAsync();
         await this._setupSections(this._root.querySelectorAll('section'));
+        setTimeout(()=>this.scroll(),1000)
 
     }
 
@@ -127,6 +127,7 @@ export default abstract class Page implements IPage {
 
     scroll() {
         // this._scrollDirection = scrollDirection;
+        console.log('____scroll');
         const scrollPosition = window.pageYOffset;
         if (this._scrollPosition === scrollPosition) {
             this._scrollDirection = 0.0;
@@ -136,7 +137,6 @@ export default abstract class Page implements IPage {
                 : 1.0;
         }
         this._scrollPosition = scrollPosition;
-
         this._updateSections();
     }
 
@@ -185,25 +185,26 @@ export default abstract class Page implements IPage {
             if (height < showTreshold)
                 showTreshold = height * 0.5;
 
-            // show if top of next element is in range
-            if (getIsShow(top, bottom, showTreshold)) {
-                show = true;
-            }
+                // show if top of next element is in range
+                if (getIsShow(top, bottom, showTreshold)) {
+                    show = true;
+                }
 
-            let hideTreshold = this._height * coeffs.hide;
-            if (height < hideTreshold) {
-                hideTreshold = height * 0.5;
-            }
+                let hideTreshold = this._height * coeffs.hide;
+                if (height < hideTreshold) {
+                    hideTreshold = height * 0.5;
+                }
 
+                console.log(coeffsDirection,'coeffsDirection',top,'top',bottom,'bottom',hideTreshold,'hideTreshold')
             if (getIsHide(top, bottom, hideTreshold)) {
                 show = false;
             }
-
             this._updateSectionActivation(show, section);
         }
     }
 
     _updateSectionActivation(show: boolean, section: Section) {
+        console.log(show,"show section", section,'this section');
         if (show != null) {
             if (show) {
                 section.activate(0.0, this._scrollDirection);
