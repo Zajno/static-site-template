@@ -48,7 +48,7 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
         return this._deactivate(delay, direction);
     }
 
-    protected  _activate(delay?: number, direction?: number) { }
+    protected _activate(delay?: number, direction?: number) { }
 
     protected _deactivate(delay?: number, direction?: number) { }
 

@@ -1,29 +1,37 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-import { SUPPORT_MIX_BLEND as supportMixBlend }  from 'utils/constants';
+import { SUPPORT_MIX_BLEND as supportMixBlend }  from 'app/utils/constants';
 
-import LazyLoadComponent from '../lazy/lazyLoadComponent';
-import ImageLazyLoadComponent from '../lazy/imageLazyLoadComponent';
+import LazyLoadComponent, { LazyLoadConfig } from 'app/components/lazy/lazyLoadComponent';
+import ImageLazyLoadComponent from 'app/components/lazy/imageLazyLoadComponent';
 
-const States = {
-    Undefined: 0,
-    LoadAllowed: 1,
-    Loaded: 2,
-    Paused: 3,
-    Playing: 4,
+const enum States {
+    Undefined = 0,
+    LoadAllowed = 1,
+    Loaded = 2,
+    Paused = 3,
+    Playing = 4,
+}
+
+export type VideoConfig = LazyLoadConfig & {
+    el: HTMLVideoElement,
+};
+
+type VideoSource = HTMLSourceElement & {
+    targetSrc?: string;
+    srcSet?: {};
 };
 
 const SCREEN_WIDTH_FOR_VIDEOS = 1024;
-
 const lazyClass = 'lazy';
 
-function getObjectDataSrc(source) {
-    const data = {};
+function getObjectDataSrc(source: VideoSource) {
+    const data: { [breakpoint: number]: string } = {};
 
     let minWidth = Number.MAX_VALUE;
     let fallbackLink = null;
 
-    Object.keys(source.dataset).forEach(function (dataSrc) {
+    Object.keys(source.dataset).forEach((dataSrc) => {
         if (/^src/.test(dataSrc)) {
             const key = dataSrc.substr(3);
             const width = (+key) || 0;
@@ -46,8 +54,7 @@ function getObjectDataSrc(source) {
     return data;
 }
 
-
-function srcSet(source, width) {
+function srcSet(source: VideoSource, width: number) {
     let currentBreakPoint = 0;
 
     if (!source.srcSet) {
@@ -55,46 +62,59 @@ function srcSet(source, width) {
     }
 
     const data = source.srcSet;
-    Object.keys(data).forEach(function (breakpoint) {
+    Object.keys(data).forEach(key => {
+        const breakpoint = +key;
         if (breakpoint >= currentBreakPoint && width >= breakpoint) {
             currentBreakPoint = breakpoint;
-            // logger.log(currentBreakPoint);
         }
     });
-    // logger.log(data[currentBreakPoint]);
     return data[currentBreakPoint];
 }
 
-export default class Video extends LazyLoadComponent {
-    // SETUP -------------------------------------------------------------------
+export default class Video extends LazyLoadComponent<VideoConfig> {
 
-    _setup(config) {
-        /** @type {HTMLVideoElement} */
-        this._el;
-        this._widthVieport;
+    private _widthVieport: number;
+    private _state: States;
+    private _requestedState: States;
+    private _changingState: boolean;
 
+    private _placeHolder: HTMLImageElement;
+    private _hasPlaceholder: boolean;
+    private _usePlaceholder?: boolean;
+
+    private _hasMixBlend: boolean;
+    private _placeHoldersLoaded: boolean;
+
+    private _sources: VideoSource[];
+    private _logId: string;
+
+    constructor(config: VideoConfig) {
         if (config.register == null) {
             config.register = true;
         }
 
-        super._setup(config);
+        super(config);
+    }
 
+    get video() { return this.element as HTMLVideoElement; }
+
+    async doSetup() {
         this._state = States.Undefined;
         this._requestedState = States.Undefined;
 
-        /** @type {HTMLImageElement} */
-        this._placeHolder = this._el.parentElement.querySelector('.video-placeholder');
+        this._placeHolder = this.element.parentElement.querySelector('.video-placeholder');
         this._hasPlaceholder = this._placeHolder != null
-            && this._el.classList.contains('has-placeholder-mobile');
+            && this.element.classList.contains('has-placeholder-mobile');
 
-        this._hasMixBlend = this._el.classList.contains('has-mix-blend');
+        this._hasMixBlend = this.element.classList.contains('has-mix-blend');
 
         this._placeHoldersLoaded = false;
 
-        this._sources = this._el.querySelectorAll('source');
+        this._sources = Array.from(this.element.querySelectorAll('source'));
 
-        this._logId = this._el.id;
+        this._logId = this.element.id;
 
+        await super.doSetup();
     }
 
     _checkIsSourceChanged(doReplace = false) {
@@ -127,37 +147,37 @@ export default class Video extends LazyLoadComponent {
         }
 
         // SHOW VIDEO
-        this._el.hidden = false;
+        this.video.hidden = false;
 
         const isChanged = this._checkIsSourceChanged(true);
 
         // this.log('[VIDEO] Switching to Video');
 
         if (isChanged) {
-            this._el.classList.add(lazyClass);
+            this.video.classList.add(lazyClass);
 
             const loadPromise = new Promise(resolve => {
 
                 const onVideoCanPlay = () => {
                     if (this._state <= States.LoadAllowed) {
-                        this._el.removeEventListener('canplay', onVideoCanPlay);
+                        this.video.removeEventListener('canplay', onVideoCanPlay);
                         this._switchToState(States.Loaded);
 
                         resolve();
                     }
                 };
 
-                this._el.addEventListener('canplay', onVideoCanPlay);
+                this.video.addEventListener('canplay', onVideoCanPlay);
 
                 // this.log('[VIDEO] Loading...');
 
-                this._el.load();
+                this.video.load();
             });
             await loadPromise;
         }
 
         // play video in case we;re active
-        if (this._active) {
+        if (this.isActive) {
             await this._switchToState(States.Playing);
         }
     }
@@ -169,7 +189,7 @@ export default class Video extends LazyLoadComponent {
         this._placeHolder.hidden = false;
 
         // HIDE VIDEO
-        this._el.hidden = true;
+        this.video.hidden = true;
 
         await this._switchToState(States.Paused);
 
@@ -183,7 +203,7 @@ export default class Video extends LazyLoadComponent {
         }
     }
 
-    async _switchToState(targetState) {
+    async _switchToState(targetState: States) {
         if (targetState < States.LoadAllowed) {
             throw new Error('Invalid state');
         }
@@ -209,13 +229,13 @@ export default class Video extends LazyLoadComponent {
         this._changingState = true;
         switch (targetState) {
             case States.Playing: {
-                await this._el.play();
+                await this.video.play();
                 // this.log('played');
                 break;
             }
 
             case States.Paused: {
-                this._el.pause();
+                this.video.pause();
                 this.log('paused');
                 break;
             }
@@ -231,7 +251,7 @@ export default class Video extends LazyLoadComponent {
             }
 
             default: {
-                throw new Error('Unhandled targetState:', targetState);
+                throw new Error('Unhandled targetState: ' + targetState);
             }
         }
         this._changingState = false;
@@ -247,7 +267,7 @@ export default class Video extends LazyLoadComponent {
 
     async _load() {
         if (this._usePlaceholder == null) {
-            this.log('Skipping load beacuse don\'t know about placeholder');
+            this.log('Skipping load beacuse don\'t know about placeholder. Try to call resize first!');
             return;
         }
 
@@ -267,7 +287,7 @@ export default class Video extends LazyLoadComponent {
         // TODO Change video playback position ?
     }
 
-    resize(width, height) {
+    resize(width: number, height: number) {
         const isMobile = width <= SCREEN_WIDTH_FOR_VIDEOS;
         const usePlaceholder = !!((this._hasPlaceholder && isMobile)
             || (this._hasMixBlend && !supportMixBlend));
@@ -291,7 +311,6 @@ export default class Video extends LazyLoadComponent {
         if (this._state >= States.LoadAllowed) {
             this._load();
         }
-
     }
 
     // STATE -------------------------------------------------------------------
@@ -304,7 +323,7 @@ export default class Video extends LazyLoadComponent {
         this._switchToState(States.Paused);
     }
 
-    log(...args) {
+    log(...args: any[]) {
         if (this._logId) {
             logger.log(`[VIDEO = ${this._logId}]`, ...args);
         }
