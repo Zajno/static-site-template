@@ -1,5 +1,5 @@
-import creditCard from 'utils/creditCard';
-import getChar from 'utils/getChar';
+import creditCard from 'app/utils/creditCard';
+import getChar from 'app/utils/getChar';
 
 const RE = {
     name: /^[a-z,\.'-]+( +[a-z,\.'-]+)+$/i,
@@ -11,8 +11,7 @@ const RE = {
     creditCardNumber: /^\d+$/,
 };
 
-function getValueValidator(fieldName) {
-
+function getValueValidator(fieldName: string) {
 
     switch (fieldName) {
         case 'userInfo.fullName':
@@ -79,7 +78,7 @@ function getValueValidator(fieldName) {
     return (() => true);
 }
 
-function getHandler(fieldName) {
+function getHandler(fieldName: string) {
     let re = null;
 
     switch (fieldName) {

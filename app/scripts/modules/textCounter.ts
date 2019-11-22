@@ -1,6 +1,17 @@
-export default ({ el, delay = 0.0, duration }) => {
-    if (el.clearCounter) {
-        el.clearCounter();
+export type TextCounterConfig = {
+    el: HTMLElement,
+    delay: number,
+    duration: number,
+};
+
+export default ({ el, delay = 0.0, duration }: TextCounterConfig) => {
+    const bel = el as HTMLElement & {
+        clearCounter: () => void,
+        counterDelay: NodeJS.Timeout,
+    };
+
+    if (bel.clearCounter) {
+        bel.clearCounter();
     }
 
     const number = +el.textContent;
@@ -14,9 +25,9 @@ export default ({ el, delay = 0.0, duration }) => {
 
     let cancel = false;
     const durationMs = duration * 1000.0;
-    el.textContent = '0';
+    bel.textContent = '0';
 
-    el.counterDelay = setTimeout(() => {
+    bel.counterDelay = setTimeout(() => {
 
         const start = performance.now();
 
@@ -37,7 +48,7 @@ export default ({ el, delay = 0.0, duration }) => {
             }
 
             const value = Math.ceil(number * progress);
-            el.textContent = value;
+            el.textContent = value + '';
 
             if (!cancel) {
                 window.requestAnimationFrame(doUpdate);
@@ -48,9 +59,9 @@ export default ({ el, delay = 0.0, duration }) => {
 
     }, delay * 1000.0);
 
-    el.clearCounter = () => {
+    bel.clearCounter = () => {
         cancel = true;
-        el.textContent = number;
-        clearTimeout(el.counterDelay);
+        el.textContent = number + '';
+        clearTimeout(bel.counterDelay);
     };
 };

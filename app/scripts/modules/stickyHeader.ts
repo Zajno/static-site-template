@@ -5,10 +5,10 @@ const classes = {
 
 const treshold = 0;
 
-let headers;
-let enabled;
+let headers: NodeListOf<HTMLElement>;
+let enabled: boolean;
 
-function setEnabled(enable) {
+function setEnabled(enable: boolean) {
     if (enabled === enable) {
         return;
     }
@@ -30,7 +30,7 @@ function setEnabled(enable) {
     }
 }
 
-function update(currentScroll) {
+function update(currentScroll: number) {
     setEnabled(currentScroll > treshold);
 }
 

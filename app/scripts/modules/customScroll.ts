@@ -1,22 +1,27 @@
-import logger from 'logger';
-import Component from 'core/component';
+import logger from 'app/logger';
+import Component, { ComponentConfig } from 'app/core/component';
 import { TweenLite } from 'gsap';
 
-export default class CustomScroll extends Component {
-    // eslint-disable-next-line no-useless-constructor
-    constructor(config) {
-        super(config);
+export type CustomScrollConfig = ComponentConfig & {
+    el: HTMLDocument,
+    target: HTMLElement,
+    speed?: number,
+};
 
-        this._updateScroller = this._updateScroller.bind(this);
-        this._scrollHandler = this._scrollHandler.bind(this);
-    }
+export default class CustomScroll extends Component<CustomScrollConfig> {
 
-    _setup(config) {
-        /** @type {HTMLElement} */
-        this._el = config.el;
-        /** @type {HTMLElement} */
-        this._target = config.target;
-        this._speed = config.speed || 0.01; // scroll speed
+    private _speed: number;
+    private _resizeRequest: number;
+    private _endY: number;
+    private _y: number;
+    private _scrollRequest: number;
+    private _rafId: number;
+    private _tickFunctions: ((y: number) => void)[];
+
+    get doc() { return this._config.el; }
+
+    doSetup() {
+        this._speed = this._config.speed || 0.01; // scroll speed
 
         this._resizeRequest = 1;
         this._endY = 0;
@@ -26,8 +31,7 @@ export default class CustomScroll extends Component {
 
         this._tickFunctions = [];
 
-
-        TweenLite.set(this._target, {
+        TweenLite.set(this._config.target, {
             rotation: 0.01,
             force3D: true,
         });
@@ -40,10 +44,10 @@ export default class CustomScroll extends Component {
     _activate() {
         this._updateScroller();
 
-        this._el.addEventListener('scroll', this._scrollHandler);
+        this.doc.addEventListener('scroll', this._scrollHandler);
     }
 
-    _scrollHandler() {
+    _scrollHandler = () => {
         this._scrollRequest++;
 
         if (!this._rafId) {
@@ -51,16 +55,16 @@ export default class CustomScroll extends Component {
         }
     }
 
-    _updateScroller() {
+    _updateScroller = () => {
         const resized = this._resizeRequest > 0;
 
         if (resized) {
-            const height = this._target.clientHeight;
-            this._el.body.style.height = height + 'px';
+            const height = this._config.target.clientHeight;
+            this.doc.body.style.height = height + 'px';
             this._resizeRequest = 0;
         }
 
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop || this._el.body.scrollTop || 0;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop || this.doc.body.scrollTop || 0;
 
         this._endY = scrollY;
         this._y += (scrollY - this._y) * this._speed;
@@ -70,7 +74,7 @@ export default class CustomScroll extends Component {
             this._scrollRequest = 0;
         }
 
-        TweenLite.set(this._target, {
+        TweenLite.set(this._config.target, {
             y: -this._y,
         });
 
@@ -82,6 +86,6 @@ export default class CustomScroll extends Component {
     }
 
     _deactivate() {
-        this._el.removeEventListener('scroll', this._scrollHandler);
+        this.doc.removeEventListener('scroll', this._scrollHandler);
     }
 }

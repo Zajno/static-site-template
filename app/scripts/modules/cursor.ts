@@ -1,8 +1,25 @@
-import logger from 'logger';
-import Component from 'core/component';
+import logger from 'app/logger';
+import Component, { ComponentConfig } from 'app/core/component';
 import { TweenLite } from 'gsap';
 
-export default class Cursor extends Component {
+export type CursorConfig = ComponentConfig & {
+    followDuration: number,
+};
+
+export default class Cursor extends Component<CursorConfig> {
+
+    private _cursorOnLink: boolean;
+    private _isLinkAlreadyActive: boolean;
+    private _isCursorActive: boolean;
+    private _cursorSmall: HTMLElement;
+    private _cursorLarge: HTMLElement;
+    private _cursorHold: HTMLElement;
+    private _links: NodeListOf<HTMLElement>;
+    private _holdLinks: NodeListOf<HTMLElement>;
+
+    private _clientX: number;
+    private _clientY: number;
+
     constructor(config) {
         super(config);
 
@@ -17,24 +34,21 @@ export default class Cursor extends Component {
         this._showCursor = this._showCursor.bind(this);
     }
 
-    _setup(config) {
-        /** @type {number} */
-        this._followDuration = config.followDuration;
+    async doSetup() {
         this._cursorOnLink = false;
         this._isLinkAlreadyActive = false;
-        this._cursorSmall = this._el.querySelector('#cursor-inner');
-        this._cursorLarge = this._el.querySelector('#cursor-outer');
-        this._cursorHold = this._el.querySelector('.cursor-hold');
+        this._cursorSmall = this.element.querySelector('#cursor-inner');
+        this._cursorLarge = this.element.querySelector('#cursor-outer');
+        this._cursorHold = this.element.querySelector('.cursor-hold');
 
-        this._links = this._el.querySelectorAll('.js-link');
-        this._holdLinks = this._el.querySelectorAll('.js-link-hold');
-
+        this._links = this.element.querySelectorAll('.js-link');
+        this._holdLinks = this.element.querySelectorAll('.js-link-hold');
     }
 
     _activate() {
-        this._el.addEventListener('mousemove', this._mouseMoveHandler);
-        this._el.addEventListener('mousedown', this._mouseDown);
-        this._el.addEventListener('mouseup', this._mouseUp);
+        this.element.addEventListener('mousemove', this._mouseMoveHandler);
+        this.element.addEventListener('mousedown', this._mouseDown);
+        this.element.addEventListener('mouseup', this._mouseUp);
 
         this._links.forEach((link) => {
             link.addEventListener('mouseenter', this._onLinkEnter);
@@ -55,9 +69,9 @@ export default class Cursor extends Component {
 
     _deactivate() {
 
-        this._el.removeEventListener('mousemove', this._mouseMoveHandler);
-        this._el.removeEventListener('mousedown', this._mouseDown);
-        this._el.removeEventListener('mouseup', this._mouseUp);
+        this.element.removeEventListener('mousemove', this._mouseMoveHandler);
+        this.element.removeEventListener('mousedown', this._mouseDown);
+        this.element.removeEventListener('mouseup', this._mouseUp);
 
         this._links.forEach((link) => {
             link.removeEventListener('mouseenter', this._onLinkEnter);
@@ -87,8 +101,16 @@ export default class Cursor extends Component {
         const cursorSmallWidth = this._cursorSmall.clientWidth;
         const cursorSmallHeight = this._cursorSmall.clientHeight;
 
-        TweenLite.to(this._cursorSmall, 0.0, { x: this._clientX - cursorSmallWidth / 2 + borderWidth, y: this._clientY - cursorSmallHeight / 2 + borderWidth, rotation: 0.01 });
-        TweenLite.to(this._cursorLarge, this._followDuration, { x: (this._clientX - cursorLargeWidth / 2), y: (this._clientY - cursorLargeHeight / 2), rotation: 0.01 });
+        TweenLite.to(this._cursorSmall, 0.0, {
+            x: this._clientX - cursorSmallWidth / 2 + borderWidth,
+            y: this._clientY - cursorSmallHeight / 2 + borderWidth,
+            rotation: 0.01,
+        });
+        TweenLite.to(this._cursorLarge, this._config.followDuration, {
+            x: (this._clientX - cursorLargeWidth / 2),
+            y: (this._clientY - cursorLargeHeight / 2),
+            rotation: 0.01,
+        });
 
         if (!this._isCursorActive) {
             this._showCursorFirstTime();

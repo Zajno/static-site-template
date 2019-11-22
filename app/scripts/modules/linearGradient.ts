@@ -1,15 +1,12 @@
 import { TweenMax, TimelineMax } from 'gsap';
 import logger from 'app/logger';
 
-/** @typedef {Object} LinearGradient
- * @property {number} directionDegrees
- * @property {{color:string,pos:number}[]} colors
- */
+type LinearGradient = {
+    directionDegrees: number,
+    colors: {color: string, pos: number }[],
+};
 
-/** @param {HTMLElement} target
- * @param {LinearGradient} source
-*/
-function updateGradientFunc(target, source) {
+function updateGradientFunc(target: HTMLElement, source: LinearGradient) {
     return () => {
         const css = [
             'linear-gradient(',
@@ -25,13 +22,7 @@ function updateGradientFunc(target, source) {
     };
 }
 
-/**
- * @param {HTMLElement} target
- * @param {number} duration
- * @param {LinearGradient} from
- * @param {LinearGradient} to
- */
-function animateFromTo(target, duration, from, to) {
+function animateFromTo(target: HTMLElement, duration: number, from: LinearGradient, to: LinearGradient) {
     const stops = [];
     const tweens = [];
 
@@ -62,12 +53,7 @@ function animateFromTo(target, duration, from, to) {
     return timeline;
 }
 
-/**
- * @param {number} rotationDegrees
- * @param  {{c:string,p:number}[]} stops
- * @returns {LinearGradient}
- */
-function construct(rotationDegrees, ...stops) {
+function construct(rotationDegrees: number, ...stops: {c: string, p: number }[]): LinearGradient {
     return {
         directionDegrees: rotationDegrees,
         colors: stops.map(s => ({ color: s.c, pos: s.p })),

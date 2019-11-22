@@ -1,23 +1,28 @@
 import TweenMax, { Power1 } from 'gsap/TweenMax';
 
 class MobileMenu {
-    constructor(menu, btn) {
-        this.menu = menu;
-        this.btn = btn;
 
+    private leftSail: HTMLElement;
+    private rightSail: HTMLElement;
+    private list: HTMLElement;
+    private links: NodeListOf<HTMLElement>;
+
+    private isOpen = false;
+
+    constructor(private readonly menu: HTMLElement, private readonly btn: HTMLElement) {
         this.leftSail = document.getElementById('mobile-menu-sail-l');
         this.rightSail = document.getElementById('mobile-menu-sail-r');
         this.list = document.getElementById('#mobile-menu-list');
         this.links = document.querySelectorAll('.mobile-menu-link');
 
-        this.isOpen = false;
-        this.toggleState = this.toggleState.bind(this);
         this.setupBurger();
     }
 
     open() {
-        if (this.isOpen)
+        if (this.isOpen) {
             return;
+        }
+
         this.menu.classList.add('opend');
         this.btn.classList.add('active');
         TweenMax.to(this.menu, 0.5, { y: 0 });
@@ -60,7 +65,7 @@ class MobileMenu {
         this.btn.addEventListener('click', this.toggleState);
     }
 
-    toggleState() {
+    toggleState = () => {
         if (this.menu.classList.contains('opend')) {
             this.close();
         } else {
@@ -69,7 +74,7 @@ class MobileMenu {
     }
 }
 
-const btn = document.querySelector('.hamburger');
-const menu = document.getElementById('mobile-menu');
+const _btn = document.querySelector('.hamburger') as HTMLElement;
+const _menu = document.getElementById('mobile-menu');
 
-export default new MobileMenu(menu, btn);
+export default new MobileMenu(_menu, _btn);

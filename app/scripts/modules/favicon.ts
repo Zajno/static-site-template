@@ -6,9 +6,9 @@ const shortcutIcons = document.head.querySelectorAll('link[rel="shortcut icon"]'
 const appleTouchIcons = document.head.querySelectorAll('link[rel="apple-touch-icon"]');
 const safariPinnedTab = document.head.querySelectorAll('link[rel="mask-icon"]');
 
-const favicons = [...icons, ...shortcutIcons, ...appleTouchIcons, ...safariPinnedTab];
+const favicons = [...icons, ...shortcutIcons, ...appleTouchIcons, ...safariPinnedTab] as HTMLLinkElement[];
 
-function changeWebsiteTheme(scheme) {
+function changeWebsiteTheme(scheme: string) {
     // const path = `${window.location.origin}/assets/img/${scheme || ''}-`;
     // if (!scheme) {
     //     scheme = '';

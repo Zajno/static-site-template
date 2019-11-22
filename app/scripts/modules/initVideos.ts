@@ -1,13 +1,13 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
 const SCREEN_WIDTH_FOR_VIDEOS = 1024;
 // if (window.innerWidth > 1024 && $('.home-hero-img-wrap').length > 0) {
 
-export default function initVideos(width) {
+export default function initVideos(width: number) {
     // home page change content video & img
-    const videos = document.querySelectorAll('.home-hero-img-wrap video');
-    const videoSources = document.querySelectorAll('.home-hero-img-wrap video source');
-    const imgEl = document.querySelectorAll('.home-hero-img-wrap .img-large');
+    const videos = document.querySelectorAll('.home-hero-img-wrap video') as NodeListOf<HTMLVideoElement>;
+    const videoSources = document.querySelectorAll('.home-hero-img-wrap video source') as NodeListOf<HTMLSourceElement>;
+    const imgEl = document.querySelectorAll('.home-hero-img-wrap .img-large') as NodeListOf<HTMLImageElement>;
 
     // logger.log('initVideos:', videos);
     if (width > SCREEN_WIDTH_FOR_VIDEOS && videos.length > 0) {

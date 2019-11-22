@@ -1,4 +1,5 @@
-function prepareEmail(to, subject, bodyText) {
+
+export function prepareEmail(to: string, subject: string, bodyText: string) {
     const form = document.createElement('form');
 
     // Set the form attributes
@@ -17,7 +18,7 @@ function prepareEmail(to, subject, bodyText) {
     document.body.removeChild(form);
 }
 
-function setupMailTo() {
+export function setupMailTo() {
     const mailTos = document.querySelectorAll('.mailto-link');
     mailTos.forEach(mailto => {
         const to = 'hello@zajno.com';
@@ -29,5 +30,3 @@ function setupMailTo() {
         });
     });
 }
-
-module.exports = { prepareEmail, setupMailTo };
