@@ -1,29 +1,22 @@
-import logger from 'logger';
-import Component from 'core/component';
-import { TweenMax } from 'gsap';
+import logger from 'app/logger';
+import Component, { ComponentConfig } from 'app/core/component';
 
-export default class LongPress extends Component {
-    constructor(config) {
-        super(config);
+export type LongPressConfig = ComponentConfig & {
+    longPressDuration: number;
+    callback: (target: HTMLElement) => void;
+    callBackAnimation: (target: HTMLElement, count: number) => void;
+    callBackResetAnimation: (target: HTMLElement) => void;
+};
 
-        this._counter = 0;
+export default class LongPress extends Component<LongPressConfig> {
 
-        this._pressingDown = this._pressingDown.bind(this);
-        this._notPressingDown = this._notPressingDown.bind(this);
-        this._longPressHolder = this._longPressHolder.bind(this);
-        this._timer = this._timer.bind(this);
-    }
+    private _counter = 0;
+    private _links: NodeListOf<HTMLElement>;
+    private _longPressEvent = new CustomEvent('longpress');
+    private _timerID: number;
 
-    _setup(config) {
-
-        this._longPressDuration = config.longPressDuration;
-        this._longPressCallBack = config.callback;
-        this._pressAnim = config.callBackAnimation;
-        this._resetAnim = config.callBackResetAnimation;
-
-        this._links = this._el.querySelectorAll('.longPress-link');
-
-        this._longPressEvent = new CustomEvent('longpress');
+    async doSetup() {
+        this._links = this.element.querySelectorAll('.longPress-link');
     }
 
     _activate() {
@@ -36,7 +29,6 @@ export default class LongPress extends Component {
             link.addEventListener('longpress', this._longPressHolder, false);
             link.addEventListener('click', (e) => e.preventDefault());
         });
-
     }
 
     _deactivate() {
@@ -50,7 +42,7 @@ export default class LongPress extends Component {
         });
     }
 
-    _pressingDown(e) {
+    _pressingDown = (e) => {
         // Start the timer
         // if ((e.which === 1 || e.type === 'touchstart') && e.target.classList.contains('js-active')) {
         if ((e.which === 1 || e.type === 'touchstart')) {
@@ -62,34 +54,32 @@ export default class LongPress extends Component {
         }
     }
 
-    _notPressingDown(e) {
+    _notPressingDown = (e) => {
         // Stop the timer
         cancelAnimationFrame(this._timerID);
 
         this._counter = 0;
-        this._resetAnim(e.target);
-
-        // logger.log('Not pressing!');
+        this._config.callBackResetAnimation(e.target);
     }
 
     // Runs at 60fps when you are pressing down
-    _timer(target) {
+    _timer = (target: HTMLElement) => {
 
         // logger.log('Timer tick!');
 
-        if (this._counter < this._longPressDuration) {
+        if (this._counter < this._config.longPressDuration) {
             this._timerID = requestAnimationFrame(() => { this._timer(target); });
             this._counter += 1;
 
-            this._pressAnim(target, this._counter);
+            this._config.callBackAnimation(target, this._counter);
         } else {
             logger.log('Press threshold reached! ');
             target.dispatchEvent(this._longPressEvent);
         }
     }
 
-    _longPressHolder(e) {
+    _longPressHolder = (e) => {
         logger.log('longPress event fired!');
-        this._longPressCallBack(e.target);
+        this._config.callback(e.target);
     }
 }
