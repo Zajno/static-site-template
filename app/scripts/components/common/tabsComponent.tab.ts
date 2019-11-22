@@ -1,19 +1,32 @@
 
-import Component from 'core/component';
+import Component, { ComponentConfig } from 'app/core/component';
 
-/** @typedef {import ('core/component').ComponentConfig} ComponentConfig */
-/** @typedef {import ('./tabsComponent').DelayedOperation} DelayedOperation */
+export interface tabConfig{
 
-export class TabItem extends Component {
-    /** @param {ComponentConfig} config */
-    // eslint-disable-next-line no-useless-constructor
-    constructor(config) {
-        super(config);
-        /** @type {HTMLElement & {tabHooks?:{activate:DelayedOperation,deactivate:DelayedOperation}}} */
-        this._el;
+}
+
+export interface TabItemElementType extends HTMLElement {
+    linkHooks: any;
+    tabHooks?: {
+        activate: (direction: number) => Promise<any>|void,
+        deactivate: (andirection: number) => Promise<any>|void,
     }
+    activate(direction: number): void;
+    deactivate(direction: number): void;
+}
+
+export class TabItem<Tconfig> extends Component<ComponentConfig> {
 
     get tabId() { return this._el.dataset.navId; }
+    _el: TabItemElementType;
+
+    // tslint:disable-next-line: no-empty
+    protected doSetup(): void | Promise<void> {
+    }
+
+    constructor(config: ComponentConfig) {
+        super(config);
+    }
 
     _activate(direction) {
         return Promise.resolve(this._activateSelf(direction))
@@ -35,32 +48,33 @@ export class TabItem extends Component {
             });
     }
 
-    // eslint-disable-next-line class-methods-use-this
     _activateSelf(direction) {
         return Promise.resolve();
     }
 
-    // eslint-disable-next-line class-methods-use-this
     _deactivateSelf(direction) {
         return Promise.resolve();
     }
 }
+ export interface HtmlTabItemConfig extends ComponentConfig {
+    activateClass: string;
+}
 
-export class HtmlTabItem extends TabItem {
+export class HtmlTabItem<HtmlTabItemConfig> extends TabItem<TConfig extends HtmlTabItemConfig = HtmlTabItemConfig>  {
+    _activateClass: string;
 
-    /** @param {ComponentConfig & {activateClass:string}} config */
-    constructor(config) {
+    constructor(config: HtmlTabItemConfig) {
         super(config);
 
         this._activateClass = config.activateClass;
     }
 
-    _activateSelf(direction) {
+    _activateSelf() {
         this._el.classList.add(this._activateClass);
         return Promise.resolve();
     }
 
-    _deactivateSelf(direction) {
+    _deactivateSelf() {
         this._el.classList.remove(this._activateClass);
         return Promise.resolve();
     }

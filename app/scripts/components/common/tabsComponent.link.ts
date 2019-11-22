@@ -1,32 +1,35 @@
-import Component from 'core/component';
-import { BufferedConsoleLogger } from 'utils/logger.js';
+import Component, { ComponentConfig } from 'app/core/component';
+
+import { TabItemElementType } from './tabsComponent.tab';
 
 /** @typedef {(import ('./tabsComponent.tab.js').TabItem)} TabItem */
 /** @typedef {import ('./tabsComponent').DelayedOperation} DelayedOperation */
 
-export class TabLinkItem extends Component {
-    _setup(config) {
-        super._setup(config);
-        /** @type {HTMLElement & {linkHooks?:{activate:DelayedOperation,deactivate:DelayedOperation}}} */
+export class TabLinkItem<TabsComponentConfig> extends Component{
+    protected doSetup(): void | Promise<void> {
         this._el;
-        /** @type {TabItem[]} */
         this._tabs = [];
     }
+    _activateCallback: (link:any) => void
+    _el: TabItemElementType;
+    _tabs: TabItemElementType[];
+    _chainActivation: any;
+    _setup(config) {
 
-    /** @returns {string} */
-    get targetId() { throw new Error('not implemented'); }
+    }
+
+    get targetId():string { throw new Error('not implemented'); }
 
     get tabs() { return this._tabs; }
 
     get item() { return this._el; }
 
-    /** @param {(link:TabLinkItem) => void} cb */
-    setActivateCallback(cb) {
+    setActivateCallback(cb:(link : any) => void) {
         this._activateCallback = cb;
         return this;
     }
 
-    setActivationChain(enabled) {
+    setActivationChain(enabled: boolean) {
         this._chainActivation = enabled;
         return this;
     }
@@ -41,7 +44,7 @@ export class TabLinkItem extends Component {
         }
     }
 
-    _activate(direction) {
+    _activate(direction:number) {
         if (this._chainActivation) {
             let res = Promise.resolve(this._activateSelf(direction));
             this._tabs.forEach(t => {
@@ -87,9 +90,11 @@ export class TabLinkItem extends Component {
     }
 }
 
-export class HtmlTabLinkItem extends TabLinkItem {
-    /** @param {HTMLElement} item */
-    constructor(item, activeClass = 'active', clickEnabled = true, hoverEnabled = false) {
+export class HtmlTabLinkItem<TabsComponentConfig> extends TabLinkItem {
+    _activeClass: any;
+    _clickEnabled: any;
+    _hoverEnabled: any;
+    constructor(item: HTMLElement, activeClass = 'active', clickEnabled = true, hoverEnabled = false) {
         super({ el: item, activeClass, clickEnabled, hoverEnabled });
     }
 
@@ -113,7 +118,7 @@ export class HtmlTabLinkItem extends TabLinkItem {
 
     init() {
         if (this._el.classList.contains(this._activeClass)) {
-            this.activate(0);
+            this._activate(0);
         }
         return super.init();
     }

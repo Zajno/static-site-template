@@ -1,67 +1,76 @@
 /* eslint-disable react/no-multi-comp */
 
-import Component from 'core/component';
-import logger from 'logger';
+import Component ,{ ComponentConfig } from 'app/core/component';
+import logger from 'app/logger';
 
-import { TabItem, HtmlTabItem } from './tabsComponent.tab';
-import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
+import { HtmlTabItem, TabItemElementType } from './tabsComponent.tab';
+import { HtmlTabLinkItem} from './tabsComponent.link';
 
-/** @callback DelayedOperation
- * @param {number} direction
- * @returns {Promise|void}
- */
+export interface TabsComponentConfig extends ComponentConfig {
+    // tabItems: any;
+    tabItems: TabItemElementType[];
+    tabs: [HTMLElement];
+    linkItems: any;
+    links: [HTMLElement];
+    linkActiveClass: string;
+    tabActiveClass: string;
+    onChanged: (prev: any, next: any, direction: number) => void;
+    onChanging: (prev: any, next: any, direction: number) => void;
+    onWillChange: (prev: any, next: any, direction: number) => void;
+    syncActivate: boolean;
+    clicksEnabled: boolean;
+    hoversEnabled: boolean;
+}
 
-/** @typedef {Object} TabsComponentConfig
- * @property {HTMLElement} el
- * @property {TabItem[]} tabItems
- * @property {HTMLElement[]=} tabs
- * @property {TabLinkItem[]} linkItems
- * @property {HTMLElement[]=} links
- * @property {string=} linkActiveClass
- * @property {string=} tabActiveClass
- * @property {(prev:TabLinkItem,next:TabLinkItem,direction:number) => void} onChanged
- * @property {(prev:TabLinkItem,next:TabLinkItem,direction:Number) => void} onChanging
- * @property {(prev:TabLinkItem,next:TabLinkItem,direction:Number) => void} onWillChange
- * @property {boolean=} syncActivate
- * @property {boolean=} clicksEnabled
- * @property {boolean=} hoversEnabled
- */
+export default class TabsComponent extends Component<TabsComponentConfig> {
+    _prevButton: any;
+    _nextButton: any;
+    syncActivate: boolean;
+    _tabs: any;
+    _links: any;
 
-export default class TabsComponent extends Component {
-    /** @param {TabsComponentConfig} config */
-    // eslint-disable-next-line no-useless-constructor
-    constructor(config) {
-        super(config);
+    _onLinkChanging(prev: any, next: any, direction: number) {
+        throw new Error("Method not implemented.");
     }
+    _onLinkWillChange: (prev: any, next: any, direction: number) => void;
+    _onLinkChanged: (prev: any, next: any, direction: number) => void;
+    _async: boolean;
+    _clicksEnabled: boolean;
+    _hoversEnabled: boolean;
+    _linkActiveClass: string;
+    _tabActiveClass: string;
+    _currentActiveLink: any;
+    _isSwitching: boolean;
+    _currentActiveIndex: any;
 
-    /** @param {TabsComponentConfig} config */
-    _setup(config) {
-        logger.log(config, '__config')
-        /** @type {string} */
+    constructor(config:TabsComponentConfig) {
+        super(config);
+
+
         this._linkActiveClass = config.linkActiveClass || 'active';
         this._tabActiveClass = config.tabActiveClass || 'active';
 
-        /** @type {TabItem[]} */
-        this._tabs = config.tabItems
-            || (config.tabs || []).map(t => new HtmlTabItem({ el: t, activateClass: this._tabActiveClass }));
-
-        /** @type {TabLinkItem[]} */
-        this._links = config.linkItems
-            || (config.links || []).map(l => new HtmlTabLinkItem(l, config.linkActiveClass, config.clicksEnabled, config.hoversEnabled));
-
-        /** @type {TabLinkItem} */
-        this._currentActiveLink = null;
-        this._currentActiveIndex = -1;
-        this._isSwitching = false;
-
         this._onLinkWillChange = config.onWillChange || (() => {});
         this._onLinkChanged = config.onChanged || (() => {});
-        this._onLinkChanging = config.onChanging || (() => {});
-        this._async = !config.syncActivate;
+        this._onLinkChanged = config.onChanging || (() => {});
+        this.syncActivate = config.syncActivate;
+        this._async = !this.syncActivate
 
         this._clicksEnabled = config.clicksEnabled;
         this._hoversEnabled = config.hoversEnabled;
 
+        this._tabs = config.tabItems
+        || (config.tabs || []).map(t => new HtmlTabItem({ el: t, activateClass: this._tabActiveClass }));
+
+        this._links = config.linkItems
+            || (config.links || []).map(l => new HtmlTabLinkItem(l, config.linkActiveClass, config.clicksEnabled, config.hoversEnabled));
+
+        this._currentActiveLink = null;
+        this._currentActiveLink = -1;
+        this._isSwitching = false;
+    }
+
+    protected doSetup() {
         this._links.forEach((link, index) => {
             const targetID = link.targetId;
             this._tabs.forEach(tab => {
@@ -76,7 +85,7 @@ export default class TabsComponent extends Component {
 
             link
                 .setActivateCallback(l => this.setActiveLink(l))
-                .setActivationChain(config.syncActivate)
+                .setActivationChain(this.syncActivate)
                 .init();
 
             if (link.isActive) {
@@ -174,7 +183,6 @@ export default class TabsComponent extends Component {
         this.setActiveIndex(nextIndex);
     }
 
-    /** @param {HTMLElement} btn */
     addNextButton(btn, loop = true) {
         this._nextButton = btn;
         if (this._nextButton) {
@@ -186,7 +194,6 @@ export default class TabsComponent extends Component {
         return this;
     }
 
-    /** @param {HTMLElement} btn */
     addPrevButton(btn, loop = true) {
         this._prevButton = btn;
         if (this._prevButton) {
