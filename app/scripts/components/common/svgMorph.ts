@@ -1,55 +1,51 @@
-import { TimelineMax, Power1 } from 'gsap';
-import { createLogger } from 'logger';
-import Component from 'app/core/component';
+import { TimelineMax, Power1, Ease } from 'gsap';
+import { createLogger, ILogger } from 'app/logger';
+import Component, { ComponentConfig } from 'app/core/component';
 
-/** @typedef {Object} PathTransition
- * @property {string} path
- * @property {boolean} [yoyo=false]
- * @property {number} [repeat=0]
- * @property {gsap.Ease} [ease=Power1]
- * @property {number} [duration=DEFAULT_DURATION]
-*/
+type PathTransition = {
+    path: string,
+    yoyo?: boolean,
+    repeat?: number,
+    ease?: Ease,
+    duration?: number,
+};
 
-/**
- * @typedef {Object} StateDefinition
- * @property {string} id
- * @property {PathTransition[]} paths
- * @property {boolean} [isDefault=false]
- * @property {number} [repeat=0]
- * @property {boolean} [yoyo=false]
- * @property {number} [timescale=1]
- */
+type StateDefinition = {
+    id: string,
+    paths: PathTransition[],
+    isDefault?: boolean,
+    repeat?: number,
+    yoyo?: boolean,
+    timescale?: number,
+};
 
-/** @typedef {Object} SvgMorphConfig
- * @property {HTMLElement} el
- * @property {StateDefinition[]} states
- * @property {boolean} [enableLogs=false]
- */
+export type SvgMorphConfig = ComponentConfig & {
+    states: StateDefinition[],
+    enableLogs?: boolean,
+};
 
 const DEFAULT_DURATION = 1;
 
-export default class SvgMorph extends Component {
-    /** @param {SvgMorphConfig} config */
-    // eslint-disable-next-line no-useless-constructor
-    constructor(config) {
-        super(config);
+export default class SvgMorph extends Component<SvgMorphConfig> {
 
-        this._onFinish = this._onFinish.bind(this);
-    }
+    private _logger: ILogger;
+    private _states: { [s: string]: StateDefinition };
 
-    /** @param {SvgMorphConfig} config */
-    _setup(config) {
+    private _default: StateDefinition;
+    private _current: StateDefinition;
 
-        this._logger = config.enableLogs
-            ? createLogger(`[SVGMorph@${this._el.nodeName}#${this._el.id}]`)
+    private _timeLine: TimelineMax;
+    private _currentResolve: () => void;
+
+    async doSetup() {
+        this._logger = this._config.enableLogs
+            ? createLogger(`[SVGMorph@${this.element.nodeName}#${this.element.id}]`)
             : createLogger('', true);
 
-        /** @type {Object.<string,StateDefinition>} */
         this._states = {};
-        /** @type {StateDefinition} */
         this._default = null;
 
-        (config.states || []).forEach(s => {
+        (this._config.states || []).forEach(s => {
             s.paths = s.paths || [];
             s.paths.forEach(p => {
                 p.yoyo = p.yoyo == null ? false : p.yoyo;
@@ -69,9 +65,7 @@ export default class SvgMorph extends Component {
             }
         });
 
-        /** @type {StateDefinition} */
         this._current = null;
-
         this._timeLine = new TimelineMax();
     }
 
@@ -82,11 +76,7 @@ export default class SvgMorph extends Component {
         this._resolveFinish();
     }
 
-    /**
-     * @param {string} stateId
-     * @returns {Promise}
-     */
-    goTo(stateId) {
+    goTo(stateId: string): Promise<void> {
         const nextState = this._states[stateId];
 
         if (!nextState) {
@@ -99,10 +89,7 @@ export default class SvgMorph extends Component {
         return this._goTo(nextState);
     }
 
-    /** @param {StateDefinition} state
-     * @returns {Promise}
-    */
-    _goTo(state) {
+    _goTo(state: StateDefinition): Promise<void> {
         if (this._current && this._current.id === state.id) {
             this._logger.log('go to state skipped, already there:', state.id);
             return Promise.resolve();
@@ -121,7 +108,7 @@ export default class SvgMorph extends Component {
             endless = endless || (p.repeat < 0);
 
             this._timeLine
-                .to(this._el, p.duration,
+                .to(this.element, p.duration,
                     {
                         attr: {
                             d: p.path,
@@ -138,7 +125,9 @@ export default class SvgMorph extends Component {
 
         endless = endless || this._timeLine.repeat() < 0;
 
-        this._logger.log('starting TL id =', this._current.id, ' endless =', endless, ', repeat =', this._timeLine.repeat(), ', yoyo =', this._timeLine.yoyo());
+        this._logger.log(
+            'starting TL id =', this._current.id, ' endless =', endless, ', repeat =', this._timeLine.repeat(), ', yoyo =', this._timeLine.yoyo(),
+        );
 
         if (!endless) {
             this._timeLine.add(this._onFinish);
@@ -159,7 +148,7 @@ export default class SvgMorph extends Component {
         }
     }
 
-    _onFinish(allowDefault = true) {
+    _onFinish = (allowDefault = true) => {
 
         this._logger.log('_onFinish; allowDefault =', allowDefault, 'state =', this._current ? this._current.id : '<null>');
 

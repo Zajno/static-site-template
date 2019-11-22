@@ -1,7 +1,7 @@
 import logger from 'app/logger';
 
-export interface ComponentConfig {
-    el: HTMLElement;
+export interface ComponentConfig<T extends HTMLElement = HTMLElement> {
+    el: T;
 }
 
 export default abstract class Component<TConfig extends ComponentConfig = ComponentConfig> {
