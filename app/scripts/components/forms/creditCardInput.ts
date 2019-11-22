@@ -1,18 +1,23 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-import Component from 'core/component';
-import creditCard from 'utils/creditCard';
-
+import Component, { ComponentConfig } from 'app/core/component';
+import creditCard from 'app/utils/creditCard';
 
 function formatCCType(type) {
     return `fa-${type}`;
 }
 
+export type CreditCardInputConfig = ComponentConfig<HTMLInputElement>;
+
 // add space after 4 digin on card number & change icon payment system
-export default class CreditCardInput extends Component {
-    _setup({ element }) {
-        /** @type {HTMLElement} */
-        this._input = element;
+export default class CreditCardInput extends Component<CreditCardInputConfig> {
+
+    private _icon: HTMLImageElement;
+    private _iconClass: string;
+
+    private get _input() { return this._config.el; }
+
+    async doSetup() {
 
         this._input.onkeypress = this._onkeypress.bind(this);
 
@@ -46,10 +51,10 @@ export default class CreditCardInput extends Component {
         });
 
         // A timeout is needed to get the new value pasted
-        this._input.addEventListener('paste', () => setTimeout(() => { this._formatAndPositionate(''); }, 50));
+        this._input.addEventListener('paste', () => setTimeout(() => { this._formatAndPositionate('', 0); }, 50));
 
-	    // reformat onblur just in case (optional)
-        this._input.addEventListener('blur', function () { _this._formatAndPositionate(this, false, true); });
+       // reformat onblur just in case (optional)
+        this._input.addEventListener('blur', () => { _this._formatAndPositionate(_this._input.value, 0, true); });
     }
 
     _onkeypress(e) {
@@ -78,7 +83,7 @@ export default class CreditCardInput extends Component {
                 return false;
             }
 
-            this._formatAndPositionate(char);
+            this._formatAndPositionate(char, 0);
 
             return undefined;
         }
@@ -86,7 +91,7 @@ export default class CreditCardInput extends Component {
         return undefined;
     }
 
-    _formatAndPositionate(char, removeDelta, blurring) {
+    private _formatAndPositionate(char: string | false, removeDelta: number, blurring?: boolean) {
         let start = 0;
         let end = 0;
         let pos = 0;
@@ -97,16 +102,14 @@ export default class CreditCardInput extends Component {
             start = this._input.selectionStart;
             end = this._input.selectionEnd;
 
-            if (removeDelta < 0 && start > 0) // handle backspace onkeydown
-            {
+            if (removeDelta < 0 && start > 0) { // handle backspace onkeydown
                 start += removeDelta;
 
                 if (value[start] === separator)
                     start += removeDelta;
             }
 
-            if (removeDelta > 0) // handle delete onkeydown
-            {
+            if (removeDelta > 0) { // handle delete onkeydown
                 if (value[end] === separator)
                     end += removeDelta;
 

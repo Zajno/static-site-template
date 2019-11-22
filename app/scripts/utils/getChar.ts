@@ -1,4 +1,5 @@
-export default function getChar(event) {
+
+export default function getChar(event: KeyboardEvent) {
     if (event.which == null) {
         if (event.keyCode < 32) return null;
         return String.fromCharCode(event.keyCode); // IE

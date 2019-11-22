@@ -1,5 +1,5 @@
 
-function clamp(val, min, max, cycle = false) {
+export function clamp(val: number, min: number, max: number, cycle = false): number {
     if (val < min) {
         return cycle ? max : min;
     }
@@ -11,8 +11,7 @@ function clamp(val, min, max, cycle = false) {
     return val;
 }
 
-
-function arrayCompare(arr, absolute, cond) {
+function arrayCompare(arr: number[], absolute: boolean, cond: (n: number, max: number) => boolean): number {
     if (!Array.isArray(arr) || arr.length <= 0) {
         return null;
     }
@@ -28,30 +27,15 @@ function arrayCompare(arr, absolute, cond) {
     return max;
 }
 
-/**
- * @param {number[]} arr
- * @param {boolean} absolute
- * @returns {number}
- */
-function arrayMax(arr, absolute = false) {
+export function arrayMax(arr: number[], absolute = false): number {
     return arrayCompare(arr, absolute, (e, max) => e > max);
 }
 
-/**
- * @param {number[]} arr
- * @param {boolean} absolute
- * @returns {number}
- */
-function arrayMin(arr, absolute = false) {
+export function arrayMin(arr: number[], absolute = false): number {
     return arrayCompare(arr, absolute, (e, min) => e < min);
 }
 
-
-/**
- * @param {number[]} arr
- * @returns {number}
- */
-function arrayAverage(arr, absolute = false) {
+export function arrayAverage(arr: number[], absolute = false): number {
     if (!Array.isArray(arr) || arr.length <= 0) {
         return 0;
     }
@@ -64,11 +48,3 @@ function arrayAverage(arr, absolute = false) {
 
     return sum / arr.length;
 }
-
-
-module.exports = {
-    clamp,
-    arrayMax,
-    arrayMin,
-    arrayAverage,
-};

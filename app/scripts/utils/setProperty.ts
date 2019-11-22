@@ -1,5 +1,5 @@
 
-export default function setProperty(obj, path, value) {
+export default function setProperty(obj, path: string, value) {
     const pList = path.split('.');
     const key = pList.pop();
     const pointer = pList.reduce((accumulator, currentValue) => {
@@ -18,7 +18,7 @@ export default function setProperty(obj, path, value) {
  * @param {string[]} propertiesToOmit
  * @returns {Object}
  */
-export function omitProperties(obj, propertiesToOmit) {
+export function omitProperties(obj, propertiesToOmit: string[]) {
     const returnObj = Object.assign({}, obj);
 
     propertiesToOmit.forEach(prop => {
