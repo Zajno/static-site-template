@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "dev": "webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
+    "dev": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
     "build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode development",
     "build:minify": "yarn build --env.fullminify",
     "build:prod": "webpack --display-error-details --mode production",
