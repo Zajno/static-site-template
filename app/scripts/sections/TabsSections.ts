@@ -1,33 +1,33 @@
 
 import Section from 'app/core/section';
  import TabsComponent, { TabsComponentConfig } from 'app/components/common/tabsComponent';
-import { TabItemElementType, TabItem, HtmlTabItemConfig } from 'app/components/common/tabsComponent.tab';
+import { TabItemElement, TabItem, HtmlTabItemConfig, HtmlTabItem } from 'app/components/common/tabsComponent.tab';
 
 export default class TabSection extends Section {
-    _mainTabs: any;
-    tabs: any;
+    _mainTabs: NodeListOf<HTMLElement>;
+    tabs: TabsComponent;
+
     async setupSection() {
         this._mainTabs = this.element.querySelectorAll('.tab-item-wrap');
     }
 
-    protected _activate() {
-    }
+    protected _activate() { /* no-op */}
 
-    protected _deactivate() {
-    }
+    protected _deactivate() { /* no-op */}
 
-    resize(){
+    resize() {
         this.tabs = new TabsComponent({
             tabItems: this._createTabItems(),
-            links: this.element.querySelectorAll('.tab-link'),
+            links: this.element.querySelectorAll('.tab-link') as unknown as HTMLElement[],
             linkActiveClass: 'active',
             syncActivate: true,
+            el: this.element,
         });
     }
     _createTabItems() {
-        const tabs:TabItemElementType[] = [];
-        this._mainTabs.forEach(tab => {
-            const tabObj:TabItemElementType = new TabItem<TabsComponentConfig> ({
+        const tabs: HtmlTabItem[] = [];
+        this._mainTabs.forEach(tab  => {
+            const tabObj = new TabItem ({
                 el: tab,
             });
 

@@ -1,69 +1,76 @@
 /* eslint-disable react/no-multi-comp */
 
-import Component ,{ ComponentConfig } from 'app/core/component';
+import Component , { ComponentConfig } from 'app/core/component';
 import logger from 'app/logger';
 
-import { HtmlTabItem, TabItemElementType } from './tabsComponent.tab';
-import { HtmlTabLinkItem} from './tabsComponent.link';
+import { HtmlTabItem, TabItemElement, HtmlTabItemConfig } from './tabsComponent.tab';
+import { HtmlTabLinkItem, TabLinkItem} from './tabsComponent.link';
 
 export interface TabsComponentConfig extends ComponentConfig {
-    // tabItems: any;
-    tabItems: TabItemElementType[];
-    tabs: [HTMLElement];
-    linkItems: any;
-    links: [HTMLElement];
-    linkActiveClass: string;
-    tabActiveClass: string;
-    onChanged: (prev: any, next: any, direction: number) => void;
-    onChanging: (prev: any, next: any, direction: number) => void;
-    onWillChange: (prev: any, next: any, direction: number) => void;
+    tabItems: HtmlTabItem[];
+    tabs?: HTMLElement[];
+    linkItems?: HtmlTabLinkItem[];
+    links?: HTMLElement[];
+    linkActiveClass?: string;
+    tabActiveClass?: string;
     syncActivate: boolean;
-    clicksEnabled: boolean;
-    hoversEnabled: boolean;
+    onChanged?: (prev: any, next: any, direction: number) => void;
+    onChanging?: (prev: any, next: any, direction: number) => void;
+    onWillChange?: (prev: any, next: any, direction: number) => void;
+    clicksEnabled?: boolean;
+    hoversEnabled?: boolean;
 }
 
 export default class TabsComponent extends Component<TabsComponentConfig> {
-    _prevButton: any;
-    _nextButton: any;
-    syncActivate: boolean;
-    _tabs: any;
-    _links: any;
+    private _prevButton: HTMLElement;
+    private _nextButton: HTMLElement;
+    private syncActivate: boolean;
+    private _tabs: HtmlTabItem[];
+    private _links: HtmlTabLinkItem[];
+    private _onLinkWillChange: (prev: any, next: any, direction: number) => void;
+    private _onLinkChanged: (prev: any, next: any, direction: number) => void;
+    private _async: boolean;
+    private _clicksEnabled: boolean;
+    private _hoversEnabled: boolean;
+    private _linkActiveClass: string;
+    private _tabActiveClass: string;
+    private _currentActiveLink: any;
+    private _isSwitching: boolean;
+    private _currentActiveIndex: number;
 
     _onLinkChanging(prev: any, next: any, direction: number) {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
-    _onLinkWillChange: (prev: any, next: any, direction: number) => void;
-    _onLinkChanged: (prev: any, next: any, direction: number) => void;
-    _async: boolean;
-    _clicksEnabled: boolean;
-    _hoversEnabled: boolean;
-    _linkActiveClass: string;
-    _tabActiveClass: string;
-    _currentActiveLink: any;
-    _isSwitching: boolean;
-    _currentActiveIndex: any;
 
-    constructor(config:TabsComponentConfig) {
+    constructor(config: TabsComponentConfig) {
         super(config);
-
 
         this._linkActiveClass = config.linkActiveClass || 'active';
         this._tabActiveClass = config.tabActiveClass || 'active';
 
-        this._onLinkWillChange = config.onWillChange || (() => {});
-        this._onLinkChanged = config.onChanged || (() => {});
-        this._onLinkChanged = config.onChanging || (() => {});
+        this._onLinkWillChange = config.onWillChange || (() => {/* no-op */});
+        this._onLinkChanged = config.onChanged || (() => {/* no-op */});
+        this._onLinkChanged = config.onChanging || (() => {/* no-op */});
         this.syncActivate = config.syncActivate;
-        this._async = !this.syncActivate
+        this._async = !this.syncActivate;
 
         this._clicksEnabled = config.clicksEnabled;
         this._hoversEnabled = config.hoversEnabled;
 
         this._tabs = config.tabItems
-        || (config.tabs || []).map(t => new HtmlTabItem({ el: t, activateClass: this._tabActiveClass }));
+            || (config.tabs).map(t => new HtmlTabItem({ el: t as TabItemElement, activateClass: this._tabActiveClass }));
 
         this._links = config.linkItems
-            || (config.links || []).map(l => new HtmlTabLinkItem(l, config.linkActiveClass, config.clicksEnabled, config.hoversEnabled));
+            || (config.links || []).map(l => {
+                const configHtml: HtmlTabItemConfig  =  {
+                    el: l as TabItemElement,
+                    activateClass: config.linkActiveClass,
+                    clicksEnabled: config.clicksEnabled,
+                    hoversEnabled: config.hoversEnabled,
+
+                };
+                 return new HtmlTabLinkItem(configHtml);
+            });
 
         this._currentActiveLink = null;
         this._currentActiveLink = -1;
@@ -103,10 +110,9 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
 
     get currentLink() { return this._currentActiveLink; }
 
-    setActiveIndex = (index) => this.setActiveLink(this._links[index]);
+    private setActiveIndex = (index) => this.setActiveLink(this._links[index]);
 
-    /** @param {TabLinkItem} link */
-    setActiveLink = (link) => {
+    private setActiveLink = (link) => {
         if (link === this._currentActiveLink || this._isSwitching) {
             return null;
         }
@@ -165,7 +171,7 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         });
     }
 
-    next(loop = true) {
+    protected next(loop = true) {
         let nextIndex = this._currentActiveIndex + 1;
 
         if (nextIndex >= this._links.length) {
@@ -174,7 +180,7 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         this.setActiveIndex(nextIndex);
     }
 
-    prev(loop = true) {
+    protected prev(loop = true) {
         let nextIndex = this._currentActiveIndex - 1;
 
         if (nextIndex < 0) {
@@ -183,7 +189,7 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         this.setActiveIndex(nextIndex);
     }
 
-    addNextButton(btn, loop = true) {
+    protected addNextButton(btn: HTMLElement, loop = true) {
         this._nextButton = btn;
         if (this._nextButton) {
             this._nextButton.addEventListener('click', e => {
@@ -194,7 +200,7 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         return this;
     }
 
-    addPrevButton(btn, loop = true) {
+    protected addPrevButton(btn: HTMLElement, loop = true) {
         this._prevButton = btn;
         if (this._prevButton) {
             this._prevButton.addEventListener('click', e => {

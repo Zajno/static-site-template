@@ -1,30 +1,30 @@
 import Component, { ComponentConfig } from 'app/core/component';
 
-import { TabItemElementType } from './tabsComponent.tab';
+import { TabItemElement, TabItem } from './tabsComponent.tab';
 
 /** @typedef {(import ('./tabsComponent.tab.js').TabItem)} TabItem */
 /** @typedef {import ('./tabsComponent').DelayedOperation} DelayedOperation */
 
-export class TabLinkItem<TabsComponentConfig> extends Component{
-    protected doSetup(): void | Promise<void> {
-        this._el;
-        this._tabs = [];
-    }
-    _activateCallback: (link:any) => void
-    _el: TabItemElementType;
-    _tabs: TabItemElementType[];
-    _chainActivation: any;
-    _setup(config) {
+export type TabLinkItemConfig = ComponentConfig<TabItemElement> & {
 
+};
+
+export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfig> extends Component<T> {
+    private readonly _tabs: TabItem[] = [];
+    private _activateCallback: (link: TabLinkItem) => void = null;
+    private _chainActivation: boolean = false;
+
+    get item(): TabItemElement { return this._config.el; }
+
+    protected doSetup() {
+        /* no-op */
     }
 
-    get targetId():string { throw new Error('not implemented'); }
+    abstract get targetId(): string;
 
     get tabs() { return this._tabs; }
 
-    get item() { return this._el; }
-
-    setActivateCallback(cb:(link : any) => void) {
+    setActivateCallback(cb: (link: TabLinkItem) => void) {
         this._activateCallback = cb;
         return this;
     }
@@ -34,7 +34,7 @@ export class TabLinkItem<TabsComponentConfig> extends Component{
         return this;
     }
 
-    init() {
+    protected init() {
         return this;
     }
 
@@ -44,11 +44,11 @@ export class TabLinkItem<TabsComponentConfig> extends Component{
         }
     }
 
-    _activate(direction:number) {
+    protected _activate(direction?: number) {
         if (this._chainActivation) {
             let res = Promise.resolve(this._activateSelf(direction));
             this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.activate(direction)));
+                res = res.then(() => Promise.resolve(t.activate(direction))) as Promise<void>;
             });
             return res;
         }
@@ -58,17 +58,17 @@ export class TabLinkItem<TabsComponentConfig> extends Component{
         return true;
     }
 
-    _activateSelf(direction) {
-        if (this._el.linkHooks && this._el.linkHooks.activate) {
-            this._el.linkHooks.activate(direction);
+     _activateSelf(direction?: number) {
+        if (this.item.linkHooks && this.item.linkHooks.activate) {
+            this.item.linkHooks.activate(direction);
         }
     }
 
-    _deactivate(direction) {
+    _deactivate(direction?: number) {
         if (this._chainActivation) {
             let res = Promise.resolve(this._deactivateSelf(direction));
             this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.deactivate(direction)));
+                res = res.then(() => Promise.resolve(t.deactivate(direction))) as Promise<void>;
             });
             return res;
         }
@@ -79,51 +79,51 @@ export class TabLinkItem<TabsComponentConfig> extends Component{
     }
 
     _deactivateSelf(direction) {
-        if (this._el.linkHooks && this._el.linkHooks.deactivate) {
-            this._el.linkHooks.deactivate(direction);
+        if (this.item.linkHooks && this.item.linkHooks.deactivate) {
+            this.item.linkHooks.deactivate(direction);
         }
     }
 
-    /** @param {TabItem} tab */
-    registerTab(tab) {
+    registerTab(tab: TabItem) {
         this._tabs.push(tab);
     }
 }
 
-export class HtmlTabLinkItem<TabsComponentConfig> extends TabLinkItem {
-    _activeClass: any;
-    _clickEnabled: any;
-    _hoverEnabled: any;
-    constructor(item: HTMLElement, activeClass = 'active', clickEnabled = true, hoverEnabled = false) {
-        super({ el: item, activeClass, clickEnabled, hoverEnabled });
-    }
+export type HtmlTabLinkItemConfig = TabLinkItemConfig & {
+        activeClass?: string,
+        clickEnabled?: boolean,
+        hoverEnabled?: boolean,
+};
 
-    /** @param {{activeClass:string,clickEnabled:boolean, hoverEnabled:boolean}} config */
-    _setup(config) {
-        super._setup(config);
+export class HtmlTabLinkItem<T extends HtmlTabLinkItemConfig = HtmlTabLinkItemConfig> extends TabLinkItem<T> {
+    private _activeClass: string;
+    private _clickEnabled: boolean;
+    private _hoverEnabled: boolean;
 
-        const { activeClass, clickEnabled, hoverEnabled } = config;
+    protected doSetup() {
+        super.doSetup();
 
-        this._activeClass = activeClass;
-        this._clickEnabled = clickEnabled;
-        this._hoverEnabled = hoverEnabled;
+        const { activeClass, clickEnabled, hoverEnabled } = this._config;
+
+        this._activeClass = activeClass || 'active';
+        this._clickEnabled = clickEnabled == null ? true : !!clickEnabled;
+        this._hoverEnabled = hoverEnabled || false;
 
         if (this._clickEnabled) {
-            this._el.addEventListener('click', this._onClick.bind(this));
+            this.item.addEventListener('click', this._onClick.bind(this));
         }
         if (this._hoverEnabled) {
-            this._el.addEventListener('mouseover', this._onHover.bind(this));
+            this.item.addEventListener('mouseover', this._onHover.bind(this));
         }
     }
-
-    init() {
-        if (this._el.classList.contains(this._activeClass)) {
+     init() {
+        if (this.item.classList.contains(this._activeClass)) {
             this._activate(0);
         }
         return super.init();
     }
 
-    get targetId() { return this._el.dataset.navTarget; }
+    get targetId() { return this.item.dataset.navTarget; }
 
     _onClick(e) {
         e.preventDefault();
@@ -136,12 +136,12 @@ export class HtmlTabLinkItem<TabsComponentConfig> extends TabLinkItem {
     }
 
     _activateSelf(direction) {
-        this._el.classList.add(this._activeClass);
+        this.item.classList.add(this._activeClass);
         super._activateSelf(direction);
     }
 
     _deactivateSelf(direction) {
-        this._el.classList.remove(this._activeClass);
+        this.item.classList.remove(this._activeClass);
         super._deactivateSelf(direction);
     }
 }

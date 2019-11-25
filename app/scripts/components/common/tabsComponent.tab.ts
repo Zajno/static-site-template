@@ -1,67 +1,67 @@
 
 import Component, { ComponentConfig } from 'app/core/component';
 
-export interface tabConfig{
-
-}
-
-export interface TabItemElementType extends HTMLElement {
-    linkHooks: any;
+export interface TabItemElement extends HTMLElement {
+    linkHooks?: any;
+    tabId?: string
     tabHooks?: {
         activate: (direction: number) => Promise<any>|void,
         deactivate: (andirection: number) => Promise<any>|void,
     }
-    activate(direction: number): void;
-    deactivate(direction: number): void;
+    activateClass?: string;
+    activate?(direction: number): void;
+    deactivate?(direction: number): void;
 }
 
-export class TabItem<Tconfig> extends Component<ComponentConfig> {
+export type TabItemConfig = ComponentConfig<TabItemElement> & {
+};
 
-    get tabId() { return this._el.dataset.navId; }
-    _el: TabItemElementType;
+export class TabItem<TConfig extends TabItemConfig = TabItemConfig> extends Component<TConfig> {
 
-    // tslint:disable-next-line: no-empty
-    protected doSetup(): void | Promise<void> {
+    get tabId() { return this.element.dataset.navId; }
+    get item() { return this._config.el; }
+
+    protected doSetup() {
+        /* no-op */
     }
 
-    constructor(config: ComponentConfig) {
-        super(config);
-    }
-
-    _activate(direction) {
+    protected _activate(direction: number) {
         return Promise.resolve(this._activateSelf(direction))
             .then(() => {
-                if (this._el.tabHooks && this._el.tabHooks.activate) {
-                    return this._el.tabHooks.activate(direction);
+                if (this.item.tabHooks && this.item.tabHooks.activate) {
+                    return this.item.tabHooks.activate(direction);
                 }
                 return Promise.resolve();
             });
     }
 
-    _deactivate(direction) {
+    protected _deactivate(direction: number) {
         return Promise.resolve(this._deactivateSelf(direction))
             .then(() => {
-                if (this._el.tabHooks && this._el.tabHooks.deactivate) {
-                    return this._el.tabHooks.deactivate(direction);
+                if (this.item.tabHooks && this.item.tabHooks.deactivate) {
+                    return this.item.tabHooks.deactivate(direction);
                 }
                 return Promise.resolve();
             });
     }
 
-    _activateSelf(direction) {
+     _activateSelf(direction: number) {
         return Promise.resolve();
     }
 
-    _deactivateSelf(direction) {
+     _deactivateSelf(direction: number) {
         return Promise.resolve();
     }
 }
- export interface HtmlTabItemConfig extends ComponentConfig {
-    activateClass: string;
+ export interface HtmlTabItemConfig extends TabItemConfig {
+    activateClass?: string;
+    clicksEnabled?: boolean;
+    hoversEnabled?: boolean;
+
 }
 
-export class HtmlTabItem<HtmlTabItemConfig> extends TabItem<TConfig extends HtmlTabItemConfig = HtmlTabItemConfig>  {
-    _activateClass: string;
+export class HtmlTabItem extends TabItem<HtmlTabItemConfig>  {
+    private _activateClass?: string;
 
     constructor(config: HtmlTabItemConfig) {
         super(config);
@@ -69,13 +69,13 @@ export class HtmlTabItem<HtmlTabItemConfig> extends TabItem<TConfig extends Html
         this._activateClass = config.activateClass;
     }
 
-    _activateSelf() {
-        this._el.classList.add(this._activateClass);
+     _activateSelf(direction: number) {
+        this.item.classList.add(this._activateClass);
         return Promise.resolve();
     }
 
-    _deactivateSelf() {
-        this._el.classList.remove(this._activateClass);
+     _deactivateSelf(direction: number) {
+        this.item.classList.remove(this._activateClass);
         return Promise.resolve();
     }
 }

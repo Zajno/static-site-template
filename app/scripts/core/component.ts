@@ -48,6 +48,7 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
         return this._deactivate(delay, direction);
     }
 
+<<<<<<< HEAD
     protected _activate(delay?: number, direction?: number): void | Promise<void> {
         // override me
     }
@@ -55,6 +56,11 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
     protected _deactivate(delay?: number, direction?: number): void| Promise<void> {
         // override me
     }
+=======
+    protected _activate(delay?: number, direction?: number) {/* no-op */ }
+
+    protected _deactivate(delay?: number, direction?: number) { /* no-op */}
+>>>>>>> ported Tabs components to TS
 
     get rect() { return this.element ? this.element.getBoundingClientRect() : new ClientRect(); }
 
