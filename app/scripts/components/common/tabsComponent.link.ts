@@ -44,7 +44,7 @@ export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfi
         }
     }
 
-    protected _activate(direction?: number) {
+    activate(direction?: number) {
         if (this._chainActivation) {
             let res = Promise.resolve(this._activateSelf(direction));
             this._tabs.forEach(t => {
