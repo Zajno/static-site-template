@@ -73,6 +73,10 @@ export default abstract class Page implements IPage {
     get deltaY() { return this._deltaY; }
     get wheelDirection() { return this._wheelDirection; }
 
+    protected getSection<TSection extends Section>(index: number) {
+        return this._sections[index] as TSection;
+    }
+
     public async setupAsync() {
         this._root = document.getElementById('main')
             || document.getElementsByTagName('body')[0];
@@ -162,7 +166,7 @@ export default abstract class Page implements IPage {
         /* override me if you want */
     }
 
-    _updateSections() {
+    protected _updateSections() {
         const coeffsDirection: Directions = this._scrollDirection <= 0
             ? 'down' : 'up';
 
@@ -202,7 +206,7 @@ export default abstract class Page implements IPage {
         }
     }
 
-    _updateSectionActivation(show: boolean, section: Section) {
+    protected _updateSectionActivation(show: boolean, section: Section) {
         // console.log(show,"show section", section,'this section');
         if (show != null) {
             if (show) {

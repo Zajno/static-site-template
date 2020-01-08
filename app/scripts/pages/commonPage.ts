@@ -10,7 +10,7 @@ export default abstract class CommonPage extends Page {
         super.start();
         Lazy.RegisterAllImages();
         window.appReady(() => {
-            // add some logic on page loaded here
+            Lazy.BeginLoading();
         });
     }
 

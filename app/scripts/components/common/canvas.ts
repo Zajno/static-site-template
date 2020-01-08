@@ -1,7 +1,6 @@
 import logger from 'app/logger';
 
 import LazyLoadComponent, { LazyLoadConfig } from 'app/components/lazy/lazyLoadComponent';
-import TweenLite from 'gsap/TweenLite';
 
 import Particle, { ParticleSettings } from './canvasParticle';
 

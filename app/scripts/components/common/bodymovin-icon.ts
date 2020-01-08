@@ -1,6 +1,6 @@
 
-import lottie, { AnimationConfigWithPath, AnimationConfig, AnimationItem as AnimationItemLottie } from 'lottie-web';
-import TweenLite from 'gsap/TweenLite';
+import lottie, { AnimationConfig, AnimationItem as AnimationItemLottie } from 'lottie-web';
+import GSAP from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
 import { ImageLazyLoadConfig } from '../lazy/imageLazyLoadComponent';
@@ -38,7 +38,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
         this._playBodymovin = this._playBodymovin.bind(this);
 
         // this._checkAnimationLoaded();
-        TweenLite.set(this.element, { alpha: 0.0, force3D: true });
+        GSAP.set(this.element, { alpha: 0.0, force3D: true });
 
         if (this._config.register == null) {
             this._config.register = true;
@@ -99,7 +99,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
     // STATE -------------------------------------------------------------------
 
     _activate(delay, direction) {
-        TweenLite.killTweensOf(this.element);
+        GSAP.killTweensOf(this.element);
 
         // TODO tweak me
         TweenLite.fromTo(this.element, 0.75, { alpha: 0.0 }, { alpha: 1.0, ease: 'Sine.easeInOut', delay: delay });
@@ -109,7 +109,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
     }
 
     _deactivate(delay, direction) {
-        TweenLite.killTweensOf(this.element);
+        GSAP.killTweensOf(this.element);
 
         // TODO tweak me
         TweenLite.to(this.element, 0.62, { alpha: 0.0, ease: 'Sine.easeInOut', delay: delay });

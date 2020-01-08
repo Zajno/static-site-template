@@ -1,9 +1,8 @@
 
 // libs
-import { TweenMax, Power1 } from 'gsap';
+import TweenMax, { Power1 } from 'gsap';
 
 import BodymovinIcon from 'app/components/common/bodymovin-icon';
-import { AnimationConfigWithPath } from 'lottie-web';
 
 export default class BodymovinVisual extends BodymovinIcon {
     _isComplete: boolean;

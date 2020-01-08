@@ -43,14 +43,13 @@ function getObjectDataSrc(source: VideoSource) {
                 minWidth = width;
             }
         }
-
     });
 
     if (!data['0']) {
         data['0'] = fallbackLink || '#';
     }
 
-    // logger.log('getObjectDataSrc', data);
+    logger.log('getObjectDataSrc', data);
     return data;
 }
 
@@ -98,13 +97,17 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
     get video() { return this.element as HTMLVideoElement; }
 
-    async doSetup() {
+    protected async doSetup() {
         this._state = States.Undefined;
         this._requestedState = States.Undefined;
 
         this._placeHolder = this.element.parentElement.querySelector('.video-placeholder');
         this._hasPlaceholder = this._placeHolder != null
             && this.element.classList.contains('has-placeholder-mobile');
+
+        if (!this._hasPlaceholder) {
+            this._usePlaceholder = false;
+        }
 
         this._hasMixBlend = this.element.classList.contains('has-mix-blend');
 
@@ -117,14 +120,14 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         await super.doSetup();
     }
 
-    _checkIsSourceChanged(doReplace = false) {
+    private _checkIsSourceChanged(doReplace = false) {
         let isChanged = false;
-
+        this.log('_checkIsSourceChanged', this.element, this._sources);
         for (let i = 0; i < this._sources.length; ++i) {
             const source = this._sources[i];
             const targetSrc = srcSet(source, this._widthVieport);
+            this.log(`Changing source ${source.src} to ${targetSrc}`);
             if (source.targetSrc !== targetSrc) {
-                this.log(`Changing source ${source.src} to ${targetSrc}`);
                 if (doReplace) {
                     source.targetSrc = targetSrc;
                     source.src = targetSrc;
@@ -138,20 +141,18 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         return isChanged;
     }
 
-    async _enableVideo() {
+    private async _enableVideo() {
         // this.log('initVideos: videos!');
 
         // HIDE ALL PLACEHOLDERS
         if (this._placeHolder) {
             this._placeHolder.hidden = true;
+            this.video.hidden = false;
         }
-
-        // SHOW VIDEO
-        this.video.hidden = false;
 
         const isChanged = this._checkIsSourceChanged(true);
 
-        // this.log('[VIDEO] Switching to Video');
+        this.log('[VIDEO] Switching to Video, isChanged =', isChanged);
 
         if (isChanged) {
             this.video.classList.add(lazyClass);
@@ -169,20 +170,20 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
                 this.video.addEventListener('canplay', onVideoCanPlay);
 
-                // this.log('[VIDEO] Loading...');
+                this.log('[VIDEO] Loading...');
 
                 this.video.load();
             });
             await loadPromise;
         }
 
-        // play video in case we;re active
+        // play video in case we're active
         if (this.isActive) {
             await this._switchToState(States.Playing);
         }
     }
 
-    async _enablePlaceholders() {
+    private async _enablePlaceholders() {
         // this.log('initVideos: images!');
 
         // SHOW ALL PLACEHOLDERS
@@ -203,7 +204,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
     }
 
-    async _switchToState(targetState: States) {
+    private async _switchToState(targetState: States) {
         if (targetState < States.LoadAllowed) {
             throw new Error('Invalid state');
         }
@@ -265,7 +266,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
     }
 
-    async _load() {
+    private async _load() {
         if (this._usePlaceholder == null) {
             this.log('Skipping load beacuse don\'t know about placeholder. Try to call resize first!');
             return;
@@ -278,7 +279,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
     }
 
-    async _doLoading() {
+    protected async _doLoading() {
         await this._switchToState(States.LoadAllowed);
         await this._load();
     }
@@ -313,17 +314,16 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
     }
 
-    // STATE -------------------------------------------------------------------
-
-    _activate(delay, direction) {
+    protected _activate(delay, direction) {
+        this.register();
         this._switchToState(States.Playing);
     }
 
-    _deactivate(delay, direction) {
+    protected _deactivate(delay, direction) {
         this._switchToState(States.Paused);
     }
 
-    log(...args: any[]) {
+    private log(...args: any[]) {
         if (this._logId) {
             logger.log(`[VIDEO = ${this._logId}]`, ...args);
         }

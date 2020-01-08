@@ -38,7 +38,7 @@ const siteConfig = (env: any): webpack.Configuration => {
         output: {
             publicPath: publicPath,
             path: outputPath,
-            filename: isProd ? '[hash:6].js' : '[name].js',
+            filename: isProd ? '[name].[hash:6].js' : '[name].js',
             chunkFilename: isProd ? '[chunkhash:6].[id].js' : '[name].[id].js',
         },
         resolve: {
@@ -83,7 +83,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                                 getCustomTransformers: () => ({ before: [tsNameof] }),
                                 configFile: 'tsconfig.json',
                             },
-                        }
+                        },
                     ],
                     exclude: [/node_modules/],
                 },
@@ -166,6 +166,18 @@ const siteConfig = (env: any): webpack.Configuration => {
                             outputPath: 'assets',
                         },
                     }],
+                },
+                {
+                    test: /\.mp3$|\.wav$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: isProd ? '[name].[contenthash:5].[ext]' : '[name].[ext]',
+                                outputPath: 'assets/sounds',
+                            },
+                        },
+                    ],
                 },
             ],
         },

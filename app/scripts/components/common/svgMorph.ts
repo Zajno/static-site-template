@@ -1,4 +1,4 @@
-import { TimelineMax, Power1, Ease } from 'gsap';
+import GSAP, { TimelineMax, Power1 } from 'gsap';
 import { createLogger, ILogger } from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
@@ -6,7 +6,7 @@ type PathTransition = {
     path: string,
     yoyo?: boolean,
     repeat?: number,
-    ease?: Ease,
+    ease?: string | gsap.EaseFunction,
     duration?: number,
 };
 

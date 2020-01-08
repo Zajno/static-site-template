@@ -119,7 +119,7 @@ class LoadGroup {
     }
 }
 export interface LazyLoadConfig extends ComponentConfig {
-    register: Boolean;
+    register?: boolean;
 }
 
 export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig = LazyLoadConfig>
@@ -134,11 +134,11 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
     protected async doSetup(): Promise<void> {
         this.loaded = false;
         this.loading = false;
-        this._priority = +this.element.dataset.loadPriority;
+        this._priority = +this.element.dataset.loadPriority || 0;
 
         this._loadClasses = [classes.show];
         this.populateAdditionalClasses();
-        this.beginLoading();
+
         if (this._config.register) {
             this.register();
         }
@@ -176,12 +176,12 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
         this.loading = true;
 
         this._doLoading()
-            .then(this._finishLoading.bind(this));
+            .then(this._finishLoading);
     }
 
     protected abstract _doLoading(): Promise<void>;
 
-    private _finishLoading() {
+    private _finishLoading = () => {
         this.loading = false;
         log(this._group, 'group of image ');
         this._loadClasses.forEach(lc => this.element.classList.add(lc));

@@ -1,6 +1,6 @@
 import logger from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
-import { TweenLite } from 'gsap';
+import gsap from 'gsap';
 
 export type CustomScrollConfig = ComponentConfig & {
     el: HTMLDocument,
@@ -31,7 +31,7 @@ export default class CustomScroll extends Component<CustomScrollConfig> {
 
         this._tickFunctions = [];
 
-        TweenLite.set(this._config.target, {
+        gsap.set(this._config.target, {
             rotation: 0.01,
             force3D: true,
         });
@@ -74,7 +74,7 @@ export default class CustomScroll extends Component<CustomScrollConfig> {
             this._scrollRequest = 0;
         }
 
-        TweenLite.set(this._config.target, {
+        gsap.set(this._config.target, {
             y: -this._y,
         });
 

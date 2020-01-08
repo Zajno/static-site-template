@@ -1,4 +1,4 @@
-import TweenMax, { Power1 } from 'gsap/TweenMax';
+import gsap, { TweenMax, Power1 } from 'gsap';
 
 class MobileMenu {
 
@@ -25,15 +25,16 @@ class MobileMenu {
 
         this.menu.classList.add('opend');
         this.btn.classList.add('active');
-        TweenMax.to(this.menu, 0.5, { y: 0 });
-        TweenMax.to(this.leftSail, 0.6, { y: 0, delay: 0.1 });
-        TweenMax.to(this.rightSail, 0.6, { y: 0, delay: 0.2 });
-        TweenMax.staggerTo(this.links, 0.75, {
+        gsap.to(this.menu, 0.5, { y: 0 });
+        gsap.to(this.leftSail, 0.6, { y: 0, delay: 0.1 });
+        gsap.to(this.rightSail, 0.6, { y: 0, delay: 0.2 });
+        gsap.to(this.links, 0.75, {
             y: 0, ease: Power1.easeInOut,
             onComplete: () => {
                 this.isOpen = true;
             },
-        }, 0.1);
+            stagger: 0.1,
+        });
     }
 
     close() {
@@ -41,9 +42,9 @@ class MobileMenu {
             return;
         this.menu.classList.remove('opend');
         this.btn.classList.remove('active');
-        TweenMax.to(this.links, 0.75, { y: '-100%', delay: 0.1, ease: Power1.easeInOut});
-        TweenMax.to(this.leftSail, 0.2, { y: '-100%', delay: 0.7 });
-        TweenMax.to(this.rightSail, 0.2, {
+        gsap.to(this.links, 0.75, { y: '-100%', delay: 0.1, ease: Power1.easeInOut});
+        gsap.to(this.leftSail, 0.2, { y: '-100%', delay: 0.7 });
+        gsap.to(this.rightSail, 0.2, {
             y: '-100%',
             delay: 0.75,
             onComplete: () => {
@@ -54,11 +55,11 @@ class MobileMenu {
     }
 
     clearProps() {
-        // TweenMax.set('#mobile-menu-list', { clearProps: 'all' });
-        TweenMax.set(this.menu, { clearProps: 'all' });
-        TweenMax.set(this.leftSail, { clearProps: 'all' });
-        TweenMax.set(this.rightSail, { clearProps: 'all' });
-        TweenMax.set(this.links, { clearProps: 'all' });
+        // gsap.set('#mobile-menu-list', { clearProps: 'all' });
+        gsap.set(this.menu, { clearProps: 'all' });
+        gsap.set(this.leftSail, { clearProps: 'all' });
+        gsap.set(this.rightSail, { clearProps: 'all' });
+        gsap.set(this.links, { clearProps: 'all' });
     }
 
     setupBurger() {

@@ -2,6 +2,7 @@ import logger from 'app/logger';
 
 export interface ComponentConfig<T extends HTMLElement = HTMLElement> {
     el: T;
+    logActivation?: boolean;
 }
 
 export default abstract class Component<TConfig extends ComponentConfig = ComponentConfig> {
@@ -68,5 +69,5 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
         return r.top - viewHeight < 0;
     }
 
-    get logActivation() { return false; }
+    protected get logActivation() { return this._config.logActivation; }
 }
