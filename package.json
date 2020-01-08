@@ -12,7 +12,7 @@
     "dev": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
     "build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode development",
     "build:minify": "yarn build --env.fullminify",
-    "build:prod": "webpack --display-error-details --mode production",
+    "build:prod": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode production",
     "build:prod:minify": "yarn build:prod --env.fullminify",
     "build:prod:minify:env": "cross-env NODE_ENV=production yarn build:prod:minify",
     "heroku-postbuild": "yarn build:prod:minify && cd server && yarn"
