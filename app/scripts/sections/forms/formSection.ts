@@ -1,11 +1,10 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-import Section from 'core/section';
-import InputValidator from 'components/forms/inputValidator';
+import Section from 'app/core/section';
+import InputValidator from 'app/components/forms/inputValidator';
 
-import validation from 'modules/forms/validation';
-
-/** @typedef {(import "pages/commonPage").default} CommonPage */
+import validation from 'app/modules/forms/validation';
+import type CommonPage from 'app/pages/commonPage';
 
 const classNames = {
     active: 'active',
@@ -13,19 +12,19 @@ const classNames = {
 
 export class FormModule {
 
-    constructor({ id, element }) {
+    private _inputs: InputValidator[] = [];
+    private _inputsMap: { [key: string]: InputValidator } = {};
 
-        /** @type {InputValidator[]} */
-        this._inputs = [];
-        /** @type {Object.<string,Input>} */
-        this._inputsMap = {};
+    private readonly _id: string;
+    private readonly _el: HTMLElement;
+
+    constructor({ id, element }: { id: string, element: HTMLElement }) {
 
         this._id = id;
-        /** @type {HTMLElement} */
         this._el = element;
 
         // collect
-        this._el.querySelectorAll('.custom-form input, select, textarea').forEach(inp => {
+        this._el.querySelectorAll('.custom-form input, select, textarea').forEach((inp: HTMLInputElement) => {
             const { name } = inp;
             if (this._inputsMap[name]) {
                 logger.error(`[${this.id}]: Duplicated input keyname: ${name}. Item will be skipeed:`, inp);
@@ -33,7 +32,7 @@ export class FormModule {
             }
 
             const inpObj = new InputValidator({
-                element: inp,
+                el: inp,
                 validator: validation.getValidationFunction(name),
                 keyhandler: validation.getInputHandlerFunction(name),
             });
@@ -43,7 +42,7 @@ export class FormModule {
         });
 
         // enable password icon
-        this._el.querySelectorAll('.password-has-icon').forEach(/** @param {HTMLInputElement} inputWithIcon */ inputWithIcon => {
+        this._el.querySelectorAll('.password-has-icon').forEach((inputWithIcon: HTMLInputElement) => {
 
             const icon = inputWithIcon.parentElement.querySelector('.icon--password');
 
@@ -63,8 +62,7 @@ export class FormModule {
 
     get inputs() { return this._inputs; }
 
-    /** @param {InputValidator} input */
-    addInput(input) {
+    addInput(input: InputValidator) {
         if (this._inputsMap[input.name]) {
             const index = this._inputs.findIndex(i => i.name === input.name);
             this._inputs.splice(index, 1);
@@ -74,15 +72,11 @@ export class FormModule {
         this._inputs.push(input);
     }
 
-    /**
-     * @param {string} name
-     * @returns {InputValidator}
-     */
-    getInput(name) {
+    getInput(name: string): InputValidator {
         return this._inputsMap[name];
     }
 
-    validateInputs(allowFocus) {
+    validateInputs(allowFocus: boolean) {
         let count = 0;
 
         // reverse iteration
@@ -109,26 +103,24 @@ export class FormModule {
 }
 
 export default class FormSection extends Section {
-    _setupSection(config) {
-        /** @type {CommonPage} */
-        this._page;
 
-        super._setupSection(config);
+    private _theForm: FormModule;
 
-        this._theForm = new FormModule({ element: this._el });
+    protected async doSetup() {
+        await super.doSetup();
 
+        this._theForm = new FormModule({ id: '?', element: this.element });
     }
 
     get id() { return this._theForm.id; }
 
     get inputs() { return this._theForm.inputs; }
 
-    /** @param {InputValidator} input */
-    addInput(input) {
+    addInput(input: InputValidator) {
         this._theForm.addInput(input);
     }
 
-    getInput(name) {
+    getInput(name: string) {
         return this._theForm.getInput(name);
     }
 
@@ -140,7 +132,7 @@ export default class FormSection extends Section {
         this._theForm.deactivate();
     }
 
-    validateInputs(allowFocus) {
+    validateInputs(allowFocus: boolean) {
         return this._theForm.validateInputs(allowFocus);
     }
 }

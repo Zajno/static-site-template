@@ -1,23 +1,21 @@
-
-import subscribeAsync from 'api/subscribe';
-
-import FormSection from 'sections/forms/formSection';
-
-import setProperty from 'utils/setProperty';
+import FormSection from 'app/sections/forms/formSection';
+import setProperty from 'app/utils/setProperty';
 
 export default class SusbcribeFormSection extends FormSection {
 
-    _setupSection(config) {
-        super._setupSection(config);
+    private _form: HTMLFormElement;
+    private _description: HTMLParagraphElement;
 
-        /** @type {HTMLFormElement} */
-        this._form = this._el.querySelector('form.sub-form');
+    protected async doSetup() {
+        await super.doSetup();
+
+        this._form = this.element.querySelector('form.sub-form');
         this._form.onsubmit = this._onSubmit.bind(this);
 
-        this._description = this._el.querySelector('.subscription__container p.description');
+        this._description = this.element.querySelector('.subscription__container p.description');
     }
 
-    _onSubmit(e) {
+    private _onSubmit(e: Event) {
         e.preventDefault();
 
         if (this.validateInputs(true) > 0) {
@@ -27,13 +25,13 @@ export default class SusbcribeFormSection extends FormSection {
         this._doSubscribeAsync();
     }
 
-    async _doSubscribeAsync() {
+    private async _doSubscribeAsync() {
 
         try {
             const formData = {};
             this.inputs.forEach(inp => setProperty(formData, inp.name, inp.value));
 
-            await subscribeAsync(formData);
+            // await subscribeAsync(formData);
 
             this._description.textContent = 'Thank you for subscribing to our Newsletter!';
         } catch (err) {

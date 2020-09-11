@@ -85,14 +85,17 @@ export default abstract class Page implements IPage {
         window.onwheel = this.onWheel.bind(this);
         await this.setupPageAsync();
         await this._setupSections(this._root.querySelectorAll('section'));
-        setTimeout(()=>this.scroll(),1000)
+        setTimeout(() => this.scroll(), 1000);
 
+        await this.afterSetup();
     }
 
-    async setupPageAsync() {
+    protected setupPageAsync(): void | Promise<void> {
         /* override me if you want */
         // console.log(this, 'setup page async');
     }
+
+    protected afterSetup(): void | Promise<void> { }
 
     protected getSectionOptions(index: number, type: SectionCtor, el: HTMLElement): any {
         return { };

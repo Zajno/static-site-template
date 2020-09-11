@@ -1,7 +1,6 @@
 import Component from 'app/core/component';
-import { timeoutAsync } from 'app/utils/timeoutAsync';
-import logger from 'app/logger';
-import GSAP, { TimelineMax } from 'gsap';
+import { setTimeoutAsync } from 'app/utils/timeoutAsync';
+import GSAP from 'gsap';
 
 const pad = (n: number) => (n || 0).toString().padStart(2, '0');
 
@@ -33,15 +32,21 @@ export class TimerComponent extends Component {
             GSAP.to(this.element, { autoAlpha: 1, duration: 1 });
         }
 
-        await timeoutAsync(delay);
+        await setTimeoutAsync(delay);
 
         const startTime = new Date().getTime();
 
         const interval = setInterval(() => this.renderTimer(seconds * 1000, new Date().getTime() - startTime), 1000 / 25);
 
-        await timeoutAsync(seconds * 1000, cb => {
-            this._cancelation = cb;
-        });
+        try {
+            await setTimeoutAsync(seconds * 1000, cb => {
+                this._cancelation = cb;
+            });
+        } catch (err) {
+            if (err !== 'canceled') {
+                throw err;
+            }
+        }
 
         if (useAnimation) {
             GSAP.to(this.element, { autoAlpha: 0, duration: 1 });

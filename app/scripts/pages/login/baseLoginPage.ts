@@ -1,13 +1,18 @@
-import logger from 'logger';
+import logger from 'app/logger';
 
-import CommonPage from 'pages/commonPage';
-import FormSection from 'sections/forms/formSection';
+import CommonPage from 'app/pages/commonPage';
+import FormSection from 'app/sections/forms/formSection';
 
-import setProperty from 'utils/setProperty';
-
-/** @typedef {(import "components/forms/inputValidator").default} InputValidator */
+import setProperty from 'app/utils/setProperty';
+import { SectionCtor } from 'app/core/section';
+import InputValidator from 'app/components/forms/inputValidator';
 
 class LoginFormSectionBase extends FormSection {
+
+    private _form: HTMLFormElement;
+    public onsubmit: (inputs: InputValidator[]) => void;
+    public validateHook: (loginSection: LoginFormSectionBase) => boolean;
+
     constructor(config) {
         super(config);
 
@@ -15,17 +20,17 @@ class LoginFormSectionBase extends FormSection {
         this.validateHook = null;
     }
 
-    _setupSection(config) {
-        super._setupSection(config);
+    protected async doSetup() {
+        await super.doSetup();
 
-        /** @type {HTMLFormElement} */
-        this._form = this._el.querySelector(`form#${this.formId}`);
+        this._form = this.element.querySelector(`form#${this.formId}`);
         this._form.onsubmit = this._onSubmit.bind(this);
     }
 
     get formId() { throw new Error('abstract'); }
+    get form() { return this._form; }
 
-    _onSubmit(e) {
+    private _onSubmit(e: Event) {
         e.preventDefault();
 
         if (!this._doValidation()) {
@@ -54,15 +59,19 @@ function createLoginFormSection({ formId }) {
 
 
 export default class BaseLoginPage extends CommonPage {
-    _setup() {
+
+    private _sectionTypes: SectionCtor[];
+    private _theForm: LoginFormSectionBase;
+
+    protected async setupPageAsync() {
         this._sectionTypes = [
             this._createSectionType(),
         ];
+    }
 
-        super._setup();
+    protected async afterSetup() {
+        this._theForm = this.getSection(0);
 
-        /** @type {LoginFormSectionBase} */
-        this._theForm = this._sections[0];
         this._theForm.onsubmit = () => {
             const formData = {};
             this.inputs.forEach(inp => setProperty(formData, inp.name, inp.value));
@@ -83,9 +92,9 @@ export default class BaseLoginPage extends CommonPage {
 
     get inputs() { return this._theForm.inputs; }
 
-    get section() { return this._theForm._el; }
+    get section() { return this._theForm.element; }
 
-    get form() { return this._theForm._form; }
+    get form() { return this._theForm.form; }
 
     get formId() { throw new Error('abstract'); }
 

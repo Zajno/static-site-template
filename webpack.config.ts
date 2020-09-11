@@ -2,7 +2,6 @@ import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-// import MinifyPlugin from 'babel-minify-webpack-plugin';
 import * as helpers from './webpack.helpers';
 import tsNameof from 'ts-nameof';
 import * as Path from 'path';
@@ -222,9 +221,16 @@ const siteConfig = (env: any): webpack.Configuration => {
                 plugin: new OptimizeCssAssetsPlugin(),
                 enabled: fullMinify,
             },
-            new CopyWebpackPlugin([
-                { from: './app/bodymovin/', to: 'assets/bodymovin/', ignore: ['*.json'] },
-            ]),
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: './app/bodymovin/',
+                        to: 'assets/bodymovin/',
+                        globOptions: { ignore: ['*.json'] },
+                        noErrorOnMissing: true,
+                    },
+                ],
+            }),
         ]),
         devServer: {
             contentBase: outputPath,

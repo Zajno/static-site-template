@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as Path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackPlugin, { MinifyOptions } from 'html-webpack-plugin';
 import { Plugin } from 'webpack';
 
 export function pathResolve(p: string) {
@@ -9,7 +9,7 @@ export function pathResolve(p: string) {
 
 export class HtmlBuilder {
 
-    readonly htmlMinifyOptions: HtmlWebpackPlugin.MinifyConfig;
+    readonly htmlMinifyOptions: MinifyOptions;
 
     constructor(minify = false) {
         this.htmlMinifyOptions =  minify
