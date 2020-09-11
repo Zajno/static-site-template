@@ -1,4 +1,4 @@
-import GSAP, { TimelineMax, Power1 } from 'gsap';
+import { TimelineMax, Power1 } from 'gsap';
 import { createLogger, ILogger } from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
@@ -89,7 +89,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
         return this._goTo(nextState);
     }
 
-    _goTo(state: StateDefinition): Promise<void> {
+    private _goTo(state: StateDefinition): Promise<void> {
         if (this._current && this._current.id === state.id) {
             this._logger.log('go to state skipped, already there:', state.id);
             return Promise.resolve();
@@ -140,7 +140,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
         return Promise.resolve();
     }
 
-    _resolveFinish() {
+    private _resolveFinish() {
         if (this._currentResolve) {
             const resolve = this._currentResolve;
             this._currentResolve = null;
@@ -148,7 +148,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
         }
     }
 
-    _onFinish = (allowDefault = true) => {
+    private _onFinish = (allowDefault = true) => {
 
         this._logger.log('_onFinish; allowDefault =', allowDefault, 'state =', this._current ? this._current.id : '<null>');
 
@@ -159,7 +159,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
         }
     }
 
-    _deactivate() {
+    protected _deactivate() {
         this.reset();
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "static-website-template",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Static website template by Zajno",
   "private": true,
   "engines": {
@@ -8,14 +8,14 @@
     "node": "^12"
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "cd server && yarn && yarn start:ts",
     "dev": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
     "build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode development",
     "build:minify": "yarn build --env.fullminify",
     "build:prod": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode production",
     "build:prod:minify": "yarn build:prod --env.fullminify",
     "build:prod:minify:env": "cross-env NODE_ENV=production yarn build:prod:minify",
-    "heroku-postbuild": "yarn build:prod:minify && cd server && yarn"
+    "heroku-postbuild": "yarn build:prod:minify && cd server && yarn && yarn build"
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
