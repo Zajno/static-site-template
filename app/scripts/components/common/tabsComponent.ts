@@ -1,64 +1,51 @@
-/* eslint-disable react/no-multi-comp */
-
 import Component , { ComponentConfig } from 'app/core/component';
 import logger from 'app/logger';
 
-import { HtmlTabItem, TabItemElement, HtmlTabItemConfig } from './tabsComponent.tab';
-import { HtmlTabLinkItem, TabLinkItem} from './tabsComponent.link';
+import { HtmlTabItem, TabItemElement, HtmlTabItemConfig, TabItem } from './tabsComponent.tab';
+import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
+import { OptAwait } from 'app/utils/async';
+
+export type ChangCallback = (prev: TabLinkItem, next: TabLinkItem, direction: number) => void;
 
 export interface TabsComponentConfig extends ComponentConfig {
-    tabItems: HtmlTabItem[];
+    tabItems: TabItem[];
     tabs?: HTMLElement[];
-    linkItems?: HtmlTabLinkItem[];
+    linkItems?: TabLinkItem[];
     links?: HTMLElement[];
     linkActiveClass?: string;
     tabActiveClass?: string;
     syncActivate: boolean;
-    onChanged?: (prev: any, next: any, direction: number) => void;
-    onChanging?: (prev: any, next: any, direction: number) => void;
-    onWillChange?: (prev: any, next: any, direction: number) => void;
+    onChanged?: ChangCallback;
+    onChanging?: ChangCallback;
+    onWillChange?: ChangCallback;
     clicksEnabled?: boolean;
     hoversEnabled?: boolean;
 }
+
+const NoOp: ChangCallback = () => { };
 
 export default class TabsComponent extends Component<TabsComponentConfig> {
     private _prevButton: HTMLElement;
     private _nextButton: HTMLElement;
     private syncActivate: boolean;
-    private _tabs: HtmlTabItem[];
-    private _links: HtmlTabLinkItem[];
-    private _onLinkWillChange: (prev: any, next: any, direction: number) => void;
-    private _onLinkChanged: (prev: any, next: any, direction: number) => void;
+    private _tabs: TabItem[];
+    private _links: TabLinkItem[];
     private _async: boolean;
-    private _clicksEnabled: boolean;
-    private _hoversEnabled: boolean;
-    private _linkActiveClass: string;
-    private _tabActiveClass: string;
-    private _currentActiveLink: any;
+    private _currentActiveLink: TabLinkItem;
     private _isSwitching: boolean;
     private _currentActiveIndex: number;
-
-    _onLinkChanging(prev: any, next: any, direction: number) {
-        throw new Error('Method not implemented.');
-    }
 
     constructor(config: TabsComponentConfig) {
         super(config);
 
-        this._linkActiveClass = config.linkActiveClass || 'active';
-        this._tabActiveClass = config.tabActiveClass || 'active';
-
-        this._onLinkWillChange = config.onWillChange || (() => {/* no-op */});
-        this._onLinkChanged = config.onChanged || (() => {/* no-op */});
-        this._onLinkChanged = config.onChanging || (() => {/* no-op */});
         this.syncActivate = config.syncActivate;
         this._async = !this.syncActivate;
 
-        this._clicksEnabled = config.clicksEnabled;
-        this._hoversEnabled = config.hoversEnabled;
-
         this._tabs = config.tabItems
-            || (config.tabs).map(t => new HtmlTabItem({ el: t as TabItemElement, activateClass: this._tabActiveClass }));
+            || (config.tabs).map(t => new HtmlTabItem({
+                el: t as TabItemElement,
+                activateClass: config.tabActiveClass || 'active',
+            }));
 
         this._links = config.linkItems
             || (config.links || []).map(l => {
@@ -67,13 +54,12 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
                     activateClass: config.linkActiveClass,
                     clicksEnabled: config.clicksEnabled,
                     hoversEnabled: config.hoversEnabled,
-
                 };
                  return new HtmlTabLinkItem(configHtml);
             });
 
         this._currentActiveLink = null;
-        this._currentActiveLink = -1;
+        this._currentActiveIndex = -1;
         this._isSwitching = false;
     }
 
@@ -110,9 +96,9 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
 
     get currentLink() { return this._currentActiveLink; }
 
-    private setActiveIndex = (index) => this.setActiveLink(this._links[index]);
+    private setActiveIndex = (index: number) => this.setActiveLink(this._links[index]);
 
-    private setActiveLink = (link) => {
+    private setActiveLink = async (link: TabLinkItem) => {
         if (link === this._currentActiveLink || this._isSwitching) {
             return null;
         }
@@ -127,48 +113,27 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         const direction = Math.sign(nextIndex - prevIndex);
 
         const cbs = {
-            before: () => this._onLinkWillChange(prev, next, direction),
-            inside: () => this._onLinkChanging(prev, next, direction),
-            after: () => this._onLinkChanged(prev, next, direction),
+            before: () => (this._config.onWillChange || NoOp)(prev, next, direction),
+            inside: () => (this._config.onChanging || NoOp)(prev, next, direction),
+            after: () => (this._config.onChanged || NoOp)(prev, next, direction),
         };
 
         this._currentActiveLink = next;
         this._currentActiveIndex = nextIndex;
 
-        if (this._async) {
+        try {
             cbs.before();
-            if (prev) {
-                prev.deactivate(direction);
-            }
+
+            await OptAwait(() => prev?.deactivate(direction), !this._async);
+
             cbs.inside();
-            next.activate(direction);
+
+            await OptAwait(() => next.activate(direction), !this._async);
+
             cbs.after();
+        } finally {
             this._isSwitching = false;
-            return null;
         }
-
-        return new Promise((resolve, reject) => {
-            if (prev) {
-                cbs.before();
-                return Promise.resolve(prev.deactivate(direction))
-                    .then(cbs.inside)
-                    .then(() => next.activate(direction))
-                    .then(() => {
-                        this._isSwitching = false;
-                        cbs.after();
-                    })
-                    .then(resolve)
-                    .catch(reject);
-            }
-
-            cbs.before();
-            cbs.inside();
-            return Promise.resolve(next.activate(direction))
-                .then(() => {
-                    cbs.after();
-                    this._isSwitching = false;
-                });
-        });
     }
 
     protected next(loop = true) {

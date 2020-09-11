@@ -1,11 +1,11 @@
 
 import Section from 'app/core/section';
- import TabsComponent, { TabsComponentConfig } from 'app/components/common/tabsComponent';
-import { TabItemElement, TabItem, HtmlTabItemConfig, HtmlTabItem } from 'app/components/common/tabsComponent.tab';
+ import TabsComponent from 'app/components/common/tabsComponent';
+import { HtmlTabItem } from 'app/components/common/tabsComponent.tab';
 
 export default class TabSection extends Section {
     _mainTabs: NodeListOf<HTMLElement>;
-    tabs: TabsComponent;
+    private tabs: TabsComponent;
 
     async setupSection() {
         this._mainTabs = this.element.querySelectorAll('.tab-item-wrap');
@@ -27,7 +27,7 @@ export default class TabSection extends Section {
     _createTabItems() {
         const tabs: HtmlTabItem[] = [];
         this._mainTabs.forEach(tab  => {
-            const tabObj = new TabItem ({
+            const tabObj = new HtmlTabItem ({
                 el: tab,
             });
 

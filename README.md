@@ -1,7 +1,7 @@
 # Static Site Template
 
 Basic template for static sites to be built with TypeScript, HTML, SASS.
-Just a compilation of commonly used approaches and utilities in projects we've made.
+Just a compilation of commonly used approaches and utilities in projects we made.
 
 Uses Webpack, Babel, GSAP.
 
@@ -32,21 +32,14 @@ GEM system for CSS: built on top of `rem`s, allows to scale up or down when usin
 
 Code breakpoints: allows to change beahaviour whenever breakpoint changes.
 
-## Requirements
-
-[Node.js ^12](https://nodejs.org/), [Yarn](https://classic.yarnpkg.com/lang/en/)
-
 ## Build project
 
-Install packages
-
-```bash
-yarn
-```
+Requirements: [Node.js ^12](https://nodejs.org/), [yarn](https://classic.yarnpkg.com/lang/en/)
 
 Output folder: `./dist`
 
 ```bash
+yarn
 yarn build
 ```
 

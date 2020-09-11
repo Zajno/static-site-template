@@ -38,8 +38,9 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
     }
 
     deactivate(delay = 0.0, direction = 1.0) {
-        if (!this._active)
+        if (!this._active) {
             return true;
+        }
 
         this._active = false;
         if (this.logActivation) {

@@ -1,9 +1,7 @@
 import Component, { ComponentConfig } from 'app/core/component';
 
 import { TabItemElement, TabItem } from './tabsComponent.tab';
-
-/** @typedef {(import ('./tabsComponent.tab.js').TabItem)} TabItem */
-/** @typedef {import ('./tabsComponent').DelayedOperation} DelayedOperation */
+import { OptAwait } from 'app/utils/async';
 
 export type TabLinkItemConfig = ComponentConfig<TabItemElement> & {
 
@@ -34,52 +32,42 @@ export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfi
         return this;
     }
 
-    protected init() {
+    init() {
         return this;
     }
 
-    _requestActivate() {
+    protected _requestActivate() {
         if (this._activateCallback) {
             this._activateCallback(this);
         }
     }
 
-    activate(direction?: number) {
-        if (this._chainActivation) {
-            let res = Promise.resolve(this._activateSelf(direction));
-            this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.activate(direction))) as Promise<void>;
-            });
-            return res;
+    async activate(direction?: number) {
+        for (let i = 0; i < this._tabs.length; ++i) {
+            const t = this._tabs[i];
+            await OptAwait(() => t.activate(direction), this._chainActivation);
         }
 
-        this._tabs.forEach(t => t.activate(direction));
         this._activateSelf(direction);
-        return true;
     }
 
-     _activateSelf(direction?: number) {
-        if (this.item.linkHooks && this.item.linkHooks.activate) {
+    protected _activateSelf(direction?: number) {
+        if (this.item.linkHooks?.activate) {
             this.item.linkHooks.activate(direction);
         }
     }
 
-    _deactivate(direction?: number) {
-        if (this._chainActivation) {
-            let res = Promise.resolve(this._deactivateSelf(direction));
-            this._tabs.forEach(t => {
-                res = res.then(() => Promise.resolve(t.deactivate(direction))) as Promise<void>;
-            });
-            return res;
+    protected async _deactivate(direction?: number) {
+        for (let i = 0; i < this._tabs.length; ++i) {
+            const t = this._tabs[i];
+            await OptAwait(() => t.deactivate(direction), this._chainActivation);
         }
 
-        this._tabs.forEach(t => t.deactivate(direction));
         this._deactivateSelf(direction);
-        return null;
     }
 
-    _deactivateSelf(direction) {
-        if (this.item.linkHooks && this.item.linkHooks.deactivate) {
+    protected _deactivateSelf(direction?: number) {
+        if (this.item.linkHooks?.deactivate) {
             this.item.linkHooks.deactivate(direction);
         }
     }
@@ -135,7 +123,7 @@ export class HtmlTabLinkItem<T extends HtmlTabLinkItemConfig = HtmlTabLinkItemCo
         this._requestActivate();
     }
 
-    _activateSelf(direction) {
+    _activateSelf(direction: number) {
         this.item.classList.add(this._activeClass);
         super._activateSelf(direction);
     }
