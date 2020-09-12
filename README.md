@@ -28,7 +28,7 @@ Prepared for:
 
 ### Responsive
 
-GEM system for CSS: built on top of `rem`s, allows to scale up or down when using `gem` sizes. See [rem.scss]('./app/styles/common/rem.scss) for more details.
+GEM system for CSS: built on top of `rem`s, allows to scale up or down when using `gem` sizes. See [rem.scss](app/styles/common/rem.scss) for more details.
 
 Code breakpoints: allows to change beahaviour whenever breakpoint changes.
 
