@@ -99,6 +99,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                         {
                             loader: 'file-loader',
                             options: {
+                                esModule: false,
                                 name: '[name].[ext]',
                                 outputPath: 'assets/img',
                             },

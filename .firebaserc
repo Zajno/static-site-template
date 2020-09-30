@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "<project name>"
+  },
+  "targets": {
+    "zajno-internal": {
+      "hosting": {
+        "web-stage": [
+          "<hosting project name>"
+        ],
+        "web-prod": [
+          "<hosting project name>"
+        ]
+      }
+    }
+  }
+}

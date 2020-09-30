@@ -57,7 +57,9 @@ Using webpack dev server
 yarn dev
 ```
 
-Also this project provides trivial Node.js app that just serves static files, additionally with:
+### Own hosted
+
+This project provides trivial Node.js app that just serves static files, additionally with:
 
 * gzip compression
 * http -> https redirection
@@ -70,3 +72,18 @@ Build and start it:
 ```bash
 yarn start
 ```
+
+### Firebase Hosting
+
+Project contains [`firebase.json`](firebase.json) with bolerplate settings for Firebase Hosting, which is much easier to use both for dev and production.
+
+To use it, fill `.firebaserc` file with your project name.
+
+Then, to build and deploy – use correspond commands:
+
+```bash
+yarn build:release:(staging | production)
+yarn deploy:firebase:(staging | production)
+```
+
+For automating the CD process, there's a [Github Workflow file](./.github/workflows/deploy-staging.yml) for building & deploying on every push to branch `staging`.

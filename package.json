@@ -1,6 +1,6 @@
 {
   "name": "static-website-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Static website template by Zajno",
   "private": true,
   "engines": {
@@ -9,13 +9,18 @@
   },
   "scripts": {
     "start": "cd server && yarn && yarn start:ts",
+    "emulate": "firebase emulators:start --only hosting",
     "dev": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
     "build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode development",
     "build:minify": "yarn build --env.fullminify",
     "build:prod": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode production",
     "build:prod:minify": "yarn build:prod --env.fullminify",
     "build:prod:minify:env": "cross-env NODE_ENV=production yarn build:prod:minify",
-    "heroku-postbuild": "yarn build:prod:minify && cd server && yarn && yarn build"
+    "heroku-postbuild": "yarn build:prod:minify && cd server && yarn && yarn build",
+    "build:release:staging": "yarn && (cross-env HOSTNAME=https://zajno.com/ yarn build:prod:minify:env)",
+    "build:release:production": "yarn && (cross-env HOSTNAME=https://zajno.com/ yarn build:prod:minify:env)",
+    "deploy:firebase:staging": "firebase deploy --only hosting:web-stage",
+    "deploy:firebase:production": "firebase deploy --only hosting:web-prod"
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
@@ -60,6 +65,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.6",
     "file-loader": "^6.1.0",
+    "firebase-tools": "^8.11.2",
     "html-loader": "^1.3.0",
     "html-webpack-plugin": "^4.4.1",
     "image-webpack-loader": "^6.0.0",
