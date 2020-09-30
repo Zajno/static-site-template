@@ -5,24 +5,23 @@ import { HtmlTabItem, TabItemElement, HtmlTabItemConfig, TabItem } from './tabsC
 import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
 import { OptAwait } from 'app/utils/async';
 
-export type ChangCallback = (prev: TabLinkItem, next: TabLinkItem, direction: number) => void;
+export type ChangeCallback = (prev: TabLinkItem, next: TabLinkItem, direction: number) => void;
 
-export interface TabsComponentConfig extends ComponentConfig {
-    tabItems: TabItem[];
-    tabs?: HTMLElement[];
-    linkItems?: TabLinkItem[];
-    links?: HTMLElement[];
+type TabItemsConfig = { tabs: NodeListOf<HTMLElement> } | { tabItems: TabItem[] };
+type TabLinksConfig = { links: NodeListOf<HTMLElement> } | { linkItems: TabLinkItem[] };
+
+export type TabsComponentConfig = ComponentConfig & TabItemsConfig & TabLinksConfig & {
     linkActiveClass?: string;
     tabActiveClass?: string;
     syncActivate: boolean;
-    onChanged?: ChangCallback;
-    onChanging?: ChangCallback;
-    onWillChange?: ChangCallback;
+    onChanged?: ChangeCallback;
+    onChanging?: ChangeCallback;
+    onWillChange?: ChangeCallback;
     clicksEnabled?: boolean;
     hoversEnabled?: boolean;
 }
 
-const NoOp: ChangCallback = () => { };
+const NoOp: ChangeCallback = () => { };
 
 export default class TabsComponent extends Component<TabsComponentConfig> {
     private _prevButton: HTMLElement;
@@ -41,30 +40,30 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         this.syncActivate = config.syncActivate;
         this._async = !this.syncActivate;
 
-        this._tabs = config.tabItems
-            || (config.tabs).map(t => new HtmlTabItem({
+        this._tabs = (config as any).tabItems
+            || ((config as any).tabs).map((t: HTMLElement) => new HtmlTabItem({
                 el: t as TabItemElement,
                 activateClass: config.tabActiveClass || 'active',
             }));
 
-        this._links = config.linkItems
-            || (config.links || []).map(l => {
-                const configHtml: HtmlTabItemConfig  =  {
-                    el: l as TabItemElement,
-                    activateClass: config.linkActiveClass,
-                    clicksEnabled: config.clicksEnabled,
-                    hoversEnabled: config.hoversEnabled,
-                };
-                 return new HtmlTabLinkItem(configHtml);
-            });
+        this._links = (config as any).linkItems
+            || ((config as any).links || []).map((l: HTMLElement) => new HtmlTabLinkItem({
+                el: l as TabItemElement,
+                activateClass: config.linkActiveClass,
+                clicksEnabled: config.clicksEnabled,
+                hoversEnabled: config.hoversEnabled,
+                // logActivation: true,
+            }));
 
         this._currentActiveLink = null;
         this._currentActiveIndex = -1;
         this._isSwitching = false;
     }
 
-    protected doSetup() {
-        this._links.forEach((link, index) => {
+    protected async doSetup() {
+        await Promise.all(this._tabs.map(t => t.setup()));
+
+        this._links.forEach(async (link, index) => {
             const targetID = link.targetId;
             this._tabs.forEach(tab => {
                 if (targetID === tab.tabId) {
@@ -73,13 +72,13 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
             });
 
             if (link.tabs.length === 0) {
-                logger.error('Could not find  tab for targetID =', targetID);
+                logger.error('Could not find tab for targetID =', targetID);
             }
 
-            link
+            await link
                 .setActivateCallback(l => this.setActiveLink(l))
                 .setActivationChain(this.syncActivate)
-                .init();
+                .setup();
 
             if (link.isActive) {
                 if (this._currentActiveLink) {

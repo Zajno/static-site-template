@@ -14,26 +14,22 @@ export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfi
 
     get item(): TabItemElement { return this._config.el; }
 
-    protected doSetup() {
-        /* no-op */
-    }
-
     abstract get targetId(): string;
 
     get tabs() { return this._tabs; }
 
-    setActivateCallback(cb: (link: TabLinkItem) => void) {
+    public setActivateCallback(cb: (link: TabLinkItem) => void) {
         this._activateCallback = cb;
         return this;
     }
 
-    setActivationChain(enabled: boolean) {
+    public setActivationChain(enabled: boolean) {
         this._chainActivation = enabled;
         return this;
     }
 
-    init() {
-        return this;
+    public registerTab(tab: TabItem) {
+        this._tabs.push(tab);
     }
 
     protected _requestActivate() {
@@ -42,20 +38,20 @@ export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfi
         }
     }
 
-    async activate(direction?: number) {
+    protected async _activate(direction?: number) {
         for (let i = 0; i < this._tabs.length; ++i) {
             const t = this._tabs[i];
             await OptAwait(() => t.activate(direction), this._chainActivation);
         }
 
         this._activateSelf(direction);
-    }
 
-    protected _activateSelf(direction?: number) {
         if (this.item.linkHooks?.activate) {
             this.item.linkHooks.activate(direction);
         }
     }
+
+    protected abstract _activateSelf(direction?: number): void;
 
     protected async _deactivate(direction?: number) {
         for (let i = 0; i < this._tabs.length; ++i) {
@@ -64,17 +60,13 @@ export abstract class TabLinkItem<T extends TabLinkItemConfig = TabLinkItemConfi
         }
 
         this._deactivateSelf(direction);
-    }
 
-    protected _deactivateSelf(direction?: number) {
         if (this.item.linkHooks?.deactivate) {
             this.item.linkHooks.deactivate(direction);
         }
     }
 
-    registerTab(tab: TabItem) {
-        this._tabs.push(tab);
-    }
+    protected abstract _deactivateSelf(direction?: number): void;
 }
 
 export type HtmlTabLinkItemConfig = TabLinkItemConfig & {
@@ -84,52 +76,41 @@ export type HtmlTabLinkItemConfig = TabLinkItemConfig & {
 };
 
 export class HtmlTabLinkItem<T extends HtmlTabLinkItemConfig = HtmlTabLinkItemConfig> extends TabLinkItem<T> {
-    private _activeClass: string;
-    private _clickEnabled: boolean;
-    private _hoverEnabled: boolean;
 
-    protected doSetup() {
-        super.doSetup();
-
-        const { activeClass, clickEnabled, hoverEnabled } = this._config;
-
-        this._activeClass = activeClass || 'active';
-        this._clickEnabled = clickEnabled == null ? true : !!clickEnabled;
-        this._hoverEnabled = hoverEnabled || false;
-
-        if (this._clickEnabled) {
-            this.item.addEventListener('click', this._onClick.bind(this));
-        }
-        if (this._hoverEnabled) {
-            this.item.addEventListener('mouseover', this._onHover.bind(this));
-        }
-    }
-     init() {
-        if (this.item.classList.contains(this._activeClass)) {
-            this._activate(0);
-        }
-        return super.init();
-    }
+    protected get activeClass() { return this._config.activeClass || 'active'; }
+    protected get hoverEnabled() { return this._config.hoverEnabled || false; }
+    protected get clickEnabled() { return this._config.clickEnabled == null ? true : !!this._config.clickEnabled; }
 
     get targetId() { return this.item.dataset.navTarget; }
 
-    _onClick(e) {
+    protected doSetup() {
+        if (this.clickEnabled) {
+            this.item.addEventListener('click', this._onClick.bind(this));
+        }
+        if (this.hoverEnabled) {
+            this.item.addEventListener('mouseover', this._onHover.bind(this));
+        }
+
+        if (this.item.classList.contains(this.activeClass)) {
+            this.activate();
+        }
+    }
+
+    private _onClick(e: MouseEvent) {
         e.preventDefault();
         this._requestActivate();
     }
 
-    _onHover(e) {
+    private _onHover(e: MouseEvent) {
         e.preventDefault();
         this._requestActivate();
     }
 
-    _activateSelf(direction: number) {
-        this.item.classList.add(this._activeClass);
-        super._activateSelf(direction);
+    protected _activateSelf() {
+        this.item.classList.add(this.activeClass);
     }
 
-    _deactivateSelf(direction) {
-        this.item.classList.remove(this._activeClass);
-        super._deactivateSelf(direction);
+    protected _deactivateSelf() {
+        this.item.classList.remove(this.activeClass);
     }
 }

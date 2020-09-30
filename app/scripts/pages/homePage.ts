@@ -3,7 +3,7 @@ import 'styles/home.sass';
 import Section, { SectionCtor } from '../core/section';
 import CommonPage from './commonPage';
 import HeroSection from 'app/sections/HeroSection';
-import TabSection from 'app/sections/TabsSections';
+import TabSection from 'app/sections/TabsSection';
 
 export default class HomePage extends CommonPage {
     _sectionTypes: SectionCtor[] = [
