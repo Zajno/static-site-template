@@ -10,6 +10,8 @@ export interface IPage {
 
     readonly scrollPosition: number;
     readonly scrollDirection: number;
+
+    readonly rem: number;
 }
 
 type ScrollDirectionHelpers = {
@@ -37,20 +39,10 @@ export default abstract class Page implements IPage {
     private _deltaY: number = 0;
     private _wheelDirection: Directions;
 
-    private readonly _scrollHelpers: ScrollDirectionHelpers = {
-        down: {
-            show: (top, bottom, showTreshold) => top <= this._height - showTreshold,
-            hide: (top, bottom, hideTreshold) => bottom <= hideTreshold,
-        },
-        up: {
-            show: (top, bottom, showTreshold) => bottom >= showTreshold,
-            hide: (top, bottom, hideTreshold) => top > this._height - hideTreshold,
-        },
-    };
+    private _rem: number = 1;
 
     static async RunPage(PageType: PageCtor) {
         const page = new PageType();
-        // console.log('entry run page');
         try {
             await page.setupAsync();
             page.start();
@@ -73,6 +65,8 @@ export default abstract class Page implements IPage {
     get deltaY() { return this._deltaY; }
     get wheelDirection() { return this._wheelDirection; }
 
+    get rem() { return this._rem; }
+
     protected getSection<TSection extends Section>(index: number) {
         return this._sections[index] as TSection;
     }
@@ -85,14 +79,14 @@ export default abstract class Page implements IPage {
         window.onwheel = this.onWheel.bind(this);
         await this.setupPageAsync();
         await this._setupSections(this._root.querySelectorAll('section'));
-        setTimeout(() => this.scroll(), 1000);
 
         await this.afterSetup();
+
+        this.resize();
     }
 
     protected setupPageAsync(): void | Promise<void> {
         /* override me if you want */
-        // console.log(this, 'setup page async');
     }
 
     protected afterSetup(): void | Promise<void> { }
@@ -106,7 +100,6 @@ export default abstract class Page implements IPage {
         const types = this.sectionTypes;
 
         for (let i = 0; i < sections.length; ++i) {
-            // console.log('enter to parse section')
             const section = sections[i];
             const Type = types[i];
             if (!Type) {
@@ -151,10 +144,14 @@ export default abstract class Page implements IPage {
         this._height = window.innerHeight;
         this._centerY = this._height * 0.5;
 
+        Breakpoints.resize(this._width, this.height);
+
+        this._rem = Breakpoints.Current.rem;
+
         for (let i = 0; i < this._sections.length; ++i) {
             this._sections[i].resize(this._width, this._height);
         }
-        Breakpoints.resize(this._width, this.height);
+
         this.scroll();
     }
 
@@ -168,6 +165,17 @@ export default abstract class Page implements IPage {
     protected wheel() {
         /* override me if you want */
     }
+
+    private readonly _scrollHelpers: ScrollDirectionHelpers = {
+        down: {
+            show: (top, bottom, showTreshold) => top <= this._height - showTreshold,
+            hide: (top, bottom, hideTreshold) => bottom <= hideTreshold,
+        },
+        up: {
+            show: (top, bottom, showTreshold) => bottom >= showTreshold,
+            hide: (top, bottom, hideTreshold) => top > this._height - hideTreshold,
+        },
+    };
 
     protected _updateSections() {
         const coeffsDirection: Directions = this._scrollDirection <= 0
@@ -184,24 +192,32 @@ export default abstract class Page implements IPage {
             const { top, bottom, height } = rect;
 
             const coeffs = section.scrollCoeffs[coeffsDirection];
-
             let show = null;
 
             let showTreshold = this._height * coeffs.show;
-            if (height < showTreshold)
-                showTreshold = height * 0.5;
+            if (section.fallbackTreshold && height < showTreshold) {
+                showTreshold = height * section.fallbackTreshold;
+            }
 
-                // show if top of next element is in range
-                if (getIsShow(top, bottom, showTreshold)) {
-                    show = true;
-                }
+            // show if top of next element is in range
+            if (getIsShow(top, bottom, showTreshold)) {
+                show = true;
+            }
 
-                let hideTreshold = this._height * coeffs.hide;
-                if (height < hideTreshold) {
-                    hideTreshold = height * 0.5;
-                }
+            let hideTreshold = this._height * coeffs.hide;
+            if (section.fallbackTreshold && height < hideTreshold) {
+                hideTreshold = height * section.fallbackTreshold;
+            }
 
-                // console.log(coeffsDirection,'coeffsDirection',top,'top',bottom,'bottom',hideTreshold,'hideTreshold')
+            // console.log({
+            //     // coeffsDirection,
+            //     // top,
+            //     bottom,
+            //     hideTreshold,
+            //     height,
+            //     pHeight: this._height,
+            //     coeff: coeffs.hide,
+            // })
             if (getIsHide(top, bottom, hideTreshold)) {
                 show = false;
             }
@@ -210,7 +226,6 @@ export default abstract class Page implements IPage {
     }
 
     protected _updateSectionActivation(show: boolean, section: Section) {
-        // console.log(show,"show section", section,'this section');
         if (show != null) {
             if (show) {
                 section.activate(0.0, this._scrollDirection);

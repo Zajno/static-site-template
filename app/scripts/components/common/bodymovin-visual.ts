@@ -1,6 +1,6 @@
 
 // libs
-import TweenMax, { Power1 } from 'gsap';
+import gsap, { Power1 } from 'gsap';
 
 import BodymovinIcon from 'app/components/common/bodymovin-icon';
 
@@ -20,12 +20,13 @@ export default class BodymovinVisual extends BodymovinIcon {
     }
 
     _activate(delay, direction) {
-        TweenMax.set(this.element, { opacity: 1 });
-        this._playBodymovin();
+        gsap.killTweensOf(this.element);
+        gsap.set(this.element, { autoAlpha: 1, onComplete: () => this._playBodymovin() });
     }
 
     _deactivate(delay, direction) {
-        TweenMax.to(this.element, 0.4, {  opacity: 0, delay: delay || 0, ease: Power1.easeInOut });
+        gsap.killTweensOf(this.element);
+        gsap.to(this.element, { duration: 0.5666, autoAlpha: 0, delay: delay || 0, ease: Power1.easeInOut });
         this._stopBodymovin();
     }
 }

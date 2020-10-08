@@ -23,8 +23,4 @@ export default abstract class CommonPage extends Page {
     //     super.setupPageAsync();
     // }
 
-    // scroll(scrollDirection, scrollPosition) {
-    //     super.scroll(scrollDirection, scrollPosition);
-    // }
-
 }

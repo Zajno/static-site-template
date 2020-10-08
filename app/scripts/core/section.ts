@@ -47,6 +47,9 @@ export default class Section<TConfig extends SectionConfig = SectionConfig>
     get scrollCoeffs(): Readonly<ActivationDirectCoeffs> { return this._scrollCoeffs; }
     get scrollPosition() { return this._scrollPosition; }
 
+    // override with 0.5 for small sections
+    get fallbackTreshold() { return 0; }
+
     protected async doSetup() {
         if (this.element && this.element.style) {
             this.element.style.visibility = 'visible';

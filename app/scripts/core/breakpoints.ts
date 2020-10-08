@@ -3,17 +3,24 @@ import { createLogger } from 'app/logger';
 
 const logger = createLogger('[Breakpoints]');
 
-type BreakpointType = {
-        id: number;
-        mediaQuery: string;
-        width: number;
-        height: number;
-    }
-;
+export type BreakpointAnimations = {
+    disableInview?: boolean,
+    disableVideo?: boolean,
+};
+
+export type BreakpointType = {
+    id: number;
+    name: string,
+    mediaQuery: string;
+    width: number;
+    height: number;
+    animations?: BreakpointAnimations;
+};
 
 const Breakpoints: [BreakpointType] = [
     {
         id: 500,
+        name: 'default',
         mediaQuery: '',
         width: 1440,
         height: 800,

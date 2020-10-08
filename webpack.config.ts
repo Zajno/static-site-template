@@ -121,6 +121,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                     use: [{
                         loader: 'file-loader',
                         options: {
+                            esModule: false,
                             name: '[name].[ext]',
                             outputPath: 'assets/video',
                         },
@@ -132,6 +133,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                     use: [{
                         loader: 'file-loader',
                         options: {
+                            esModule: false,
                             name: '[name].[ext]',
                             outputPath: (url, resourcePath, context) => {
                                 const split = resourcePath.split(Path.sep);
@@ -162,6 +164,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                     use: [{
                         loader: 'file-loader',
                         options: {
+                            esModule: false,
                             name: '[name].[ext]',
                             outputPath: 'assets',
                         },
@@ -226,7 +229,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 patterns: [
                     {
                         from: './app/bodymovin/',
-                        to: 'assets/bodymovin/',
+                        to: 'assets/bodymovin/bodymovin/',
                         globOptions: { ignore: ['*.json'] },
                         noErrorOnMissing: true,
                     },

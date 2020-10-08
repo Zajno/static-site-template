@@ -1,6 +1,6 @@
 
 import lottie, { AnimationConfig, AnimationItem as AnimationItemLottie } from 'lottie-web';
-import GSAP from 'gsap';
+import gsap from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
 import { ImageLazyLoadConfig } from '../lazy/imageLazyLoadComponent';
@@ -38,7 +38,7 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
         this._playBodymovin = this._playBodymovin.bind(this);
 
         // this._checkAnimationLoaded();
-        GSAP.set(this.element, { alpha: 0.0, force3D: true });
+        gsap.set(this.element, { autoAlpha: 0.0 });
 
         if (this._config.register == null) {
             this._config.register = true;
@@ -72,10 +72,10 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
                 if (this._playPending) {
 
                     this._playPending = false;
-                    setTimeout(() => {
-                        // logger.log('[BodymovinIcon] Play Pending', this);
-                        this._animBodymovin.play();
-                    }, 500);
+                    // setTimeout(() => {
+                    //     // logger.log('[BodymovinIcon] Play Pending', this);
+                    // }, 500);
+                    this._animBodymovin.play();
                 }
 
                 resolve();
@@ -99,20 +99,22 @@ export default class BodymovinIcon extends LazyLoadComponent<ImageLazyLoadConfig
     // STATE -------------------------------------------------------------------
 
     _activate(delay, direction) {
-        GSAP.killTweensOf(this.element);
+        gsap.killTweensOf(this.element);
 
         // TODO tweak me
-        TweenLite.fromTo(this.element, 0.75, { alpha: 0.0 }, { alpha: 1.0, ease: 'Sine.easeInOut', delay: delay });
-        // TweenLite.fromTo(this.element, 2.56, { scale: 0.84 }, { scale: 1.0, force3D: true, ease: 'Sine.easeOut', delay: delay });
-
-        setTimeout(this._playBodymovin, 500);
+        gsap.fromTo(this.element, 0.5666,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, delay: delay, onComplete: () => this._playBodymovin },
+        );
     }
 
     _deactivate(delay, direction) {
-        GSAP.killTweensOf(this.element);
+        gsap.killTweensOf(this.element);
 
         // TODO tweak me
-        TweenLite.to(this.element, 0.62, { alpha: 0.0, ease: 'Sine.easeInOut', delay: delay });
-        // TweenLite.to(this.element, 0.56, { scale: 0.76, force3D: true, ease: 'Cubic.easeIn', delay: delay });
+        gsap.fromTo(this.element, 0.5666,
+            { autoAlpha: 1 },
+            { autoAlpha: 0, delay: delay },
+        );
     }
 }
