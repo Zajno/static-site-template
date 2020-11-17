@@ -3,6 +3,4 @@ dist
 package-lock.json
 yarn-error.log
 build
-
-firebase-debug.log
 .firebase
