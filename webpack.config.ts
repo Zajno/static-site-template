@@ -69,6 +69,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                             'link:href',
                             'source:srcset',
                             'div:data-bodymovin-path',
+                            'source:data-srcset',
                         ],
                     },
                 },
