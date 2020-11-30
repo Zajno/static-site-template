@@ -3,9 +3,10 @@ import Breakpoints, { BreakpointType } from 'app/core/breakpoints';
 
 // TODO register additional breakpoints
 
-const AppBreakpoints = {
+const AppBreakpoints: Record<string, BreakpointType> = {
     Desktop: {
         id: 3,
+        name: 'Desktop',
         width: 1440,
         height: 800,
         mediaQuery: '(max-width: 1920px)',
