@@ -12,7 +12,7 @@ export default class HomePage extends CommonPage {
     ];
 
     async setupPageAsync() {
-        super.setupPageAsync();
+        await super.setupPageAsync();
     }
 
     get sectionTypes() {
