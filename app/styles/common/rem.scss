@@ -17,7 +17,7 @@
     @if $heightDesign != 0 {
         @media all and (min-aspect-ratio: #{$widthDesign} / #{$heightDesign}) {
             html {
-                font-size: calc(100vh / #{$heightDesign});
+                font-size: calc(10000vh / #{$heightDesign});
             }
         }
     }
