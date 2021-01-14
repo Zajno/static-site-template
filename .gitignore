@@ -4,3 +4,4 @@ package-lock.json
 yarn-error.log
 build
 .firebase
+firebase-debug.log

@@ -1,11 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <%
-	const page = htmlWebpackPlugin.options && htmlWebpackPlugin.options.page;
+	const Sitemap = require('sitemap');
+    // get the page directly to hook it into webpack dev build process
+	const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
+
+	const Locale = page.locale;
+	const Strings = page.strings;
+	const BaseUrl = page.baseUrl;
+
 	const title = (page && page.title) || 'Title';
 	const description = (page && page.description) || 'Description';
+	const canonical = (page && page.canonical) || '/';
 %>
+
+<!DOCTYPE html>
+<html lang="<%= Locale %>">
 
 <head>
 
@@ -21,7 +29,7 @@
 
 	<!-- Open Graph -->
 	<!--<meta property="og:type" content="website">
-	<meta property=“og:url” content=“website url“>
+	<meta property="og:url" content="<%= canonical %>">
 	<meta property="og:site_name" content="<%= title %>">
 	<meta property="og:title" content="<%= title %>">
 	<meta property="og:description" content="<%= description %>">
@@ -60,4 +68,4 @@
 	</style>
 </head>
 
-<body>
+<body class="locale-<%= Locale %>">

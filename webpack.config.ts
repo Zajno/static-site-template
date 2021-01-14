@@ -33,7 +33,7 @@ const siteConfig = (env: any): webpack.Configuration => {
 
     return {
         devtool: isProd ? undefined : 'inline-source-map',
-        entry: sitemapData.getEntryPoint(),
+        entry: sitemapData.ApplicationEntryPoints,
         output: {
             publicPath: publicPath,
             path: outputPath,

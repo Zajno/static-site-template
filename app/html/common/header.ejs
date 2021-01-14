@@ -1,3 +1,15 @@
+<%
+    const Sitemap = require('sitemap');
+    // get the page directly to hook it into webpack dev build process
+    const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
+
+    const Strings = page.copy.header;
+    const Locale = page.locale;
+    const BaseUrl = page.baseUrl;
+
+    const getLocaleHref = (lang) => Sitemap.getLocaleHref(page, lang);
+%>
+
 <header id="header" class="header"
 <% if (typeof hideheader !== 'undefined' && hideheader) { %>
 style="visibility: hidden;"

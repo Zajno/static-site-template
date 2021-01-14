@@ -1,6 +1,16 @@
 @require('./common/structure/head.ejs')
 @require('./common/header.ejs')
 
+<%
+    const Sitemap = require('sitemap');
+    // get the page directly to hook it into webpack dev build process
+    const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
+
+    const Locale = page.locale;
+    const Strings = page.copy.page;
+    const BaseUrl = page.baseUrl;
+%>
+
 <main id="main" data-page-id="home">
 </main>
 
