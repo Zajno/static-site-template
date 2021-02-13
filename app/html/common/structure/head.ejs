@@ -14,12 +14,7 @@
 	const canonical = (page && page.canonical) || '/';
 	const image = canonical + require('../../../assets/img/' + page.image) || '';
 
-	const faviconIco = require('../../../assets/img/favicon/favicon.ico');
-	const appleTouchIcon = require('../../../assets/img/favicon/apple-touch-icon.png');
-	const favicon32 = require('../../../assets/img/favicon/favicon-32x32.png');
-	const favicon16 = require('../../../assets/img/favicon/favicon-16x16.png');
-	const manifest = require('../../../assets/img/favicon/site.webmanifest');
-	const maskIcon = require('../../../assets/img/favicon/safari-pinned-tab.svg');
+	const faviconIco = require('../../../assets/img/logo.png');
 %>
 
 <!DOCTYPE html>
@@ -62,11 +57,6 @@
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="<%= faviconIco %>" type="image/x-icon">
-	<link rel="apple-touch-icon" sizes="180x180" href="<%= appleTouchIcon %>">
-	<link rel="icon" type="image/png" sizes="32x32" href="<%= favicon32 %>">
-	<link rel="icon" type="image/png" sizes="16x16" href="<%= favicon16 %>">
-	<link rel="manifest" href="<%= manifest %>">
-	<link rel="mask-icon" href="<%= maskIcon %>" color="#da532c">
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
 

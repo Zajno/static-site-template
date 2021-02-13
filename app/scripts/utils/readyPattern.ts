@@ -1,6 +1,6 @@
 
 /** @param {EventTarget} target */
-export default function addReadyEvent(target ) {
+export default function addReadyEvent(target) {
 
     let isLoaded = false;
     let isOk: boolean;

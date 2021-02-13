@@ -1,3 +1,4 @@
+import type gsap from 'gsap';
 import { TimelineMax, Power1 } from 'gsap';
 import { createLogger, ILogger } from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
@@ -157,7 +158,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
         if (allowDefault && this._default) {
             this._goTo(this._default);
         }
-    }
+    };
 
     protected _deactivate() {
         this.reset();

@@ -13,7 +13,7 @@ export interface IGenericLogger {
 }
 
 const CONSOLE = console;
-const EMPTY_FUNCTION = () => { /* no-op */};
+const EMPTY_FUNCTION = () => { /* no-op */ };
 
 function addArg(func: (...args: any[]) => any, value: string) {
     return (...args: any[]) => func(value, ...args);

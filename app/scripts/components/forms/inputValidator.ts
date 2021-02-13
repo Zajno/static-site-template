@@ -1,5 +1,3 @@
-import logger from 'app/logger';
-
 import Component, { ComponentConfig } from 'app/core/component';
 import { MOBILE_DEVICE_SCREEN_WIDTH } from 'app/utils/constants';
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { URL } from 'url';
 
 let Hostname = process.env.HOSTNAME || 'http://localhost/';
@@ -14,7 +16,7 @@ function combine(path: string, base: string) {
 
 function combineWithHostname(path: string) {
     return combine(path, Hostname);
-};
+}
 
 export {
     Hostname,

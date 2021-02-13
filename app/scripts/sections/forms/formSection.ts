@@ -4,7 +4,6 @@ import Section from 'app/core/section';
 import InputValidator from 'app/components/forms/inputValidator';
 
 import validation from 'app/modules/forms/validation';
-import type CommonPage from 'app/pages/commonPage';
 
 const classNames = {
     active: 'active',

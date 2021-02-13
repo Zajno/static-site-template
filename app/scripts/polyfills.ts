@@ -44,9 +44,8 @@ if (window.NodeList && !window.NodeList.prototype.map) {
 if (typeof Object.assign !== 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         value: function assign(target, varArgs) { // .length of function is 2
-
-
             if (target == null) { // TypeError if undefined or null
                 throw new TypeError('Cannot convert undefined or null to object');
             }

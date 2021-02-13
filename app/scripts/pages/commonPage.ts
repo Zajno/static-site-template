@@ -22,5 +22,4 @@ export default abstract class CommonPage extends Page {
     // async setupPageAsync() {
     //     super.setupPageAsync();
     // }
-
 }

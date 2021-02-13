@@ -5,7 +5,7 @@ export function prepareEmail(to: string, subject: string, bodyText: string) {
     // Set the form attributes
     form.setAttribute('method', 'post');
     form.setAttribute('enctype', 'text/plain');
-    form.setAttribute('action', 'mailto:' + escape(to) + '?Subject=' + escape(subject) + '&Body=' + escape(bodyText ? bodyText : ' ') );
+    form.setAttribute('action', 'mailto:' + escape(to) + '?Subject=' + escape(subject) + '&Body=' + escape(bodyText ? bodyText : ' '));
     form.setAttribute('style', 'display:none');
 
     // Append the form to the body

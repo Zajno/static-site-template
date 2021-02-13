@@ -1,8 +1,4 @@
 
-function linkifyText(text: string) {
-
-}
-
 function a(text: string, href: string, classes: string[] = []) {
     return `<a href="${href}" target="_blank" rel="noopener" class="${classes.join(' ')}" >${text}</a>`;
 }

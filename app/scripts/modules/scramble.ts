@@ -8,8 +8,8 @@ export type ScramleConfig = {
 export default ({ el, delay = 0.0, count, interval }: ScramleConfig) => {
     const bel = el as HTMLElement & {
         clearScramble: () => void,
-        scrambleDelay: NodeJS.Timeout,
-        scramble: NodeJS.Timeout,
+        scrambleDelay: number,
+        scramble: number,
     };
 
     if (bel.clearScramble) {
@@ -19,11 +19,11 @@ export default ({ el, delay = 0.0, count, interval }: ScramleConfig) => {
     const text = el.textContent;
     const parts = text.split('');
 
-    bel.scrambleDelay = setTimeout(() => {
+    bel.scrambleDelay = window.setTimeout(() => {
 
         let currentCount = 0;
 
-        bel.scramble = setInterval(() => {
+        bel.scramble = window.setInterval(() => {
 
             if (currentCount++ >= count) {
                 bel.clearScramble();

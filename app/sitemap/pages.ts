@@ -41,12 +41,12 @@ const Home: SitePage = {
     title: 'Zajno | Digital Design Agency',
     description: 'Full-service digital design and development agency specializing in UX/UI design, crafting thought-out personalized experiences for web and mobile.',
     canonical: Hostname,
-    image: 'og-image.jpg',
+    image: 'logo.png',
     entryPoint: './app/scripts/pages/homePage.ts',
     locales: HomeCopyright,
     localesOutput: {
-        ja: { output: 'ja/index.html', href: '/ja' },
         en: { output: 'index.html', href: '/' },
+        ja: { output: 'ja/index.html', href: '/ja' },
     },
 };
 

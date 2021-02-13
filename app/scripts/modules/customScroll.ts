@@ -1,4 +1,3 @@
-import logger from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 import gsap from 'gsap';
 
@@ -53,7 +52,7 @@ export default class CustomScroll extends Component<CustomScrollConfig> {
         if (!this._rafId) {
             this._rafId = requestAnimationFrame(this._updateScroller);
         }
-    }
+    };
 
     _updateScroller = () => {
         const resized = this._resizeRequest > 0;
@@ -83,7 +82,7 @@ export default class CustomScroll extends Component<CustomScrollConfig> {
         }
 
         this._rafId = this._scrollRequest > 0 ? requestAnimationFrame(this._updateScroller) : null;
-    }
+    };
 
     _deactivate() {
         this.doc.removeEventListener('scroll', this._scrollHandler);

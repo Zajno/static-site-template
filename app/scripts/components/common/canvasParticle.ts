@@ -1,5 +1,3 @@
-import logger from 'app/logger';
-
 export type ParticleSettings = {
     scale: number[];
     baseSpeed: number;
@@ -52,6 +50,7 @@ export default class Particle {
     }
 
     // will be called before first draw. Override it (and call super!) to make some initialization
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected prepareDraw(context: CanvasRenderingContext2D) {
         this.doPrepareDraw = () => { /* no-op */ };
     }

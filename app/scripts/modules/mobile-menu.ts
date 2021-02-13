@@ -17,7 +17,7 @@ class MobileMenu {
         this.setupBurger();
 
         this.links.forEach(l => {
-            l.addEventListener('click', e => {
+            l.addEventListener('click', () => {
                 const animation = gsap.timeline({
                     immediateRender: false,
                 });
@@ -87,7 +87,7 @@ class MobileMenu {
         } else {
             this.open();
         }
-    }
+    };
 }
 
 const _btn = document.querySelectorAll('.mobile-menu-button') as NodeListOf<HTMLElement>;

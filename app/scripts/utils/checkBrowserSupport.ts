@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* global require */
 
 import { browser, ApplyNameAndVersion } from './detectBrowser';
 
@@ -31,12 +33,15 @@ function doesSupport() {
     }
 
     try {
-        // chech for proxy
+        // check for proxy
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const p = new Proxy({}, {});
         // check for symbol
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const s = Symbol('test');
         // check for arrow functions
-        const f = () => {};
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const f = () => { /* no-op */ };
     } catch (error) {
         console.log('[BrowserCheck]: ' + error);
         return false;
@@ -50,7 +55,7 @@ const result = doesSupport();
 
 if (result == null) {
     console.log('[BrowserCheck]: skipped');
-} else  if (!result) {
+} else if (!result) {
 
     // HIDE ALL ELEMENTS
 
@@ -63,6 +68,7 @@ if (result == null) {
     // PLACE NOT SUPPORTED BROWSER PLACEHOLDER
 
     const ieMain = document.createElement('main');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const ieScreen = require('app/modules/iePlaceholder').default;
 
     body.style.cursor = 'default';

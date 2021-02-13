@@ -92,7 +92,7 @@ export function normalize(arr: number[]): number[] {
     const max = arrayMax(arr);
     const dist = max - min;
     if (Math.abs(dist) < 0.000001) { // almost zero
-        return arr.map(_ => 1);
+        return arr.map(() => 1);
     }
 
     return arr.map(x => (x - min) / dist);
@@ -102,9 +102,9 @@ export function roundNumber(val: number, signs = 2, mode?: 'floor' | 'ceil') {
     const k = 10 ** signs;
     let v = (val + Number.EPSILON) * k;
     switch (mode) {
-        case 'floor':   v = Math.floor(v); break;
-        case 'ceil':    v = Math.ceil(v); break;
-        default:        v = Math.round(v); break;
+        case 'floor': v = Math.floor(v); break;
+        case 'ceil': v = Math.ceil(v); break;
+        default: v = Math.round(v); break;
     }
     return v / k;
 }

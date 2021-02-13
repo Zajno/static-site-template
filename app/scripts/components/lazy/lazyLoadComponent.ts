@@ -190,7 +190,7 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
         this._group._itemLoaded(this);
 
         this.loaded = true;
-    }
+    };
 }
 
 export function BeginLoading() {

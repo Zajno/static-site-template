@@ -1,5 +1,5 @@
 
-export function setTimeoutAsync(ms: number, useCancel: (cb: () => void) => void  = null) {
+export function setTimeoutAsync(ms: number, useCancel: (cb: () => void) => void = null) {
     let canceled = false;
     let _reject: () => void;
     const res = new Promise<void>((resolve, reject) => {

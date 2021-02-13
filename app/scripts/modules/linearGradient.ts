@@ -1,5 +1,4 @@
 import { TweenMax, TimelineMax } from 'gsap';
-import logger from 'app/logger';
 
 type LinearGradient = {
     directionDegrees: number,

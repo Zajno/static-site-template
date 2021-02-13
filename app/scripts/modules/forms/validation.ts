@@ -2,6 +2,7 @@ import creditCard from 'app/utils/creditCard';
 import getChar from 'app/utils/getChar';
 
 const RE = {
+    // eslint-disable-next-line no-useless-escape
     name: /^[a-z,\.'-]+( +[a-z,\.'-]+)+$/i,
     englishLetters: /^([a-zA-Z\s]+)$/,
     email: /^([a-zA-Z0-9_.-\\+])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/,

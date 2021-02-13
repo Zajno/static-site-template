@@ -1,6 +1,6 @@
 import logger from 'app/logger';
 
-import { SUPPORT_MIX_BLEND as supportMixBlend }  from 'app/utils/constants';
+import { SUPPORT_MIX_BLEND as supportMixBlend } from 'app/utils/constants';
 
 import LazyLoadComponent, { LazyLoadConfig } from 'app/components/lazy/lazyLoadComponent';
 import ImageLazyLoadComponent from 'app/components/lazy/imageLazyLoadComponent';
@@ -157,7 +157,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         if (isChanged) {
             this.video.classList.add(lazyClass);
 
-            const loadPromise = new Promise(resolve => {
+            const loadPromise = new Promise<void>(resolve => {
 
                 const onVideoCanPlay = () => {
                     if (this._state <= States.LoadAllowed) {
@@ -198,7 +198,8 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
             this.log('Switching to Placeholders');
             this._placeHolder.classList.add(lazyClass);
-            const lazy = new ImageLazyLoadComponent({ el: this._placeHolder, register: true });
+            // will do the work behind the scenes
+            new ImageLazyLoadComponent({ el: this._placeHolder, register: true });
 
             this._placeHoldersLoaded = true;
         }
@@ -284,10 +285,12 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         await this._load();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     scroll(scrollDirection, scrollPosition) {
         // TODO Change video playback position ?
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     resize(width: number, height: number) {
         const isMobile = width <= SCREEN_WIDTH_FOR_VIDEOS;
         const usePlaceholder = !!((this._hasPlaceholder && isMobile)

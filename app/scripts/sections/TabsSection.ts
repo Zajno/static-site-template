@@ -25,6 +25,4 @@ export default class TabSection extends Section {
     protected _deactivate() {
         this.tabs.deactivate();
     }
-
-    resize() { }
 }

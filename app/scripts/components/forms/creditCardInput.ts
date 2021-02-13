@@ -1,5 +1,3 @@
-import logger from 'app/logger';
-
 import Component, { ComponentConfig } from 'app/core/component';
 import creditCard from 'app/utils/creditCard';
 
@@ -28,8 +26,7 @@ export default class CreditCardInput extends Component<CreditCardInputConfig> {
 
         // backspace doesn't fire the keypress event
         this._input.onkeydown = e => {
-            if (e.keyCode === 8 || e.keyCode === 46) // backspace or delete
-            {
+            if (e.keyCode === 8 || e.keyCode === 46) { // backspace or delete
                 e.preventDefault();
 
                 this._formatAndPositionate(
@@ -78,8 +75,7 @@ export default class CreditCardInput extends Component<CreditCardInputConfig> {
 
             if (/\D/.test(char)
                 || (input.selectionStart === input.selectionEnd
-                    && input.value.replace(/\D/g, '').length >= creditCard.getDigitsCount(input.value)))
-            {
+                    && input.value.replace(/\D/g, '').length >= creditCard.getDigitsCount(input.value))) {
                 return false;
             }
 

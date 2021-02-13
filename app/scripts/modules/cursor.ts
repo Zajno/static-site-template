@@ -1,4 +1,3 @@
-import logger from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 import { TweenLite } from 'gsap';
 

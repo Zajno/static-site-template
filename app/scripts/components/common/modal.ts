@@ -1,7 +1,6 @@
 // core
-import { TimelineMax, TweenLite } from 'gsap';
+import { TimelineMax } from 'gsap';
 import Component, { ComponentConfig } from 'app/core/component';
-import logger from 'app/logger';
 
 export type ModalConfig = ComponentConfig & {
     modal: HTMLElement;
@@ -11,7 +10,7 @@ export type ModalConfig = ComponentConfig & {
     modalActiveClass: string;
 };
 
-export default class Modal extends Component<ModalConfig>  {
+export default class Modal extends Component<ModalConfig> {
     private _body: HTMLBodyElement;
     private _modalActiveClass: string;
     public openButton: Element;
@@ -64,7 +63,7 @@ export default class Modal extends Component<ModalConfig>  {
     closeModal() {
         this._body.classList.remove(this._modalActiveClass);
 
-        document.ontouchmove = event => {
+        document.ontouchmove = () => {
             return true;
         };
 

@@ -1,4 +1,3 @@
-import logger from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
 type ScrollDirection = 'down' | 'up';
@@ -13,7 +12,7 @@ export default class ScrollController extends Component<ScrollControllerConfig> 
 
     private _mouseCouterClearDelay: number;
     private _mouseCounter = 0;
-    private _timer: NodeJS.Timeout;
+    private _timer: number;
     private _deltaY: number;
     private _wheelDirection: ScrollDirection;
 
@@ -58,7 +57,7 @@ export default class ScrollController extends Component<ScrollControllerConfig> 
             this.eventCallback(this._wheelDirection);
             this._mouseCounter = 0;
         } else {
-            this._timer = setTimeout(() => {
+            this._timer = window.setTimeout(() => {
                 this._mouseCounter = 0;
             }, this._mouseCouterClearDelay);
         }

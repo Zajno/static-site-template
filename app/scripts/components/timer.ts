@@ -21,7 +21,7 @@ export class TimerComponent extends Component {
 
         const str = `${pad(min)}:${pad(sec)}.${pad(ms)}`;
         this.element.textContent = str;
-    }
+    };
 
     public prepare(seconds: number) {
         this.renderTimer(seconds * 1000, 0);

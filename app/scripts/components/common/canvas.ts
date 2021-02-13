@@ -1,7 +1,5 @@
-import logger from 'app/logger';
-
+import gsap from 'gsap';
 import LazyLoadComponent, { LazyLoadConfig } from 'app/components/lazy/lazyLoadComponent';
-
 import Particle, { ParticleSettings } from './canvasParticle';
 
 type CanvasSettings = ParticleSettings & {
@@ -21,7 +19,7 @@ export default abstract class Canvas extends LazyLoadComponent<LazyLoadConfig & 
 
     private isPlaying = false;
     private startTime = null;
-    private drawTimer = null;
+    // private drawTimer = null;
     private renderingAllowed = false;
 
     constructor (config: CanvasSettings) {
@@ -55,12 +53,12 @@ export default abstract class Canvas extends LazyLoadComponent<LazyLoadConfig & 
 
     _doLoading() {
         this.renderingAllowed = true;
-        TweenLite.fromTo(this.canvas, 1.5, { autoAlpha: 0 }, { autoAlpha: 1, delay: 1 });
+        gsap.fromTo(this.canvas, 1.5, { autoAlpha: 0 }, { autoAlpha: 1, delay: 1 });
         this.renderOnce();
         return Promise.resolve();
     }
 
-    play(delay: number) {
+    play() {
         if (this.isPlaying) {
             return;
         }
@@ -106,7 +104,7 @@ export default abstract class Canvas extends LazyLoadComponent<LazyLoadConfig & 
     animationWorker = (timeStamp: number) => {
         this.drawCanvas(timeStamp);
         this.enqueueAnimation();
-    }
+    };
 
     enqueueAnimation() {
         if (this.isPlaying) {

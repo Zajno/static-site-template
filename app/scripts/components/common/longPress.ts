@@ -52,7 +52,7 @@ export default class LongPress extends Component<LongPressConfig> {
 
             e.preventDefault();
         }
-    }
+    };
 
     _notPressingDown = (e) => {
         // Stop the timer
@@ -60,7 +60,7 @@ export default class LongPress extends Component<LongPressConfig> {
 
         this._counter = 0;
         this._config.callBackResetAnimation(e.target);
-    }
+    };
 
     // Runs at 60fps when you are pressing down
     _timer = (target: HTMLElement) => {
@@ -76,10 +76,10 @@ export default class LongPress extends Component<LongPressConfig> {
             logger.log('Press threshold reached! ');
             target.dispatchEvent(this._longPressEvent);
         }
-    }
+    };
 
     _longPressHolder = (e) => {
         logger.log('longPress event fired!');
         this._config.callback(e.target);
-    }
+    };
 }

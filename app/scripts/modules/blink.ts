@@ -14,19 +14,19 @@ export default ({ el, delay = 0.0, count, interval, on, off, final, onComplete }
 
     const bel = el as HTMLElement & {
         clearBlink?: () => void,
-        blinkDelay?: NodeJS.Timeout,
-        blink?: NodeJS.Timeout,
+        blinkDelay?: number,
+        blink?: number,
     };
 
     if (bel.clearBlink) {
         bel.clearBlink();
     }
 
-    bel.blinkDelay = setTimeout(() => {
+    bel.blinkDelay = window.setTimeout(() => {
 
         let currentCount = 0;
 
-        bel.blink = setInterval(() => {
+        bel.blink = window.setInterval(() => {
 
             if (currentCount++ === count) {
 

@@ -1,5 +1,3 @@
-import logger from 'app/logger';
-
 import CommonPage from 'app/pages/commonPage';
 import FormSection from 'app/sections/forms/formSection';
 
@@ -99,10 +97,12 @@ export default class BaseLoginPage extends CommonPage {
     get formId() { throw new Error('abstract'); }
 
     /** @param {LoginFormSectionBase} form */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validate(form) {
         return true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     doSumbit(formData) {
         throw new Error('abstract');
     }

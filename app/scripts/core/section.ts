@@ -62,10 +62,12 @@ export default class Section<TConfig extends SectionConfig = SectionConfig>
         /* override me if you want */
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public resize(width: number, height: number) {
         /* override me if you want */
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public scroll(scrollPosition: number, scrollDirection: number) {
         const rect = this.rect;
         const totalHeight = this.page.height + rect.height;
@@ -75,6 +77,7 @@ export default class Section<TConfig extends SectionConfig = SectionConfig>
         /* override me if you want */
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public wheel(deltaY: number, wheelDirection: number) {
         /* override me if you want */
     }

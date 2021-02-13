@@ -96,7 +96,7 @@ export default class ImageLazyLoadComponent extends LazyLoadComponent<ImageLazyL
     }
 
     static RegisterAll(selector = 'img.lazy') {
-        const  arrImage = document.querySelectorAll(selector);
+        const arrImage = document.querySelectorAll(selector);
         return Promise.all(arrImage
             .map(el => new ImageLazyLoadComponent({ el: el as HTMLImageElement, register: true }).setup()));
     }

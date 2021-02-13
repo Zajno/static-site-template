@@ -47,6 +47,7 @@ export default abstract class Page implements IPage {
             await page.setupAsync();
             page.start();
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(`failed to setup page '${PageType.name}':`, err);
         }
     }
@@ -89,8 +90,11 @@ export default abstract class Page implements IPage {
         /* override me if you want */
     }
 
-    protected afterSetup(): void | Promise<void> { }
+    protected afterSetup(): void | Promise<void> {
+        /* override me if you want */
+    }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected getSectionOptions(index: number, type: SectionCtor, el: HTMLElement): any {
         return { };
     }
