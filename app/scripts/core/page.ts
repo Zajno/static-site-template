@@ -33,8 +33,8 @@ export default abstract class Page implements IPage {
 
     private _centerY: number = 0.0;
 
-    private _scrollPosition: number = 0.0;
-    private _scrollDirection: number = -1.0;
+    private _scrollPosition: number = 0;
+    private _scrollDirection: 0 | -1 | 1 = -1;
 
     private _deltaY: number = 0;
     private _wheelDirection: Directions;
@@ -228,10 +228,10 @@ export default abstract class Page implements IPage {
     protected _updateSectionActivation(show: boolean, section: Section) {
         if (show != null) {
             if (show) {
-                section.activate(0.0, this._scrollDirection);
+                section.activate({ direction: this._scrollDirection });
                 section.scroll(this._scrollPosition, this._scrollDirection);
             } else if (section.isActive) {
-                section.deactivate(0.0, this._scrollDirection);
+                section.deactivate({ direction: this._scrollDirection });
             }
         }
     }

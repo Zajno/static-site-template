@@ -5,10 +5,18 @@ export interface ComponentConfig<T extends HTMLElement = HTMLElement> {
     logActivation?: boolean;
 }
 
+export type ActivateConfig = {
+    delay?: number,
+    direction?: 1 | 0 | -1,
+};
+
 export default abstract class Component<TConfig extends ComponentConfig = ComponentConfig> {
 
     private _active = false;
+    private _wasActive = false;
     protected readonly _config: TConfig;
+
+    private _activateConfig: ActivateConfig = null;
 
     constructor(config: TConfig) {
         this._config = config;
@@ -17,6 +25,9 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
     get element() { return this._config.el; }
     get isActive() { return this._active; }
 
+    protected get activationConfig() { return this._activateConfig; }
+    protected get wasActive() { return this._wasActive; }
+
     public async setup() {
         await this.doSetup();
         return this;
@@ -24,7 +35,8 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
 
     protected abstract doSetup(): Promise<void> | void;
 
-    activate(delay = 0.0, direction = 1.0) {
+    activate(config?: ActivateConfig) {
+        this._activateConfig = null;
         if (this._active) {
             return true;
         }
@@ -34,27 +46,31 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
             logger.log('Activating:', this);
         }
 
-        return this._activate(delay, direction);
+        this._activateConfig = config;
+        return this._activate();
     }
 
-    deactivate(delay = 0.0, direction = 1.0) {
+    deactivate(config?: ActivateConfig) {
+        this._activateConfig = null;
         if (!this._active) {
             return true;
         }
 
+        this._wasActive = true;
         this._active = false;
         if (this.logActivation) {
             logger.log('Deactivating:', this);
         }
 
-        return this._deactivate(delay, direction);
+        this._activateConfig = config;
+        return this._deactivate();
     }
 
-    protected _activate(delay?: number, direction?: number): void | Promise<void> {
+    protected _activate(): void | Promise<void> {
         // override me
     }
 
-    protected _deactivate(delay?: number, direction?: number): void| Promise<void> {
+    protected _deactivate(): void| Promise<void> {
         // override me
     }
 
@@ -71,4 +87,8 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
     }
 
     protected get logActivation() { return this._config.logActivation; }
+
+    protected useDefaultConfig(defaults: Partial<TConfig>) {
+        Object.assign(this._config, Object.assign(defaults, this._config));
+    }
 }

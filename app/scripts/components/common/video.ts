@@ -314,12 +314,12 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
     }
 
-    protected _activate(delay, direction) {
+    protected _activate() {
         this.register();
         this._switchToState(States.Playing);
     }
 
-    protected _deactivate(delay, direction) {
+    protected _deactivate() {
         this._switchToState(States.Paused);
     }
 

@@ -1,7 +1,7 @@
 import Component , { ComponentConfig } from 'app/core/component';
 import logger from 'app/logger';
 
-import { HtmlTabItem, TabItemElement, HtmlTabItemConfig, TabItem } from './tabsComponent.tab';
+import { HtmlTabItem, TabItemElement, TabItem } from './tabsComponent.tab';
 import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
 import { OptAwait } from 'app/utils/async';
 
@@ -19,9 +19,9 @@ export type TabsComponentConfig = ComponentConfig & TabItemsConfig & TabLinksCon
     onWillChange?: ChangeCallback;
     clicksEnabled?: boolean;
     hoversEnabled?: boolean;
-}
+};
 
-const NoOp: ChangeCallback = () => { };
+const NoOp: ChangeCallback = () => { /* no-op */ };
 
 export default class TabsComponent extends Component<TabsComponentConfig> {
     private _prevButton: HTMLElement;
@@ -109,7 +109,7 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         const nextIndex = this._links.indexOf(link);
         const prevIndex = this._links.indexOf(prev);
 
-        const direction = Math.sign(nextIndex - prevIndex);
+        const direction = Math.sign(nextIndex - prevIndex) as -1 | 0 | 1;
 
         const cbs = {
             before: () => (this._config.onWillChange || NoOp)(prev, next, direction),
@@ -123,17 +123,17 @@ export default class TabsComponent extends Component<TabsComponentConfig> {
         try {
             cbs.before();
 
-            await OptAwait(() => prev?.deactivate(direction), !this._async);
+            await OptAwait(() => prev?.deactivate({ direction }), !this._async);
 
             cbs.inside();
 
-            await OptAwait(() => next.activate(direction), !this._async);
+            await OptAwait(() => next.activate({ direction }), !this._async);
 
             cbs.after();
         } finally {
             this._isSwitching = false;
         }
-    }
+    };
 
     protected next(loop = true) {
         let nextIndex = this._currentActiveIndex + 1;
