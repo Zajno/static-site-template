@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+import { URL } from 'url';
 import Pages, { SitePage } from './pages';
 import { Hostname } from './hostname';
 import { AllLocales } from './copyright';
@@ -5,6 +7,8 @@ import { AllLocales } from './copyright';
 type CopyShape = {
     page: Object,
     header: Object,
+    footer: Object,
+    modalMenu: Object,
 };
 
 export type SitePageOutput = SitePage & {
@@ -14,18 +18,16 @@ export type SitePageOutput = SitePage & {
     copy?: CopyShape,
 };
 
+type SitemapPageLink = { lang: string, url: string };
+
 const PagesFlatten: SitePageOutput[] = [];
+const SitemapInfo: { path: string, links?: SitemapPageLink[] }[] = [];
 
-const addPage = (p: SitePage, output: string, copy: CopyShape = null, locale: string = null, baseUrl = '/') => {
-    const res: SitePageOutput = {
-        ...p,
-        output: output,
-        copy: copy,
-        baseUrl,
-        locale,
-    };
-
-    PagesFlatten.push(res);
+const addPage = (p: SitePageOutput, links?: SitemapPageLink[]) => {
+    PagesFlatten.push(p);
+    if (p.baseUrl) {
+        SitemapInfo.push({ path: p.baseUrl, links });
+    }
 };
 
 Pages.forEach(p => {
@@ -38,15 +40,21 @@ Pages.forEach(p => {
     }
 
     if (!p.locales) {
-        addPage(p, path);
+        addPage({
+            ...p,
+            output: path,
+            baseUrl: '/',
+        });
         return;
     }
 
-    AllLocales.forEach(locale => {
+    const localePages = AllLocales.map(locale => {
         const pageCopy = p.locales[locale];
         const headerCopy = p.header.copy[locale] || p.header.copy.default;
-        if (!pageCopy || !headerCopy) {
-            return;
+        const footerCopy = p.footer.copy[locale] || p.footer.copy.default;
+        const modalMenuCopy = p.modalMenu.copy[locale] || p.modalMenu.copy.default;
+        if (!pageCopy || !headerCopy || !footerCopy || !modalMenuCopy) {
+            return null;
         }
 
         let baseUrl: string = undefined;
@@ -56,7 +64,33 @@ Pages.forEach(p => {
             baseUrl = localeOutput?.href;
         }
 
-        addPage(p, path, { page: pageCopy, header: headerCopy }, locale, baseUrl);
+        const output: SitePageOutput = {
+            ...p,
+            output: path,
+            copy: {
+                page: pageCopy,
+                header: headerCopy,
+                footer: footerCopy,
+                modalMenu: modalMenuCopy,
+            },
+            baseUrl: baseUrl || '/',
+            locale,
+        };
+
+        return output;
+    }).filter(pp => pp);
+
+    if (!localePages.length) {
+        return;
+    }
+
+    const links: SitemapPageLink[] = localePages.map(pp => ({
+        lang: pp.locale,
+        url: new URL(pp.baseUrl, Hostname).href,
+    }));
+
+    localePages.forEach(pp => {
+        addPage(pp, links);
     });
 });
 
@@ -88,6 +122,14 @@ export function getPage(page: SitePageOutput) {
     return PagesFlatten.find(p => p.id === page.id && (!page.locale || page.locale === p.locale));
 }
 
+export function getPages(page: SitePageOutput) {
+    if (!page) {
+        return null;
+    }
+
+    return PagesFlatten.filter(p => p.id === page.id);
+}
+
 export function getLocaleHref(page: SitePageOutput, lang: string) {
     if (lang === page.locale) {
         return '';
@@ -97,11 +139,12 @@ export function getLocaleHref(page: SitePageOutput, lang: string) {
     const lo = origPage.localesOutput[lang];
     const href = lo && lo.href;
     return `href="${href || `#${lang}`}"`;
-};
+}
 
 export {
     Pages,
     PagesFlatten,
+    SitemapInfo,
     Hostname,
     ApplicationEntryPoints,
 };

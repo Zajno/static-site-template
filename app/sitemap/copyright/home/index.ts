@@ -1,11 +1,11 @@
 import type { PageCopyright } from '../types';
 import { HomeEnCopy } from './en';
-import { HomeJpCopy } from './jp';
+import { HomeJaCopy } from './ja';
 
 export type HomeCopyrightShape = typeof HomeEnCopy;
 
 export const HomeCopyright: PageCopyright<HomeCopyrightShape> = {
     default: 'en',
     en: HomeEnCopy,
-    jp: HomeJpCopy,
+    ja: HomeJaCopy,
 };

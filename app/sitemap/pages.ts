@@ -1,5 +1,12 @@
 import { Hostname } from './hostname';
-import { PageCopyright, HomeCopyright, HeaderCopyright, Locales } from './copyright';
+import {
+    PageCopyright,
+    HomeCopyright,
+    HeaderCopyright,
+    FooterCopyright,
+    ModalMenuCopyright,
+    Locales,
+} from './copyright';
 
 export type SitePage = {
     id: string,
@@ -18,6 +25,12 @@ const PagesCommonData = {
     header: {
         copy: HeaderCopyright,
     },
+    footer: {
+        copy: FooterCopyright,
+    },
+    modalMenu: {
+        copy: ModalMenuCopyright,
+    },
 };
 
 const Home: SitePage = {
@@ -28,11 +41,11 @@ const Home: SitePage = {
     title: 'Zajno | Digital Design Agency',
     description: 'Full-service digital design and development agency specializing in UX/UI design, crafting thought-out personalized experiences for web and mobile.',
     canonical: Hostname,
-    image: Hostname + '/image.png',
+    image: 'og-image.jpg',
     entryPoint: './app/scripts/pages/homePage.ts',
     locales: HomeCopyright,
     localesOutput: {
-        jp: { output: 'jp/index.html', href: '/jp' },
+        ja: { output: 'ja/index.html', href: '/ja' },
         en: { output: 'index.html', href: '/' },
     },
 };

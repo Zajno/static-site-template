@@ -1,11 +1,11 @@
 import type { PageCopyright } from '../types';
 import { HeaderEnCopy } from './en';
-import { HeaderJpCopy } from './jp';
+import { HeaderJaCopy } from './ja';
 
 export type HeaderCopyrightShape = typeof HeaderEnCopy;
 
 export const HeaderCopyright: PageCopyright<HeaderCopyrightShape> = {
     default: 'en',
     en: HeaderEnCopy,
-    jp: HeaderJpCopy,
+    ja: HeaderJaCopy,
 };

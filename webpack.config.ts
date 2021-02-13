@@ -2,11 +2,16 @@ import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import * as helpers from './webpack.helpers';
 import tsNameof from 'ts-nameof';
 import * as Path from 'path';
-import * as sitemapData from './app/sitemap';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import SitemapPlugin from 'sitemap-webpack-plugin';
+
+import * as helpers from './webpack.helpers';
+import * as sitemapData from './app/sitemap';
+
+/* eslint-disable no-console */
+/* global process */
 
 const pathResolve = helpers.pathResolve;
 
@@ -68,7 +73,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                             'source:data-src',
                             'link:href',
                             'source:srcset',
-                            'div:data-bodymovin-path',
+                            'div:data-lottie-path',
                             'source:data-srcset',
                         ],
                     },
@@ -235,6 +240,10 @@ const siteConfig = (env: any): webpack.Configuration => {
                         noErrorOnMissing: true,
                     },
                 ],
+            }),
+            new SitemapPlugin({
+                base: sitemapData.Hostname,
+                paths: sitemapData.SitemapInfo,
             }),
         ]),
         devServer: {

@@ -1,0 +1,18 @@
+<%
+    const Sitemap = require('sitemap');
+    // get the page directly to hook it into webpack dev build process
+    const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
+
+    const Strings = page.copy.modalMenu;
+    const Locale = page.locale;
+    const BaseUrl = page.baseUrl;
+
+    const HeaderLinks = page.copy.header.links;
+
+    const getLocaleHref = (lang) => Sitemap.getLocaleHref(page, lang);
+%>
+
+
+<div id="mobile-menu" class="mobile-menu">
+    <!-- mobile menu markup goes here -->
+</div>

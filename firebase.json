@@ -9,6 +9,9 @@
         "**/node_modules/**"
       ],
       "cleanUrls": true,
+      "i18n": {
+        "root": "/"
+      },
       "headers": [
         {
           "source": "**",
@@ -55,6 +58,9 @@
         "**/node_modules/**"
       ],
       "cleanUrls": true,
+      "i18n": {
+        "root": "/"
+      },
       "headers": [
         {
           "source": "**",
