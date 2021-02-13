@@ -136,7 +136,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                         options: {
                             esModule: false,
                             name: '[name].[ext]',
-                            outputPath: (url, resourcePath, context) => {
+                            outputPath: (url, resourcePath) => {
                                 const split = resourcePath.split(Path.sep);
                                 const page = split[split.length - 3];
                                 const section = split[split.length - 2];

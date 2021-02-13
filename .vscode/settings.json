@@ -1,4 +1,3 @@
 {
     "files.trimTrailingWhitespace": true,
-    "eslint.enable": false,
 }
