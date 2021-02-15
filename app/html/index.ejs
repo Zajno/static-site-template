@@ -6,9 +6,9 @@
     // get the page directly to hook it into webpack dev build process
     const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
 
-    const Locale = page.locale;
-    const Strings = page.copy.page;
-    const BaseUrl = page.baseUrl;
+    const Locale = page.output.locale;
+    const Strings = page.output.copy;
+    const BaseUrl = page.output.href;
 %>
 
 <main id="main" data-page-id="home">

@@ -3,11 +3,32 @@
     // get the page directly to hook it into webpack dev build process
     const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
 
-    const Strings = page.copy.header;
-    const Locale = page.locale;
-    const BaseUrl = page.baseUrl;
+    const Strings = page.common.header;
+    const Locale = page.output.locale;
+    const BaseUrl = page.output.href;
+    const getLocaleHref = (lang) => Sitemap.getLocaleHref(page, lang, true);
 
-    const getLocaleHref = (lang) => Sitemap.getLocaleHref(page, lang);
+    // here are all options for the language dropdown
+    const allLocales = [
+        {
+            language: 'en',
+            img:'🇬🇧',
+            url: getLocaleHref('en'),
+        },
+        {
+            language: 'ja',
+            img:'🇯🇵',
+            url: getLocaleHref('ja'),
+        },
+        {
+            language: 'ko',
+            img:'🇰🇷',
+            url: getLocaleHref('ko'),
+        },
+    ];
+
+    // choosing the selected one and filtering the list
+    const [locale] = allLocales.splice(allLocales.findIndex(l => l.language == page.output.locale), 1);
 %>
 
 <header id="header" class="header"

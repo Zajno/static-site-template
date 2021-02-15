@@ -1,96 +1,74 @@
 /* eslint-disable no-console */
 import { URL } from 'url';
-import Pages, { SitePage } from './pages';
+import Pages, { SitePage, PageOutput } from './pages';
 import { Hostname } from './hostname';
 import { AllLocales } from './copyright';
+import { getCopyForLocale as getCommonCopyForLocale } from './common';
 
-type CopyShape = {
-    page: Object,
-    header: Object,
-    footer: Object,
-    modalMenu: Object,
-};
-
-export type SitePageOutput = SitePage & {
-    output: string,
-    baseUrl: string,
-    locale?: string,
-    copy?: CopyShape,
+export type SitePageOutput = Omit<SitePage, 'i18n'> & {
+    canonical: string,
+    common: ReturnType<typeof getCommonCopyForLocale>,
+    isAlternative?: boolean,
 };
 
 type SitemapPageLink = { lang: string, url: string };
 
 const PagesFlatten: SitePageOutput[] = [];
 const SitemapInfo: { path: string, links?: SitemapPageLink[] }[] = [];
+const PagesAlternatives: Record<string, { default: string, links: SitemapPageLink[] }> = { };
 
 const addPage = (p: SitePageOutput, links?: SitemapPageLink[]) => {
     PagesFlatten.push(p);
-    if (p.baseUrl) {
-        SitemapInfo.push({ path: p.baseUrl, links });
+    if (p.output.href) {
+        SitemapInfo.push({ path: p.output.href, links });
     }
+    return p;
 };
 
+function getOutput(p: SitePage, output: Partial<PageOutput>, strict = true): SitePageOutput {
+    if (strict && !AllLocales.includes(output.locale)) {
+        return null;
+    }
+
+    const common = getCommonCopyForLocale(output.locale, strict);
+    if (!common) {
+        return null;
+    }
+
+    const resOutput = {
+        ...p.output,
+        ...output,
+    };
+
+    const altPage: SitePageOutput = {
+        ...p,
+        output: resOutput,
+        canonical: new URL(resOutput.href, Hostname).href,
+        common,
+    };
+
+    altPage.output.path = altPage.output.path || `${p.id}/${resOutput.locale}/index.html`;
+
+    return altPage;
+}
+
 Pages.forEach(p => {
-    let path: string;
+    p.output.path = p.output.path || `${p.id}/index.html`;
+    p.output.href = p.output.href || `/${p.id}`;
 
-    if (p.outputFileName && typeof p.outputFileName === 'string') {
-        path = p.outputFileName;
-    } else {
-        path = `${p.id}/index.html`;
-    }
-
-    if (!p.locales) {
-        addPage({
-            ...p,
-            output: path,
-            baseUrl: '/',
-        });
-        return;
-    }
-
-    const localePages = AllLocales.map(locale => {
-        const pageCopy = p.locales[locale];
-        const headerCopy = p.header.copy[locale] || p.header.copy.default;
-        const footerCopy = p.footer.copy[locale] || p.footer.copy.default;
-        const modalMenuCopy = p.modalMenu.copy[locale] || p.modalMenu.copy.default;
-        if (!pageCopy || !headerCopy || !footerCopy || !modalMenuCopy) {
-            return null;
-        }
-
-        let baseUrl: string = undefined;
-        if (p.locales.default !== locale) {
-            const localeOutput = p.localesOutput && p.localesOutput[locale];
-            path = localeOutput?.output || `${p.id}/${locale}/index.html`;
-            baseUrl = localeOutput?.href;
-        }
-
-        const output: SitePageOutput = {
-            ...p,
-            output: path,
-            copy: {
-                page: pageCopy,
-                header: headerCopy,
-                footer: footerCopy,
-                modalMenu: modalMenuCopy,
-            },
-            baseUrl: baseUrl || '/',
-            locale,
-        };
-
-        return output;
-    }).filter(pp => pp);
-
-    if (!localePages.length) {
-        return;
-    }
-
-    const links: SitemapPageLink[] = localePages.map(pp => ({
-        lang: pp.locale,
-        url: new URL(pp.baseUrl, Hostname).href,
+    // localized alternatives for the page
+    const alts = p.i18n?.map(alt => getOutput(p, alt)).filter(a => a);
+    const altLinks: SitemapPageLink[] = alts?.map(pp => ({
+        lang: pp.output.locale,
+        url: pp.canonical,
     }));
 
-    localePages.forEach(pp => {
-        addPage(pp, links);
+    const defaultPage = addPage(getOutput(p, p.output, false), altLinks);
+    PagesAlternatives[p.id] = { default: defaultPage.canonical, links: altLinks || [] };
+
+    alts?.forEach(pp => {
+        pp.isAlternative = true;
+        addPage(pp, altLinks);
     });
 });
 
@@ -108,18 +86,21 @@ const ApplicationEntryPoints = (function () {
 if (process.env.PATH) {
     console.log(
         '[SITEMAP] Generated the following pages: ',
-        PagesFlatten.map(pf => ({ id: pf.id, path: pf.output, template: pf.templateName, locale: pf.locale })),
+        PagesFlatten.map(pf => ({ id: pf.id, path: pf.output.path, template: pf.templateName, href: pf.output.href, locale: pf.output.locale })),
     );
 
-    console.log('[SITEMAP] Generated the following entrypoints: ', ApplicationEntryPoints);
+    console.log('[SITEMAP] Generated the following entry points: ', ApplicationEntryPoints);
 }
 
 export function getPage(page: SitePageOutput) {
-    if (!page) {
-        return null;
-    }
-
-    return PagesFlatten.find(p => p.id === page.id && (!page.locale || page.locale === p.locale));
+    const res = page && PagesFlatten.find(p => p.id === page.id
+        && (!page.output.locale || page.output.locale === p.output.locale)
+        && (page.isAlternative === p.isAlternative)
+    );
+	if (!res) {
+		throw new Error(`Couldn't load the page '${page.id}' for locale '${page.output.locale}' `);
+	}
+    return res;
 }
 
 export function getPages(page: SitePageOutput) {
@@ -130,15 +111,24 @@ export function getPages(page: SitePageOutput) {
     return PagesFlatten.filter(p => p.id === page.id);
 }
 
-export function getLocaleHref(page: SitePageOutput, lang: string) {
-    if (lang === page.locale) {
+export function getLocaleHref(page: SitePageOutput, lang: string, preferAlt = false) {
+    if (lang === page.output.locale) {
+        // no href required
         return '';
     }
 
-    const origPage = Pages.find(pp => pp.id === page.id);
-    const lo = origPage.localesOutput[lang];
-    const href = lo && lo.href;
+    const lps = PagesFlatten.filter(pp => pp.id === page.id && pp.output.locale === lang);
+    const lp = preferAlt ? lps.find(pp => pp.isAlternative) : lps[0];
+    const href = lp && lp.output.href;
     return `href="${href || `#${lang}`}"`;
+}
+
+export function getPageAlternatives(pageId: string) {
+    const res = PagesAlternatives[pageId];
+    if (!res) {
+        throw new Error(`PagesAlternatives[${pageId}] => ${res}`);
+    }
+    return res;
 }
 
 export {

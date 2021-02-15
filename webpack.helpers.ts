@@ -23,9 +23,9 @@ export class HtmlBuilder {
             } : null;
     }
 
-    createHtmlPlugin(outputName: string, templatePath: string, id: string, options = {}) {
+    createHtmlPlugin(output: string, templatePath: string, id: string, options = {}) {
         return new HtmlWebpackPlugin({
-            filename: outputName,
+            filename: output,
             cache: false,
             template: templatePath,
             minify: this.htmlMinifyOptions,

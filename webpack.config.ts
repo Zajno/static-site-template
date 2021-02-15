@@ -213,7 +213,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 },
             }),
 
-            ...sitemapData.PagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output, p.templateName, p.id, { page: p })),
+            ...sitemapData.PagesFlatten.map(p => htmlBuilder.createHtmlPlugin(p.output.path, p.templateName, p.id, { page: p })),
 
             new MiniCssExtractPlugin({
                 filename: isProd ? '[name].[hash:6].css' : '[name].css',

@@ -3,16 +3,17 @@
 	let page = htmlWebpackPlugin.options && htmlWebpackPlugin.options.page;
     // get the page directly to hook it into webpack dev build process
 	page = Sitemap.getPage(page);
-	const allPages = Sitemap.getPages(page);
 
-	const Locale = page.locale;
-	const Strings = page.strings;
-	const BaseUrl = page.baseUrl;
+	const pageAlts = Sitemap.getPageAlternatives(page.id);
 
-	const title = (page && page.title) || 'Title';
-	const description = (page && page.description) || 'Description';
-	const canonical = (page && page.canonical) || '/';
-	const image = canonical + require('../../../assets/img/' + page.image) || '';
+	const Locale = page.output.locale;
+	const Strings = page.output.copy;
+	const BaseUrl = page.output.href;
+
+	const title = page.output.title || 'Title';
+	const description = page.output.description || 'Description';
+	const canonical = page.canonical || '/';
+	const image = canonical + require('../../../assets/img/' + page.output.image) || '';
 
 	const faviconIco = require('../../../assets/img/logo.png');
 %>
@@ -50,10 +51,12 @@
 	<meta name="twitter:description" content="<%= description %>">
 
 	<!-- i18n alternatives for search engines -->
-	<% allPages.forEach(p => { const { locale, baseUrl } = p  %>
-		<link rel="alternate" hreflang="<%= locale %>" href="<%= canonical + baseUrl %>" />
+	<% pageAlts.links.forEach(p => { const { lang, url } = p  %>
+		<link rel="alternate" hreflang="<%= lang %>" href="<%= url %>" />
 	<% }) %>
-	<link rel="alternate" hreflang="x-default" href="<%= canonical %>" />
+	<% if (pageAlts.default) { %>
+	<link rel="alternate" hreflang="x-default" href="<%= pageAlts.default %>" />
+	<% } %>
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="<%= faviconIco %>" type="image/x-icon">
