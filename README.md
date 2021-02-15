@@ -32,6 +32,22 @@ GEM system for CSS: built on top of `rem`s, allows to scale up or down when usin
 
 Code breakpoints: allows to change beahaviour whenever breakpoint changes.
 
+
+### i18n
+
+The idea behind i18n implementation is to:
+
+* keep all pages content (such as copyright) in a separate files (`sitemap/copyright`)
+* declare all pages and their localized alternative in a sitemap (`sitemap/pages.ts`)
+* each page can have localized alternatives by having a template with few additional objects containing copyright or any other content variations
+* according to the configs above generate proper output html pages
+* optionally, set up Firebase Hosting's `i18n` feature so it can rewrite a request to correct localized file based on client's Accept-Language header.
+
+Using this way, it's possible to update content such as copyright but not touching the code (html/js) itself. This can be extended to/replaced with a remote CMS service – because the main idea is to keep separately thing that can be changed often.
+
+In theory, a non-developer person such as content editor can go to Github web interface, find a corresponding file, replace some strings in there, create and merge a PR and hopefully deploy the update without developers involvement.
+
+
 ## Build project
 
 Requirements: [Node.js ^12](https://nodejs.org/), [yarn](https://classic.yarnpkg.com/lang/en/)
