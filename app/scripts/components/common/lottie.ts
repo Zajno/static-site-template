@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
 import { ImageLazyLoadConfig } from '../lazy/imageLazyLoadComponent';
-import { createLogger } from 'app/logger';
+import { createLogger } from 'common/logger';
 
 const logger = createLogger('[LottieComponent]');
 

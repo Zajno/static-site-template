@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 
 declare global {
     export function appReady(cb: () => any): void;

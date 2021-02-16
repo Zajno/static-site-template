@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
 const classes = {

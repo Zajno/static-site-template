@@ -1,16 +1,16 @@
-import creditCard from 'app/utils/creditCard';
-import getChar from 'app/utils/getChar';
+import creditCard from 'common/validation/creditCard';
+import { ValidatorsRegExps as RE } from 'common/validation/validators';
 
-const RE = {
-    // eslint-disable-next-line no-useless-escape
-    name: /^[a-z,\.'-]+( +[a-z,\.'-]+)+$/i,
-    englishLetters: /^([a-zA-Z\s]+)$/,
-    email: /^([a-zA-Z0-9_.-\\+])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/,
-    password: /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-    phoneNumber: /^([\d/+]+)$/,
-    cvv: /^\d+$/,
-    creditCardNumber: /^\d+$/,
-};
+// const RE = {
+//     // eslint-disable-next-line no-useless-escape
+//     name: /^[a-z,\.'-]+( +[a-z,\.'-]+)+$/i,
+//     englishLetters: /^([a-zA-Z\s]+)$/,
+//     email: /^([a-zA-Z0-9_.-\\+])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/,
+//     password: /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+//     phoneNumber: /^([\d/+]+)$/,
+//     cvv: /^\d+$/,
+//     creditCardNumber: /^\d+$/,
+// };
 
 function getValueValidator(fieldName: string) {
 
@@ -139,6 +139,21 @@ function getInputHandlerFunction(fieldName) {
     const handler = getHandler(fieldName);
     return handler;
 }
+
+function getChar(event: KeyboardEvent) {
+    if (event.which == null) {
+        if (event.keyCode < 32) return null;
+        return String.fromCharCode(event.keyCode); // IE
+    }
+
+    if (event.which != 0 && event.charCode != 0) {
+        if (event.which < 32) return null;
+        return String.fromCharCode(event.which);
+    }
+
+    return null;
+}
+
 
 export default {
     getValidationFunction,

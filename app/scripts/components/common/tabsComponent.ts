@@ -1,9 +1,9 @@
 import Component , { ComponentConfig } from 'app/core/component';
-import logger from 'app/logger';
+import logger from 'common/logger';
 
 import { HtmlTabItem, TabItemElement, TabItem } from './tabsComponent.tab';
 import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
-import { OptAwait } from 'app/utils/async';
+import { OptAwait } from 'common/async/opts';
 
 export type ChangeCallback = (prev: TabLinkItem, next: TabLinkItem, direction: number) => void;
 

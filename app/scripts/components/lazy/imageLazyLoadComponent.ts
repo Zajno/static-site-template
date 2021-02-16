@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 import createReadyPattern from 'app/utils/readyPattern';
 
 import LazyLoadComponent, { LazyLoadConfig } from './lazyLoadComponent';

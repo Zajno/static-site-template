@@ -1,6 +1,6 @@
 import 'app/utils/checkBrowserSupport';
 
-import logger from 'app/logger';
+import logger from 'common/logger';
 import Section, { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
 import Breakpoints from 'app/appBreakpoints';
 

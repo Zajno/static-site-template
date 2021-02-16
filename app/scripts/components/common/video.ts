@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 
 import { SUPPORT_MIX_BLEND as supportMixBlend } from 'app/utils/constants';
 

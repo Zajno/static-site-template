@@ -1,5 +1,5 @@
 import Component, { ComponentConfig } from 'app/core/component';
-import creditCard from 'app/utils/creditCard';
+import creditCard from 'common/validation/creditCard';
 
 function formatCCType(type) {
     return `fa-${type}`;

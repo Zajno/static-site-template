@@ -1,7 +1,7 @@
 import Component, { ComponentConfig } from 'app/core/component';
 
 import { TabItemElement, TabItem } from './tabsComponent.tab';
-import { OptAwait } from 'app/utils/async';
+import { OptAwait } from 'common/async/opts';
 
 export type TabLinkItemConfig = ComponentConfig<TabItemElement> & {
 

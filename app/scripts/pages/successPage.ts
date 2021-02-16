@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 
 import CommonPage from 'app/pages/commonPage';
 import Section, { SectionCtor } from 'app/core/section';

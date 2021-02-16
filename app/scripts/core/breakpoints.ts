@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { createLogger } from 'app/logger';
+import { createLogger } from 'common/logger';
 
 const logger = createLogger('[Breakpoints]');
 

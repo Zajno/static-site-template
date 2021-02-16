@@ -1,4 +1,4 @@
-import logger from 'app/logger';
+import logger from 'common/logger';
 
 import Section from 'app/core/section';
 import InputValidator from 'app/components/forms/inputValidator';

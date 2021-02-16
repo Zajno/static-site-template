@@ -1,27 +1,32 @@
 {
-    "compilerOptions": {
-      "noImplicitAny": false,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "strictBindCallApply": true,
-      "sourceMap": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "importHelpers": true,
-      "skipLibCheck": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "target": "es2017",
-      "outDir": "./dist/",
-      "baseUrl": ".",
-      "paths": {
-        "app/*": ["./app/scripts/*"],
-        "assets/*": ["./app/assets/*"],
-        "styles/*": ["./app/styles/*"]
-      }
-    },
-    "exclude": [
-      "node_modules",
-      "dist"
-    ]
-  }
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictBindCallApply": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "outDir": "./dist/",
+    "baseUrl": ".",
+    "paths": {
+      "app/*": [ "./app/scripts/*" ],
+      "common/*": [ "./node_modules/zajno-common-utils/src/*" ],
+      "assets/*": [ "./app/assets/*" ],
+      "styles/*": [ "./app/styles/*" ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "references": [
+    // this will build it during `tsc` compilation
+    { "path": "./node_modules/zajno-common-utils" }
+  ]
+}

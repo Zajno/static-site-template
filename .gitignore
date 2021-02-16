@@ -5,3 +5,6 @@ yarn-error.log
 build
 .firebase
 firebase-debug.log
+
+.yalc
+yalc.lock
