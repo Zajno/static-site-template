@@ -5046,9 +5046,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-gsap@./gsap-member/npm-install-this/gsap-bonus.tgz:
-  version "3.1.0"
-  resolved "./gsap-member/npm-install-this/gsap-bonus.tgz#6a7ea9720b54a8ab70e000ab0c676db1f5ed96cd"
+"gsap@file:./gsap-member/npm-install-this/gsap-bonus.tgz":
+  version "3.6.0"
+  resolved "file:./gsap-member/npm-install-this/gsap-bonus.tgz#3eaf348d2ace919efd3ba942cbb02879d36b3546"
 
 handle-thing@^2.0.0:
   version "2.0.1"
@@ -10519,8 +10519,8 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-"zajno-common-utils@git+ssh://git@github.com:Zajno/common-utils.git":
+"zajno-common-utils@git+https://github.com/Zajno/common-utils.git":
   version "1.0.1"
-  resolved "git+ssh://git@github.com:Zajno/common-utils.git#d421cf67c5c4b5eea8aad54be7ab519e733fb681"
+  resolved "git+https://github.com/Zajno/common-utils.git#d421cf67c5c4b5eea8aad54be7ab519e733fb681"
   dependencies:
     mobx "5"

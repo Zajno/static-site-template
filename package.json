@@ -27,12 +27,12 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "detect-browser": "^5.2.0",
-    "gsap": "./gsap-member/npm-install-this/gsap-bonus.tgz",
+    "gsap": "file:./gsap-member/npm-install-this/gsap-bonus.tgz",
     "lottie-web": "^5.7.6",
     "mobx": "5",
     "regenerator-runtime": "^0.13.7",
     "reset-css": "^5.0.1",
-    "zajno-common-utils": "git+ssh://git@github.com:Zajno/common-utils.git"
+    "zajno-common-utils": "git+https://github.com/Zajno/common-utils.git"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.16",
