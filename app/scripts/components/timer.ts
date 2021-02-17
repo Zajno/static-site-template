@@ -1,5 +1,5 @@
 import Component from 'app/core/component';
-import { setTimeoutAsync } from 'common/async/timeout';
+import { setTimeoutAsync } from '@zajno/common/lib/async/timeout';
 import GSAP from 'gsap';
 
 const pad = (n: number) => (n || 0).toString().padStart(2, '0');

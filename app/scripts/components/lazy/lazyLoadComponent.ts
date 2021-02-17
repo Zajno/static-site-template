@@ -1,4 +1,4 @@
-import logger from 'common/logger';
+import logger from '@zajno/common/lib/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
 const classes = {

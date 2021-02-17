@@ -1,4 +1,4 @@
-import logger from 'common/logger';
+import logger from '@zajno/common/lib/logger';
 
 import Section from 'app/core/section';
 import InputValidator from 'app/components/forms/inputValidator';

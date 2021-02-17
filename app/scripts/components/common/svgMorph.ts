@@ -1,6 +1,6 @@
 import type gsap from 'gsap';
 import { TimelineMax, Power1 } from 'gsap';
-import { createLogger, ILogger } from 'common/logger';
+import { createLogger, ILogger } from '@zajno/common/lib/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
 type PathTransition = {

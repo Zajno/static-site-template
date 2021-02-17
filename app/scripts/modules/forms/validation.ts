@@ -1,5 +1,5 @@
-import creditCard from 'common/validation/creditCard';
-import { ValidatorsRegExps as RE } from 'common/validation/validators';
+import creditCard from '@zajno/common/lib/validation/creditCard';
+import { ValidatorsRegExps as RE } from '@zajno/common/lib/validation/validators';
 
 // const RE = {
 //     // eslint-disable-next-line no-useless-escape

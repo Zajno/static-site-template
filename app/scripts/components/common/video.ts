@@ -1,4 +1,4 @@
-import logger from 'common/logger';
+import logger from '@zajno/common/lib/logger';
 
 import { SUPPORT_MIX_BLEND as supportMixBlend } from 'app/utils/constants';
 

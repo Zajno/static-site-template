@@ -1,7 +1,7 @@
 import Component, { ComponentConfig } from 'app/core/component';
 
 import { TabItemElement, TabItem } from './tabsComponent.tab';
-import { OptAwait } from 'common/async/opts';
+import { OptAwait } from '@zajno/common/lib/async/opts';
 
 export type TabLinkItemConfig = ComponentConfig<TabItemElement> & {
 

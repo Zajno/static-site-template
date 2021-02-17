@@ -1,4 +1,4 @@
-import logger from 'common/logger';
+import logger from '@zajno/common/lib/logger';
 
 declare global {
     export function appReady(cb: () => any): void;

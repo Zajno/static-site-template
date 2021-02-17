@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "app/*": [ "./app/scripts/*" ],
-      "common/*": [ "./node_modules/zajno-common-utils/src/*" ],
       "assets/*": [ "./app/assets/*" ],
       "styles/*": [ "./app/styles/*" ]
     }
@@ -25,8 +24,5 @@
     "node_modules",
     "dist"
   ],
-  "references": [
-    // this will build it during `tsc` compilation
-    { "path": "./node_modules/zajno-common-utils" }
-  ]
+  "references": []
 }

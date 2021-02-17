@@ -50,7 +50,6 @@ const siteConfig = (env: any): webpack.Configuration => {
             modules: [pathResolve('./app'), 'node_modules'],
             alias: {
                 app: pathResolve('./app/scripts/'),
-                common: pathResolve('./node_modules/zajno-common-utils/src/'),
                 assets: pathResolve('./app/assets/'),
                 styles: pathResolve('./app/styles/'),
             },
@@ -88,10 +87,10 @@ const siteConfig = (env: any): webpack.Configuration => {
                             options: {
                                 getCustomTransformers: () => ({ before: [tsNameof] }),
                                 configFile: 'tsconfig.json',
-                                allowTsInNodeModules: true,
                             },
                         },
                     ],
+                    exclude: [/node_modules/],
                 },
                 {
                     test: /\.jsx?$/,

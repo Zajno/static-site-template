@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { createLogger } from 'common/logger';
+import { createLogger } from '@zajno/common/lib/logger';
 
 const logger = createLogger('[Breakpoints]');
 

@@ -3,7 +3,7 @@ import gsap from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
 import { ImageLazyLoadConfig } from '../lazy/imageLazyLoadComponent';
-import { createLogger } from 'common/logger';
+import { createLogger } from '@zajno/common/lib/logger';
 
 const logger = createLogger('[LottieComponent]');
 
