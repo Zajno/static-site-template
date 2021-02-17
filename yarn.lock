@@ -1642,9 +1642,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zajno/common@git+https://github.com/Zajno/common-utils.git":
-  version "1.0.1"
-  resolved "git+https://github.com/Zajno/common-utils.git#758a3095775b73a70cfe291b1a0b8777b0d4e7d2"
+"@zajno/common@git://github.com/Zajno/common-utils.git#v1.0.2":
+  version "1.0.2"
+  resolved "git://github.com/Zajno/common-utils.git#291e2d3e641dd44f559a952f3658e063c47e28d6"
 
 abbrev@1:
   version "1.1.1"
