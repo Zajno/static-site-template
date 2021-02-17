@@ -96,6 +96,7 @@ module.exports = {
         "no-new-wrappers": "error",
         "no-null/no-null": "off",
         "no-redeclare": "off",
+        "no-tabs": 1,
         "no-trailing-spaces": "error",
         "no-underscore-dangle": "off",
         "no-unused-labels": "error",

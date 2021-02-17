@@ -97,9 +97,9 @@ export function getPage(page: SitePageOutput) {
         && (!page.output.locale || page.output.locale === p.output.locale)
         && (page.isAlternative === p.isAlternative)
     );
-	if (!res) {
-		throw new Error(`Couldn't load the page '${page.id}' for locale '${page.output.locale}' `);
-	}
+    if (!res) {
+        throw new Error(`Couldn't load the page '${page.id}' for locale '${page.output.locale}' `);
+    }
     return res;
 }
 
