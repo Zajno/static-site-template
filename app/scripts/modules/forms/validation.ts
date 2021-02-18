@@ -1,17 +1,6 @@
 import creditCard from '@zajno/common/lib/validation/creditCard';
 import { ValidatorsRegExps as RE } from '@zajno/common/lib/validation/validators';
 
-// const RE = {
-//     // eslint-disable-next-line no-useless-escape
-//     name: /^[a-z,\.'-]+( +[a-z,\.'-]+)+$/i,
-//     englishLetters: /^([a-zA-Z\s]+)$/,
-//     email: /^([a-zA-Z0-9_.-\\+])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/,
-//     password: /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-//     phoneNumber: /^([\d/+]+)$/,
-//     cvv: /^\d+$/,
-//     creditCardNumber: /^\d+$/,
-// };
-
 function getValueValidator(fieldName: string) {
 
     switch (fieldName) {
@@ -153,7 +142,6 @@ function getChar(event: KeyboardEvent) {
 
     return null;
 }
-
 
 export default {
     getValidationFunction,

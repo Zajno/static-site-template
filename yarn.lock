@@ -1642,9 +1642,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zajno/common@git://github.com/Zajno/common-utils.git#v1.0.2":
+"@zajno/common@git+https://github.com/Zajno/common-utils.git#v1.0.2":
   version "1.0.2"
-  resolved "git://github.com/Zajno/common-utils.git#291e2d3e641dd44f559a952f3658e063c47e28d6"
+  resolved "git+https://github.com/Zajno/common-utils.git#291e2d3e641dd44f559a952f3658e063c47e28d6"
 
 abbrev@1:
   version "1.1.1"
@@ -8690,11 +8690,6 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
-
-reset-css@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/reset-css/-/reset-css-5.0.1.tgz#1ced0604fdb6836567e40d82de3537afaf3bb4c8"
-  integrity sha512-VyuJdNFfp5x/W6e5wauJM59C02Vs0P22sxzZGhQMPaqu/NGTeFxlBFOOw3eq9vQd19gIDdZp7zi89ylyKOJ33Q==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

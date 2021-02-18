@@ -249,7 +249,8 @@ const siteConfig = (env: any): webpack.Configuration => {
         optimization: {
             concatenateModules: false,
             splitChunks: {
-                minSize: 400000,
+                minSize: 100000,
+                maxSize: 300000,
                 chunks(chunk) {
                     return chunk.name !== 'polyfills';
                 },
@@ -265,7 +266,6 @@ const siteConfig = (env: any): webpack.Configuration => {
                         chunks: 'all',
                         enforce: true,
                     },
-
                 },
             },
         },

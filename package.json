@@ -12,7 +12,7 @@
     "emulate": "firebase emulators:start --only hosting",
     "dev": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server --host 0.0.0.0 --mode development --color --env.noclear --env.hmr",
     "build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode development",
-    "build:ts:w": "ttsc --watch",
+    "build:ts:w": "ttsc --noEmit --watch",
     "build:minify": "yarn build --env.fullminify",
     "build:prod": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack --display-error-details --mode production",
     "build:prod:minify": "yarn build:prod --env.fullminify",
@@ -25,13 +25,12 @@
     "lint": "eslint \"app/**/*.ts\""
   },
   "dependencies": {
-    "@zajno/common": "git://github.com/Zajno/common-utils.git#v1.0.2",
+    "@zajno/common": "git+https://github.com/Zajno/common-utils.git#v1.0.2",
     "core-js": "^3.8.3",
     "detect-browser": "^5.2.0",
     "gsap": "file:./gsap-member/npm-install-this/gsap-bonus.tgz",
     "lottie-web": "^5.7.6",
-    "regenerator-runtime": "^0.13.7",
-    "reset-css": "^5.0.1"
+    "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.16",
