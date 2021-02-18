@@ -246,6 +246,29 @@ const siteConfig = (env: any): webpack.Configuration => {
                 paths: sitemapData.SitemapInfo,
             }),
         ]),
+        optimization: {
+            concatenateModules: false,
+            splitChunks: {
+                minSize: 400000,
+                chunks(chunk) {
+                    return chunk.name !== 'polyfills';
+                },
+                cacheGroups: {
+                    // default: false,
+                    vendors: {
+                        reuseExistingChunk: true,
+                    },
+                    // Merge all the CSS into one file
+                    styles: {
+                        name: 'styles',
+                        test: /\.s?css$/,
+                        chunks: 'all',
+                        enforce: true,
+                    },
+
+                },
+            },
+        },
         devServer: {
             contentBase: outputPath,
             compress: true,

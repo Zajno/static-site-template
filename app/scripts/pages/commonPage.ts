@@ -1,9 +1,9 @@
 import 'styles/base.sass';
 
 import Page from 'app/core/page';
-import Breakpoints from 'app/appBreakpoints';
 import Lazy from 'app/components/lazy';
 
+/** Base page for all site pages */
 export default abstract class CommonPage extends Page {
 
     start() {
@@ -13,13 +13,4 @@ export default abstract class CommonPage extends Page {
             Lazy.BeginLoading();
         });
     }
-
-    resize() {
-        super.resize();
-        Breakpoints.resize(this.width, this.height);
-    }
-
-    // async setupPageAsync() {
-    //     super.setupPageAsync();
-    // }
 }

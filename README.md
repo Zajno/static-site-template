@@ -3,7 +3,7 @@
 Basic template for static sites to be built with TypeScript, HTML, SASS.
 Just a compilation of commonly used approaches and utilities in projects we made.
 
-Uses Webpack, Babel, GSAP.
+Uses Typescript, Webpack, Babel, GSAP.
 
 Includes an infrastructure for DOM management via code – Pages, Sections, various modules and components:
 
@@ -17,7 +17,7 @@ Includes an infrastructure for DOM management via code – Pages, Sections, vari
 
 Prepared for:
 * in-view animation or interactivity
-* replace favicon depdending on browser color scheme (dark/light)
+* replace favicon depending on browser color scheme (dark/light)
 * custom cursor
 * custom scroll
 * placeholder for non supported browsers
@@ -26,12 +26,21 @@ Prepared for:
 * styles organization – responsive, colors, typography
 * some other easy effects (like linear gradient animation)
 
-### Responsive
+### Responsiveness
 
 GEM system for CSS: built on top of `rem`s, allows to scale up or down when using `gem` sizes. See [rem.scss](app/styles/common/rem.scss) for more details.
 
 Code breakpoints: allows to change beahaviour whenever breakpoint changes.
 
+### Dependencies
+
+This package depends on some polyfills packages and helpers like `reset-css` and `detect-browser` which are either required or doesn't affect bundle size much.
+
+Big dependencies are:
+
+* [GSAP](https://greensock.com/gsap/) – doesn't need introduction; 'member' version is used in this project
+* [Lottie](https://airbnb.io/lottie/#/) – for stunning SVG animations; see wrapper [`LottieComponent`](./app/scripts/components/common/lottie.ts)
+* [@zajno/common](https://github.com/Zajno/common-utils) – Zajno's custom toolbox with useful utils & helpers. It's used as a direct Github link, and planned to stay public.
 
 ### i18n
 
@@ -41,7 +50,7 @@ The idea behind i18n implementation is to:
 * declare all pages and their localized alternative in a sitemap (`sitemap/pages.ts`)
 * each page can have localized alternatives by having a template with few additional objects containing copyright or any other content variations
 * according to the configs above generate proper output html pages
-* optionally, set up Firebase Hosting's `i18n` feature so it can rewrite a request to correct localized file based on client's Accept-Language header.
+* optionally, set up Firebase Hosting `i18n` feature so it can rewrite a request to correct localized file based on client's Accept-Language header.
 
 Using this way, it's possible to update content such as copyright but not touching the code (html/js) itself. This can be extended to/replaced with a remote CMS service – because the main idea is to keep separately thing that can be changed often.
 

@@ -1,7 +1,8 @@
 import 'styles/home.sass';
 
-import { SectionCtor } from '../core/section';
+import { SectionCtor } from 'app/core/section';
 import CommonPage from './commonPage';
+
 import HeroSection from 'app/sections/HeroSection';
 import TabSection from 'app/sections/TabsSection';
 
@@ -20,4 +21,5 @@ export default class HomePage extends CommonPage {
     }
 
 }
+
 HomePage.RunPage(HomePage);

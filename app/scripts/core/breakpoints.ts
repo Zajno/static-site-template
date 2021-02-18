@@ -1,5 +1,5 @@
-import { observable } from 'mobx';
 import { createLogger } from '@zajno/common/lib/logger';
+import { Event } from '@zajno/common/lib/event';
 
 const logger = createLogger('[Breakpoints]');
 
@@ -8,7 +8,7 @@ export type BreakpointAnimations = {
     disableVideo?: boolean,
 };
 
-export type BreakpointType = {
+export type BreakpointData = {
     id: number;
     name: string,
     mediaQuery: string;
@@ -17,7 +17,7 @@ export type BreakpointType = {
     animations?: BreakpointAnimations;
 };
 
-const Breakpoints: [BreakpointType] = [
+const Breakpoints: [BreakpointData] = [
     {
         id: 500,
         name: 'default',
@@ -27,7 +27,7 @@ const Breakpoints: [BreakpointType] = [
     },
 ];
 
-function calcRem(width, height, breakpoint) {
+function calcRem(width: number, height: number, breakpoint: BreakpointData) {
     const ab = breakpoint.width / breakpoint.height;
     const avp = width / height;
 
@@ -38,19 +38,19 @@ function calcRem(width, height, breakpoint) {
     return rem;
 }
 
-type _internalType = {
-    currentBreakpoint: BreakpointType;
-    currentRem: number;
+const _internal = {
+    width: 0,
+    height: 0,
+    currentBreakpoint: null as BreakpointData,
+    currentRem: 0.0,
 };
 
-const _internal: _internalType = observable.object({
-    currentBreakpoint: null,
-    currentRem: 0.0,
-});
+const _remChanged = new Event<number>();
+const _breakpointChanged = new Event<BreakpointData>();
 
-export default observable.object({
+export default {
 
-    registerBreakpoint(bp: BreakpointType) {
+    registerBreakpoint(bp: BreakpointData) {
         const existing = Breakpoints.findIndex(b => b.id === bp.id);
         if (existing >= 0) {
             Breakpoints[existing] = bp;
@@ -64,6 +64,13 @@ export default observable.object({
         get breakpoint() { return _internal.currentBreakpoint; },
 
         get rem() { return _internal.currentRem; },
+
+        get width() { return _internal.width; },
+        get height() { return _internal.height; },
+
+        get breakpointChanged() { return _breakpointChanged.expose(); },
+
+        get remChanged() { return _remChanged.expose(); },
     },
 
     resize(width: number, height: number) {
@@ -72,14 +79,21 @@ export default observable.object({
             bp = Breakpoints[0];
         }
 
+        _internal.width = width;
+        _internal.height = height;
+
         const rem = calcRem(width, height, bp);
 
         logger.log('Current breakpoint:', `[${width}x${height}]`, bp, '; rem =', rem);
 
         if (!_internal.currentBreakpoint || _internal.currentBreakpoint.id !== bp.id) {
             _internal.currentBreakpoint = bp;
+            _breakpointChanged.trigger(bp);
         }
 
-        _internal.currentRem = rem;
+        if (_internal.currentRem !== rem) {
+            _internal.currentRem = rem;
+            _remChanged.trigger(rem);
+        }
     },
-});
+};

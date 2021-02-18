@@ -30,7 +30,6 @@
     "detect-browser": "^5.2.0",
     "gsap": "file:./gsap-member/npm-install-this/gsap-bonus.tgz",
     "lottie-web": "^5.7.6",
-    "mobx": "5",
     "regenerator-runtime": "^0.13.7",
     "reset-css": "^5.0.1"
   },

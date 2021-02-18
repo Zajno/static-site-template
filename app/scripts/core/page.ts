@@ -2,7 +2,7 @@ import 'app/utils/checkBrowserSupport';
 
 import logger from '@zajno/common/lib/logger';
 import Section, { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
-import Breakpoints from 'app/appBreakpoints';
+import Breakpoints from 'app/core/breakpoints';
 
 export interface IPage {
     readonly width: number;
@@ -16,7 +16,7 @@ export interface IPage {
 
 type ScrollDirectionHelpers = {
     [k1 in Directions]: {
-        [k2 in SectionActions]: (top: number, bottom: number, showTreshold: number) => boolean;
+        [k2 in SectionActions]: (top: number, bottom: number, showThreshold: number) => boolean;
     };
 };
 
