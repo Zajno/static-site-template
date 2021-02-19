@@ -2,7 +2,7 @@
 
 import { URL } from 'url';
 
-let Hostname = process.env.HOSTNAME || 'http://localhost/';
+export let Hostname = process.env.HOSTNAME || 'http://localhost/';
 
 if (Hostname.endsWith('/')) {
     Hostname = Hostname.substring(0, Hostname.length - 1);
@@ -10,17 +10,10 @@ if (Hostname.endsWith('/')) {
 
 console.log('[Hostname] Current Hostname =', Hostname);
 
-function combine(path: string, base: string) {
+export function combineUrl(path: string, base: string) {
     return new URL(path, base).href;
 }
 
-function combineWithHostname(path: string) {
-    return combine(path, Hostname);
+export function combineUrlWithHostname(path: string) {
+    return combineUrl(path, Hostname);
 }
-
-export {
-    Hostname,
-
-    combine,
-    combineWithHostname,
-};

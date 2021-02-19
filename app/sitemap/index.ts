@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
-import { URL } from 'url';
 import Pages, { SitePage, PageOutput } from './pages';
-import { Hostname } from './hostname';
+import { Hostname, combineUrlWithHostname } from './hostname';
 import { AllLocales } from './copyright';
 import { getCopyForLocale as getCommonCopyForLocale } from './common';
 
@@ -43,7 +42,7 @@ function getOutput(p: SitePage, output: Partial<PageOutput>, strict = true): Sit
     const altPage: SitePageOutput = {
         ...p,
         output: resOutput,
-        canonical: new URL(resOutput.href, Hostname).href,
+        canonical: combineUrlWithHostname(resOutput.href),
         common,
     };
 

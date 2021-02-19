@@ -1,5 +1,6 @@
 <%
 	const Sitemap = require('sitemap');
+	const { combineUrlWithHostname } = require('sitemap/hostname');
 	let page = htmlWebpackPlugin.options && htmlWebpackPlugin.options.page;
     // get the page directly to hook it into webpack dev build process
 	page = Sitemap.getPage(page);
@@ -13,7 +14,7 @@
 	const title = page.output.title || 'Title';
 	const description = page.output.description || 'Description';
 	const canonical = page.canonical || '/';
-	const image = canonical + require('../../../assets/img/' + page.output.image) || '';
+	const image = combineUrlWithHostname(require('../../../assets/img/' + page.output.image) || '');
 
 	const faviconIco = require('../../../assets/img/logo.png');
 %>
