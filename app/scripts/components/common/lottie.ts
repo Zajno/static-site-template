@@ -1,4 +1,5 @@
-import lottie, { AnimationConfigWithPath, AnimationItem } from 'lottie-web';
+import type LottieLib from 'lottie-web';
+import type { AnimationConfigWithPath, AnimationItem } from 'lottie-web';
 import gsap from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
@@ -16,6 +17,18 @@ export type LottieComponentConfig = ImageLazyLoadConfig & {
     fade?: boolean | 'first';
 };
 
+const LottieLoader = () => import('lottie-web') as Promise<any>;
+let LottieLibLoading: Promise<typeof LottieLib>;
+
+async function loadLottie() {
+    if (!LottieLibLoading) {
+        logger.log('Loading library...');
+        LottieLibLoading = LottieLoader();
+        LottieLibLoading.then(() => logger.log('Library has been loaded'));
+    }
+    return LottieLibLoading;
+}
+
 export default class LottieComponent extends LazyLoadComponent<LottieComponentConfig> {
     private _params: AnimationConfigWithPath;
     private _isCompleted: boolean = true;
@@ -24,7 +37,7 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     private _isLoaded: boolean = false;
     private _playPending: boolean = false;
 
-    // SETUP -------------------------------------------------------------------
+    private _lottie: typeof LottieLib;
 
     async doSetup() {
         this.useDefaultConfig({ register: true, loop: true, fade: true, autoplay: true });
@@ -50,8 +63,10 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
         return this._priority || 3;
     }
 
-    protected _doLoading(): Promise<void> {
-        this._anim = lottie.loadAnimation(this._params);
+    protected async _doLoading(): Promise<void> {
+        this._lottie = await loadLottie();
+
+        this._anim = this._lottie.loadAnimation(this._params);
         this._anim.addEventListener('complete', () => {
             // this._animBodymovin.goToAndStop(0);
             this._isCompleted = true;
@@ -62,9 +77,9 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
             return Promise.resolve();
         }
 
-        return new Promise(resolve => {
+        await new Promise<void>(resolve => {
             this._anim.addEventListener('DOMLoaded', () => {
-                logger.log('DOMLoaded', this._playPending, this._anim);
+                // logger.log('DOMLoaded', this._playPending, this._anim);
 
                 this._isLoaded = true;
                 if (this._playPending) {
@@ -82,6 +97,10 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     }
 
     private _play = () => {
+        if (!this._anim) {
+            return;
+        }
+
         if (this._isLoaded) {
             if (this._isCompleted) {
                 this._anim.goToAndStop(0);
@@ -94,7 +113,7 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     };
 
     private _stop() {
-        this._anim.goToAndStop(0);
+        this._anim?.goToAndStop(0);
         this._isCompleted = false;
     }
 
@@ -119,16 +138,16 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
 
     private async fadeIn() {
         gsap.killTweensOf(this.element);
-        await gsap.fromTo(this.element, 0,
-            { autoAlpha: 0 },
+        await gsap.fromTo(this.element,
+            { autoAlpha: 0, duration: 0 },
             { autoAlpha: 1, delay: this.activationConfig?.delay || 0 },
         );
     }
 
     private async fadeOut() {
         gsap.killTweensOf(this.element);
-        await gsap.fromTo(this.element, 0,
-            { autoAlpha: 1 },
+        await gsap.fromTo(this.element,
+            { autoAlpha: 1, duration: 0 },
             { autoAlpha: 0, delay: this.activationConfig?.delay || 0 },
         );
     }

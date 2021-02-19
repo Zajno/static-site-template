@@ -75,13 +75,16 @@ export default abstract class Page implements IPage {
     public async setupAsync() {
         this._root = document.getElementById('main')
             || document.getElementsByTagName('body')[0];
-        window.onresize = this.resize.bind(this);
-        window.onscroll = this.scroll.bind(this);
-        window.onwheel = this.onWheel.bind(this);
+
         await this.setupPageAsync();
         await this._setupSections(this._root.querySelectorAll('section'));
 
         await this.afterSetup();
+
+        // subscribe to window events only after the page has been set up
+        window.onresize = this.resize.bind(this);
+        window.onscroll = this.scroll.bind(this);
+        window.onwheel = this.onWheel.bind(this);
 
         this.resize();
     }
