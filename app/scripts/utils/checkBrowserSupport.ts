@@ -69,13 +69,15 @@ if (result == null) {
 
     const ieMain = document.createElement('main');
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const ieScreen = require('app/modules/iePlaceholder').default;
+    import('app/modules/iePlaceholder')
+        .then(module => {
+            body.style.cursor = 'default';
+            ieMain.innerHTML = module.default;
+            // makeVisible(ieMain);
 
-    body.style.cursor = 'default';
-    ieMain.innerHTML = ieScreen;
-    // makeVisible(ieMain);
+            body.insertBefore(ieMain, body.firstChild).classList.add('ie__main');
+        });
 
-    body.insertBefore(ieMain, body.firstChild).classList.add('ie__main');
 
     throw new Error('The browser is not supported. Follow links on the screen or contact site administrator.');
 } else {
