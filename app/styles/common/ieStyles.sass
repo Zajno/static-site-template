@@ -4,11 +4,12 @@ main, header
 .section-ie
     visibility: visible
     display: flex
+    justify-content: center
     align-items: center
     z-index: initial
     height: 100vh
     background: #222524 url('../../assets/img/pattern_grain.png')
-    .container
+    .ie__container
         display: flex
         flex-direction: column
         align-items: center
@@ -55,8 +56,25 @@ main, header
         letter-spacing: 0.008vw
         line-height: 1.67vw
 
-@media only screen and (max-width: 768px)
+@media all and (max-width: 1024px)
+    .section-ie
+        .ie__logo-block
+            width: 9.38vw
+            height: 3.78vw
+            margin: 0.2vw 0 5.4vw
+        .ie__text-block__title
+            margin-bottom: 2vw
+        .ie__text-block__subtitle
+            margin-bottom: 7.3vw
+        .ie-browsers
+            width: 27.21vw
+        .ie-browsers__item__image
+            width: 5.6vw
+            height: 5.6vw
 
-    body.one-page-scroll
-        .section-ie
-            position: absolute
+        .ie__text-block__title-font
+            font-size: 4.3vw
+            line-height: 5.21vw
+        .ie__text-block__subtitle-font
+            font-size: 2.34vw
+            line-height: 2.87vw

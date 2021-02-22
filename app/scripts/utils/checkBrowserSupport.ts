@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global require */
 
 import { browser, ApplyNameAndVersion } from './detectBrowser';
@@ -51,7 +52,8 @@ function doesSupport() {
     return true;
 }
 
-const result = doesSupport();
+// const result = doesSupport();
+const result = false;
 
 if (result == null) {
     console.log('[BrowserCheck]: skipped');
