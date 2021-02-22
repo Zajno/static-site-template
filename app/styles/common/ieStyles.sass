@@ -1,5 +1,3 @@
-@import './gem.scss'
-
 main, header
     opacity: 1
 
@@ -9,46 +7,53 @@ main, header
     align-items: center
     z-index: initial
     height: 100vh
+    background: #222524 url('../../assets/img/pattern_grain.png')
     .container
         display: flex
         flex-direction: column
         align-items: center
-        margin-top: gem(-2)
+    .ie__logo-block
+        display: flex
+        width: 5vw
+        height: 2.02vw
+        margin-bottom: 3vw
     .ie__text-block
         text-align: center
-        margin-top: gem(-38)
     .ie__text-block__title
-        margin-bottom: gem(65)
+        margin-bottom: 1vw
     .ie__text-block__subtitle
-        margin-bottom: gem(48)
+        margin-bottom: 4.2vw
     .ie-browsers
         display: flex
         justify-content: space-between
-        width: gem(560)
+        width: 14.6vw
         margin: 0 auto
     .ie-browsers__item
-        .ie-browsers__item__image,
-        .ie-browsers__item__text
+        .ie-browsers__item__image
             transition: all .3s ease
-        &:first-child
-            .ie-browsers__item__image
-                width: gem(63)
-                height: gem(63)
     .ie-browsers__item__link
         display: flex
-        flex-direction: column
-        align-items: center
-        justify-content: space-between
-        height: gem(91)
         &:hover
             .ie-browsers__item__image
                 transform: scale(1.2)
-            .ie-browsers__item__text
-                color: var(--color-mona-lisa)
-                line-height: gem(80)
     .ie-browsers__item__image
-        width: gem(60)
-        height: gem(60)
+        width: 2.99vw
+        height: 2.99vw
+
+    .ie__text-block__title-font
+        color: #EEEEEE
+        font-family: 'Space Grotesk', sans-serif
+        font-size: 2.99vw
+        font-weight: 500
+        letter-spacing: -0.038vw
+        line-height: 3.61vw
+    .ie__text-block__subtitle-font
+        color: #7D7D7D
+        font-family: 'Space Grotesk', sans-serif
+        font-size: 1.39vw
+        font-weight: 400
+        letter-spacing: 0.008vw
+        line-height: 1.67vw
 
 @media only screen and (max-width: 768px)
 
