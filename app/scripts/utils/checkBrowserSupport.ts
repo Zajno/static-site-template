@@ -52,8 +52,7 @@ function doesSupport() {
     return true;
 }
 
-// const result = doesSupport();
-const result = false;
+const result = doesSupport();
 
 if (result == null) {
     console.log('[BrowserCheck]: skipped');

@@ -19,6 +19,9 @@ main, header
         height: 2.02vw
         margin-bottom: 3vw
     .ie__text-block
+        display: flex
+        flex-direction: column
+        align-items: center
         text-align: center
     .ie__text-block__title
         margin-bottom: 1vw
@@ -53,7 +56,7 @@ main, header
         font-family: 'Space Grotesk', sans-serif
         font-size: 1.39vw
         font-weight: 400
-        letter-spacing: 0.008vw
+        letter-spacing: -0.008vw
         line-height: 1.67vw
 
 @media all and (max-width: 1024px)
@@ -74,7 +77,35 @@ main, header
 
         .ie__text-block__title-font
             font-size: 4.3vw
+            letter-spacing: -0.045vw
             line-height: 5.21vw
         .ie__text-block__subtitle-font
             font-size: 2.34vw
+            letter-spacing: -0.013vw
             line-height: 2.87vw
+
+@media all and (max-width: 480px)
+    .section-ie
+        .ie__logo-block
+            width: 19.2vw
+            height: 7.74vw
+            margin: 3.9vw 0 9.55vw
+        .ie__text-block__title
+            margin-bottom: 3.5vw
+        .ie__text-block__subtitle
+            width: 57vw
+            margin-bottom: 12.27vw
+        .ie-browsers
+            width: 42.77vw
+        .ie-browsers__item__image
+            width: 8.8vw
+            height: 8.8vw
+
+        .ie__text-block__title-font
+            font-size: 5.33vw
+            letter-spacing: -0.06vw
+            line-height: 6.4vw
+        .ie__text-block__subtitle-font
+            font-size: 3.73vw
+            letter-spacing: -0.01vw
+            line-height: 4.53vw
