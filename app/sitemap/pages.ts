@@ -53,9 +53,9 @@ const Home: SitePage<HomeCopyrightShape> = {
 
     // TODO: Remove what is not needed
     i18n: [ // looks similar but in future more fields can be different
-        { locale: 'en', path: 'en/index.html', href: '/en', copy: HomeCopyright.en },
-        { locale: 'ja', path: 'ja/index.html', href: '/ja', copy: HomeCopyright.ja },
-        { locale: 'ko', path: 'ko/index.html', href: '/ko', copy: HomeCopyright.ko },
+        { locale: 'en', href: '/en', path: 'en/index.html', copy: HomeCopyright.en },
+        { locale: 'ja', href: '/ja', path: 'ja/index.html', copy: HomeCopyright.ja },
+        { locale: 'ko', href: '/ko', path: 'ko/index.html', copy: HomeCopyright.ko },
     ],
 };
 

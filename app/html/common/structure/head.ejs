@@ -1,9 +1,8 @@
 <%
 	const Sitemap = require('sitemap');
 	const { combineUrlWithHostname } = require('sitemap/hostname');
-	let page = htmlWebpackPlugin.options && htmlWebpackPlugin.options.page;
     // get the page directly to hook it into webpack dev build process
-	page = Sitemap.getPage(page);
+	const page = Sitemap.getPage(Page);
 
 	const pageAlts = Sitemap.getPageAlternatives(page.id);
 

@@ -1,5 +1,4 @@
-import type LottieLib from 'lottie-web';
-import type { AnimationConfigWithPath, AnimationItem } from 'lottie-web';
+import type { LottiePlayer, AnimationConfigWithPath, AnimationItem } from 'lottie-web';
 import gsap from 'gsap';
 
 import LazyLoadComponent from 'app/components/lazy/lazyLoadComponent';
@@ -18,7 +17,7 @@ export type LottieComponentConfig = ImageLazyLoadConfig & {
 };
 
 const LottieLoader = () => import('lottie-web') as Promise<any>;
-let LottieLibLoading: Promise<typeof LottieLib>;
+let LottieLibLoading: Promise<LottiePlayer>;
 
 async function loadLottie() {
     if (!LottieLibLoading) {
@@ -37,7 +36,7 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     private _isLoaded: boolean = false;
     private _playPending: boolean = false;
 
-    private _lottie: typeof LottieLib;
+    private _lottie: LottiePlayer;
 
     async doSetup() {
         this.useDefaultConfig({ register: true, loop: true, hideOnDeactivate: true, autoplay: true });

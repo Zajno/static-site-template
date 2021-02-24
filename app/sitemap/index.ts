@@ -3,11 +3,13 @@ import Pages, { SitePage, PageOutput } from './pages';
 import { Hostname, combineUrlWithHostname } from './hostname';
 import { AllLocales } from './copyright';
 import { getCopyForLocale as getCommonCopyForLocale } from './common';
+import type webpack from 'webpack';
 
 export type SitePageOutput = Omit<SitePage, 'i18n'> & {
     canonical: string,
     common: ReturnType<typeof getCommonCopyForLocale>,
     isAlternative?: boolean,
+    skipRender?: boolean,
 };
 
 type SitemapPageLink = { lang: string, url: string };
@@ -46,7 +48,9 @@ function getOutput(p: SitePage, output: Partial<PageOutput>, strict = true): Sit
         common,
     };
 
-    altPage.output.path = altPage.output.path || `${p.id}/${resOutput.locale}/index.html`;
+    if (!output.path) {
+        altPage.skipRender = true;
+    }
 
     return altPage;
 }
@@ -72,20 +76,25 @@ Pages.forEach(p => {
 });
 
 const ApplicationEntryPoints = (function () {
-    const parseEntryPoint = {
+    const result: webpack.EntryObject = {
         polyfills: './app/scripts/polyfills',
     };
+
     Pages.forEach(item => {
-        parseEntryPoint[`${item.id}`] = `${item.entryPoint}`;
+        result[`${item.id}`] = {
+            import: `${item.entryPoint}`,
+            dependOn: ['polyfills'],
+        };
     });
-    return parseEntryPoint;
+
+    return result;
 })();
 
 // log only if we're in initial command line run context
 if (process.env.PATH) {
     console.log(
         '[SITEMAP] Generated the following pages: ',
-        PagesFlatten.map(pf => ({ id: pf.id, path: pf.output.path, template: pf.templateName, href: pf.output.href, locale: pf.output.locale })),
+        PagesFlatten.map(pf => ({ id: pf.id, path: pf.output.path, template: pf.templateName, href: pf.output.href, locale: pf.output.locale, skip: pf.skipRender || false })),
     );
 
     console.log('[SITEMAP] Generated the following entry points: ', ApplicationEntryPoints);

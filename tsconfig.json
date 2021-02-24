@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2017",
     "outDir": "./dist/",

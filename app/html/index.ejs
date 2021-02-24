@@ -4,7 +4,7 @@
 <%
     const Sitemap = require('sitemap');
     // get the page directly to hook it into webpack dev build process
-    const page = Sitemap.getPage(htmlWebpackPlugin.options && htmlWebpackPlugin.options.page);
+    const page = Sitemap.getPage(Page);
 
     const Locale = page.output.locale;
     const Strings = page.output.copy;

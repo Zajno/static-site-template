@@ -9,6 +9,6 @@ import '../../assets/img/ieopera.png';
 /* global require */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const html = require('!raw-loader!../../html/common/ie.html');
+const html = require('../../html/common/ie.html?inline');
 
 export default html;

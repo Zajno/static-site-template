@@ -1,7 +1,10 @@
+/* eslint-disable no-console */
 import * as fs from 'fs';
 import * as Path from 'path';
 import HtmlWebpackPlugin, { MinifyOptions } from 'html-webpack-plugin';
-import { Plugin } from 'webpack';
+import { WebpackPluginInstance as Plugin } from 'webpack';
+
+/* global __dirname, process */
 
 export function pathResolve(p: string) {
     return Path.resolve(__dirname, p);
@@ -9,10 +12,10 @@ export function pathResolve(p: string) {
 
 export class HtmlBuilder {
 
-    readonly htmlMinifyOptions: MinifyOptions;
+    readonly htmlMinifyOptions: MinifyOptions | false;
 
     constructor(minify = false) {
-        this.htmlMinifyOptions =  minify
+        this.htmlMinifyOptions = minify
             ? {
                 removeAttributeQuotes: true,
                 collapseWhitespace: false,
@@ -20,7 +23,7 @@ export class HtmlBuilder {
                 minifyCSS: true,
                 removeComments: true,
                 removeEmptyAttributes: true,
-            } : null;
+            } : false;
     }
 
     createHtmlPlugin(output: string, templatePath: string, id: string, options = {}) {
@@ -32,28 +35,30 @@ export class HtmlBuilder {
             inject: false,
             chunks: ['polyfills', `${id}`],
             chunksSortMode: 'manual',
-            ...options,
+            templateParameters: options,
         });
     }
 
-    // generateHtmlPlugins(templateDir: string = './app/html/') {
-    //     const templateFiles = fs.readdirSync(pathResolve(templateDir));
+    generateHtmlPlugins(templateDir: string = './app/html/', extensions: string[] = ['html', 'ejs']) {
+        const templateFiles = fs.readdirSync(pathResolve(templateDir));
 
-    //     return templateFiles
-    //         .map(item => {
-    //             const parts = item.split('.');
+        return templateFiles
+            .map(item => {
+                const parts = item.split('.');
+                const ext = parts.pop();
 
-    //             if (parts.pop() !== 'html')
-    //                 return null;
-    //             const name = parts.join().toLowerCase();
+                if (!extensions.includes(ext)) {
+                    return null;
+                }
+                const name = parts.join().toLowerCase();
 
-    //             const outputName = name === 'index' ? item : `${name}/index.html`;
-    //             const templatePath = pathResolve(`${templateDir}/${item}`);
+                const outputName = name === 'index' ? 'index.html' : `${name}/index.html`;
+                const templatePath = pathResolve(`${templateDir}/${item}`);
 
-    //             return this.createHtmlPlugin(outputName, templatePath, item );
-    //         })
-    //         .filter(p => p);
-    // }
+                return this.createHtmlPlugin(outputName, templatePath, item);
+            })
+            .filter(p => p);
+    }
 }
 
 export type PluginOption = {
