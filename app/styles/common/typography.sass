@@ -58,9 +58,17 @@
 @mixin title-no-script
     @include mixed-lbl(var(--color-title-no-script), var(--font-no-script), var(--font-size-title-ns), var(--font-weight-5), var(--letter-spacing-title-ns), var(--line-height-title-ns))
 
+// title for 404 page
+@mixin title-page-404
+    @include mixed-lbl(var(--color-title-page-404), var(--font-page-404), var(--font-size-title-404), var(--font-weight-5), var(--letter-spacing-title-404), var(--line-height-title-404))
+
 // subtitle for noScript mode
 @mixin subtitle-no-script
     @include mixed-lbl(var(--color-subtitle-no-script), var(--font-no-script), var(--font-size-subtitle-ns), var(--font-weight-4), var(--letter-spacing-subtitle-ns), var(--line-height-subtitle-ns))
+
+// subtitle for 404 page
+@mixin subtitle-page-404
+    @include mixed-lbl(var(--color-subtitle-page-404), var(--font-page-404), var(--font-size-subtitle-404), var(--font-weight-4), var(--letter-spacing-subtitle-404), var(--line-height-subtitle-404))
 
 
 html, body, div, span,
@@ -124,8 +132,14 @@ article, footer, header, nav, section
     &.title-no-script
         @include title-no-script
 
+    &.title-page-404
+        @include title-page-404
+
     &.subtitle-no-script
         @include subtitle-no-script
+
+    &.subtitle-page-404
+        @include subtitle-page-404
     &::selection
         color: var(--color-mona-lisa)
         background: none

@@ -59,6 +59,21 @@ const Home: SitePage<HomeCopyrightShape> = {
     ],
 };
 
+const Page404: SitePage = {
+    id: '404',
+    entryPoint: './app/scripts/pages/page404.ts',
+    templateName: 'app/html/page-404.ejs',
+    output: {
+        path: 'page-404.html',
+        href: '/',
+        title: '',
+        description: '',
+        image: 'logo.png',
+        locale: 'en',
+        copy: undefined,
+    },
+};
+
 const NoScript: SitePage = {
     id: 'noScript',
     entryPoint: './app/scripts/pages/noScript.ts',
@@ -76,6 +91,7 @@ const NoScript: SitePage = {
 
 const pages: SitePage[] = [
     Home,
+    Page404,
     NoScript,
 ];
 
