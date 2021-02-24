@@ -14,7 +14,7 @@ export type LottieComponentConfig = ImageLazyLoadConfig & {
     /** @default true */
     autoplay?: boolean;
     /** @default true */
-    fade?: boolean | 'first';
+    hideOnDeactivate?: boolean | 'first';
 };
 
 const LottieLoader = () => import('lottie-web') as Promise<any>;
@@ -40,7 +40,7 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     private _lottie: typeof LottieLib;
 
     async doSetup() {
-        this.useDefaultConfig({ register: true, loop: true, fade: true, autoplay: true });
+        this.useDefaultConfig({ register: true, loop: true, hideOnDeactivate: true, autoplay: true });
 
         this._params = {
             container: this.element,
@@ -50,7 +50,7 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
             path: this.element.dataset.lottiePath,
         };
 
-        if (this._config.fade) {
+        if (this._config.hideOnDeactivate) {
             gsap.set(this.element, { autoAlpha: 0.0 });
         } else {
             gsap.set(this.element, { autoAlpha: 1.0 });
@@ -118,10 +118,10 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     }
 
     protected async _activate() {
-        if (this._config.fade) {
-            const skip = this._config.fade === 'first' && this.wasActive;
+        if (this._config.hideOnDeactivate) {
+            const skip = this._config.hideOnDeactivate === 'first' && this.wasActive;
             if (!skip) {
-                await this.fadeIn();
+                await this.showByAlpha();
             }
         }
 
@@ -129,25 +129,24 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
     }
 
     protected async _deactivate() {
-        if (this._config.fade === true) {
-            await this.fadeOut();
+        if (this._config.hideOnDeactivate === true) {
+            await this.hideByAlpha();
         }
 
         this._stop();
     }
 
-    private async fadeIn() {
+    private async showByAlpha() {
         gsap.killTweensOf(this.element);
-        await gsap.fromTo(this.element,
-            { autoAlpha: 0, duration: 0 },
+        await gsap.set(
+            this.element,
             { autoAlpha: 1, delay: this.activationConfig?.delay || 0 },
         );
     }
 
-    private async fadeOut() {
+    private async hideByAlpha() {
         gsap.killTweensOf(this.element);
-        await gsap.fromTo(this.element,
-            { autoAlpha: 1, duration: 0 },
+        await gsap.set(this.element,
             { autoAlpha: 0, delay: this.activationConfig?.delay || 0 },
         );
     }
