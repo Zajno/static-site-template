@@ -43,6 +43,11 @@
 	<meta property="og:image:height" content="630">
 	<meta property="og:image" content="<%= image %>">
 	<meta property="og:image:alt" content="<%= description %>">
+	<% if(!(page.id == 'noScript')){ %>
+	<noscript>
+		<meta http-equiv="refresh" content="0;url=/no-script.html">
+	</noscript>
+	<% } %>
 
 	<!--Twitter-->
 	<meta name="twitter:card" content="summary">
