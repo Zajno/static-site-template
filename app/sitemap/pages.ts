@@ -59,8 +59,24 @@ const Home: SitePage<HomeCopyrightShape> = {
     ],
 };
 
+const NoScript: SitePage = {
+    id: 'noScript',
+    entryPoint: './app/scripts/pages/noScript.ts',
+    templateName: 'app/html/no-script.ejs',
+    output: {
+        path: 'no-script.html',
+        href: '/',
+        title: '',
+        description: '',
+        image: 'logo.png',
+        locale: 'en',
+        copy: undefined,
+    },
+};
+
 const pages: SitePage[] = [
     Home,
+    NoScript,
 ];
 
 export default pages;

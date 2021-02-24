@@ -1,4 +1,3 @@
-
 @import './variables'
 
 @mixin typography($color, $font-family, $font-size, $font-weight, $letter-spacing:0, $line-height: normal)
@@ -54,6 +53,14 @@
 
 @mixin link-text
 	@include mixed-lbl(var(--color-mineral-green), var(--main-font), var(--font-size-link), var(--font-weight-3), var(--letter-spacing-1), var(--line-height-label))
+
+// title for noScript mode
+@mixin title-no-script
+    @include mixed-lbl(var(--color-title-no-script), var(--font-no-script), var(--font-size-title-ns), var(--font-weight-5), var(--letter-spacing-title-ns), var(--line-height-title-ns))
+
+// subtitle for noScript mode
+@mixin subtitle-no-script
+    @include mixed-lbl(var(--color-subtitle-no-script), var(--font-no-script), var(--font-size-subtitle-ns), var(--font-weight-4), var(--letter-spacing-subtitle-ns), var(--line-height-subtitle-ns))
 
 
 html, body, div, span,
@@ -113,6 +120,12 @@ article, footer, header, nav, section
 
     &.link-text
         @include link-text
+
+    &.title-no-script
+        @include title-no-script
+
+    &.subtitle-no-script
+        @include subtitle-no-script
     &::selection
         color: var(--color-mona-lisa)
         background: none
