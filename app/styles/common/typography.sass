@@ -58,24 +58,28 @@
 @mixin title-no-script
     @include mixed-lbl(var(--color-title-no-script), var(--font-no-script), var(--font-size-title-ns), var(--font-weight-5), var(--letter-spacing-title-ns), var(--line-height-title-ns))
 
-// title for 404 page
-@mixin title-page-404
-    @include mixed-lbl(var(--color-title-page-404), var(--font-page-404), var(--font-size-title-404), var(--font-weight-5), var(--letter-spacing-title-404), var(--line-height-title-404))
-
 // subtitle for noScript mode
 @mixin subtitle-no-script
     @include mixed-lbl(var(--color-subtitle-no-script), var(--font-no-script), var(--font-size-subtitle-ns), var(--font-weight-4), var(--letter-spacing-subtitle-ns), var(--line-height-subtitle-ns))
-
-// subtitle for 404 page
-@mixin subtitle-page-404
-    @include mixed-lbl(var(--color-subtitle-page-404), var(--font-page-404), var(--font-size-subtitle-404), var(--font-weight-4), var(--letter-spacing-subtitle-404), var(--line-height-subtitle-404))
 
 // desc for noScript mode
 @mixin desc-no-script
     @include mixed-lbl(var(--color-desc-no-script), var(--font-no-script), var(--font-size-desc-ns), var(--font-weight-4), var(--letter-spacing-desc-ns), var(--line-height-desc-ns))
 
+// title for 404 page
+@mixin title-page-404
+    @include mixed-lbl(var(--color-title-page-404), var(--font-page-404), var(--font-size-title-404), var(--font-weight-5), var(--letter-spacing-title-404), var(--line-height-title-404))
 
-html, body, div, span,
+// subtitle for 404 page
+@mixin subtitle-page-404
+    @include mixed-lbl(var(--color-subtitle-page-404), var(--font-page-404), var(--font-size-subtitle-404), var(--font-weight-4), var(--letter-spacing-subtitle-404), var(--line-height-subtitle-404))
+
+// label for 404 page
+@mixin label-page-404
+    @include mixed-lbl(var(--color-title-page-404), var(--font-page-404), var(--font-size-label-404), var(--font-weight-5), var(--letter-spacing-label-404), var(--line-height-label-404))
+
+
+html, body, div, span, button,
 h1, h2, h3, h4, h5, h6, p, blockquote,
 a, small, strong, ul, li, form, label,
 article, footer, header, nav, section
@@ -136,17 +140,20 @@ article, footer, header, nav, section
     &.title-no-script
         @include title-no-script
 
-    &.title-page-404
-        @include title-page-404
-
     &.subtitle-no-script
         @include subtitle-no-script
+
+    &.desc-no-script
+        @include desc-no-script
+
+    &.title-page-404
+        @include title-page-404
 
     &.subtitle-page-404
         @include subtitle-page-404
 
-    &.desc-no-script
-        @include desc-no-script
+    &.label-page-404
+        @include label-page-404
     &::selection
         color: var(--color-mona-lisa)
         background: none

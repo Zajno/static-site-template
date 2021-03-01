@@ -1,8 +1,5 @@
 .page-404__section
     visibility: visible
-    display: flex
-    justify-content: center
-    align-items: center
     z-index: initial
     height: 100vh
     background: var(--color-bg-page-404) url('../assets/img/pattern-grain.png')
@@ -13,11 +10,26 @@
     .page-404__logo-block
         display: flex
         width: gem(72)
-        margin-bottom: gem(40)
+        margin: 27.11vh 0 4.25vh
     .page-404__text-block
         display: flex
         flex-direction: column
         align-items: center
         text-align: center
-    .page-404__text-block__title
-        margin-bottom: gem(43)
+        margin-bottom: 8.2vh
+    .page-404__text-block__subtitle
+        margin-top: -2.05vh
+    .page-404__button-block
+        display: flex
+    .page-404__button-block__homepage-button
+        width: gem(265)
+        padding: gem(17)
+        outline: none
+        border: 1px solid var(--color-subtitle-page-404)
+        border-radius: gem(10)
+        background: none
+        cursor: pointer
+        transition: all .3s ease
+        &:hover
+            color: var(--color-bg-page-404)
+            background: var(--color-subtitle-page-404)
