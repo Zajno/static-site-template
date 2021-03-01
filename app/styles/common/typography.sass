@@ -70,6 +70,10 @@
 @mixin subtitle-page-404
     @include mixed-lbl(var(--color-subtitle-page-404), var(--font-page-404), var(--font-size-subtitle-404), var(--font-weight-4), var(--letter-spacing-subtitle-404), var(--line-height-subtitle-404))
 
+// desc for noScript mode
+@mixin desc-no-script
+    @include mixed-lbl(var(--color-desc-no-script), var(--font-no-script), var(--font-size-desc-ns), var(--font-weight-4), var(--letter-spacing-desc-ns), var(--line-height-desc-ns))
+
 
 html, body, div, span,
 h1, h2, h3, h4, h5, h6, p, blockquote,
@@ -140,6 +144,9 @@ article, footer, header, nav, section
 
     &.subtitle-page-404
         @include subtitle-page-404
+
+    &.desc-no-script
+        @include desc-no-script
     &::selection
         color: var(--color-mona-lisa)
         background: none
