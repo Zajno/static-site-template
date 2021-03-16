@@ -6,6 +6,7 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SitemapPlugin from 'sitemap-webpack-plugin';
 import * as helpers from './webpack.helpers';
+import * as AppConfig from './app/config';
 import * as sitemapData from './app/sitemap';
 
 /* eslint-disable no-console */
@@ -189,9 +190,13 @@ const siteConfig = (env: any): webpack.Configuration => {
                         NODE_ENV: JSON.stringify(
                             process.env.NODE_ENV || 'development',
                         ),
-                        HOSTNAME: JSON.stringify(
-                            process.env.HOSTNAME || 'http://localhost',
+                        APP_ENV: JSON.stringify(
+                            AppConfig.APP_ENV || 'development',
                         ),
+                        APP_CONFIG: JSON.stringify(
+                            AppConfig.CurrentConfig,
+                        ),
+                        COMMON_UTILS_LOGGER: JSON.stringify(AppConfig.CurrentConfig.EnableLogger ? 'console' : false),
                         PUBLIC_PATH_OVERRIDE: JSON.stringify(
                             publicPath,
                         ),

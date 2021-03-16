@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 
 import { URL } from 'url';
+import { CurrentConfig } from '../config';
 
-export let Hostname = process.env.HOSTNAME || 'http://localhost/';
+export let Hostname = CurrentConfig.Hostname || 'http://localhost/';
 
 if (Hostname.endsWith('/')) {
     Hostname = Hostname.substring(0, Hostname.length - 1);

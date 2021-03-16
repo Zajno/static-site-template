@@ -14,14 +14,14 @@
     "build:ts:w": "tsc --noEmit --watch",
     "build:minify": "yarn build --env fullminify",
     "build:prod": "webpack --node-env production --env fullminify",
-    "build:release:staging": "yarn && (cross-env HOSTNAME=https://zajno.com/ yarn build:prod)",
-    "build:release:production": "yarn && (cross-env HOSTNAME=https://zajno.com/ yarn build:prod)",
+    "build:release:staging": "yarn && (cross-env APP_ENV=staging yarn build:prod)",
+    "build:release:production": "yarn && (cross-env APP_ENV=production yarn build:prod)",
     "deploy:firebase:staging": "firebase deploy --only hosting:web-stage",
     "deploy:firebase:production": "firebase deploy --only hosting:web-prod",
     "lint": "eslint \"app/**/*.ts\""
   },
   "dependencies": {
-    "@zajno/common": "git+https://github.com/Zajno/common-utils.git#v1.0.3",
+    "@zajno/common": "git+https://github.com/Zajno/common-utils.git#v1.0.4",
     "core-js": "^3.9.0",
     "detect-browser": "^5.2.0",
     "gsap": "file:./gsap-member/npm-install-this/gsap-bonus.tgz",
