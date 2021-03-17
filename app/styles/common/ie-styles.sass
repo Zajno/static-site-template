@@ -1,0 +1,111 @@
+main, header
+    opacity: 1
+
+.section-ie
+    visibility: visible
+    display: flex
+    justify-content: center
+    align-items: center
+    z-index: initial
+    height: 100vh
+    background: #222524 url('../../assets/img/pattern-grain.png')
+    .ie__container
+        display: flex
+        flex-direction: column
+        align-items: center
+    .ie__logo-block
+        display: flex
+        width: 5vw
+        height: 2.02vw
+        margin-bottom: 3vw
+    .ie__text-block
+        display: flex
+        flex-direction: column
+        align-items: center
+        text-align: center
+    .ie__text-block__title
+        margin-bottom: 1vw
+    .ie__text-block__subtitle
+        margin-bottom: 4.2vw
+    .ie-browsers
+        display: flex
+        justify-content: space-between
+        width: 14.6vw
+        margin: 0 auto
+    .ie-browsers__item
+        .ie-browsers__item__image
+            transition: all .3s ease
+    .ie-browsers__item__link
+        display: flex
+        &:hover
+            .ie-browsers__item__image
+                transform: scale(1.2)
+    .ie-browsers__item__image
+        width: 2.99vw
+        height: 2.99vw
+
+    .ie__text-block__title-font
+        color: #EEEEEE
+        font-family: 'Space Grotesk', sans-serif
+        font-size: 2.99vw
+        font-weight: 500
+        letter-spacing: -0.038vw
+        line-height: 3.61vw
+    .ie__text-block__subtitle-font
+        color: #7D7D7D
+        font-family: 'Space Grotesk', sans-serif
+        font-size: 1.39vw
+        font-weight: 400
+        letter-spacing: -0.008vw
+        line-height: 1.67vw
+
+@media all and (max-width: 1024px)
+    .section-ie
+        .ie__logo-block
+            width: 9.38vw
+            height: 3.78vw
+            margin: 0.2vw 0 5.4vw
+        .ie__text-block__title
+            margin-bottom: 2vw
+        .ie__text-block__subtitle
+            margin-bottom: 7.3vw
+        .ie-browsers
+            width: 27.21vw
+        .ie-browsers__item__image
+            width: 5.6vw
+            height: 5.6vw
+
+        .ie__text-block__title-font
+            font-size: 4.3vw
+            letter-spacing: -0.045vw
+            line-height: 5.21vw
+        .ie__text-block__subtitle-font
+            font-size: 2.34vw
+            letter-spacing: -0.013vw
+            line-height: 2.87vw
+
+@media all and (max-width: 480px)
+    .section-ie
+        .ie__logo-block
+            width: 19.2vw
+            height: 7.74vw
+            margin: 3.9vw 0 9.55vw
+        .ie__text-block__title
+            margin-bottom: 3.5vw
+        .ie__text-block__subtitle
+            width: 57vw
+            margin-bottom: 12.27vw
+        .ie-browsers
+            width: 42.77vw
+        .ie-browsers__item__image
+            width: 8.8vw
+            height: 8.8vw
+
+        .ie__text-block__title-font
+            font-size: 5.33vw
+            letter-spacing: -0.06vw
+            line-height: 6.4vw
+        .ie__text-block__subtitle-font
+            font-size: 3.73vw
+            letter-spacing: -0.01vw
+            line-height: 4.53vw

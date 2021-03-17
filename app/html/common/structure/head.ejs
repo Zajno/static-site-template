@@ -42,6 +42,11 @@
 	<meta property="og:image:height" content="630">
 	<meta property="og:image" content="<%= image %>">
 	<meta property="og:image:alt" content="<%= description %>">
+	<% if(!(page.id == 'noScript')){ %>
+	<noscript>
+		<meta http-equiv="refresh" content="0;url=/no-script.html">
+	</noscript>
+	<% } %>
 
 	<!--Twitter-->
 	<meta name="twitter:card" content="summary">
@@ -64,7 +69,8 @@
 	<meta name="theme-color" content="#ffffff">
 
 	<!-- Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 
 	@require('../scripts/window.appReady.html')
 

@@ -1,0 +1,57 @@
+.no-script__section
+    visibility: visible
+    z-index: initial
+    height: 100vh
+    background: var(--color-bg-no-script) url('../assets/img/pattern-grain.png')
+    .no-script__container
+        display: flex
+        flex-direction: column
+        justify-content: flex-end
+        align-items: center
+        height: 100vh
+    .no-script__logo-block
+        display: flex
+        width: gem(72)
+        margin-bottom: 4.75vh
+    .no-script__text-block
+        display: flex
+        flex-direction: column
+        align-items: center
+        text-align: center
+    .no-script__text-block__title
+        margin-bottom: 1.45vh
+    .no-script__text-block__subtitle
+        width: gem(700)
+        margin-bottom: 35.11vh
+    .no-script__text-block__desc
+        margin-bottom: 7.25vh
+    .no-script__text-block__link
+        color: var(--color-link-no-script)
+        text-decoration: underline
+        text-underline-offset: 5%
+
+@media all and (max-width: 1024px)
+    .no-script__section
+        .no-script__logo-block
+            margin-bottom: 4.22vh
+        .no-script__text-block__subtitle
+            width: gem(544)
+            margin-bottom: 34.8vh
+        .no-script__text-block__desc
+            width: gem(628)
+            margin-bottom: 5.5vh
+
+@media all and (max-width: 480px)
+    .no-script__section
+        .no-script__logo-block
+            margin-bottom: 5.5vh
+        .no-script__text-block__title
+            margin-bottom: 1.6vh
+        .no-script__text-block__subtitle
+            width: gem(340)
+            margin-bottom: 32.4vh
+        .no-script__text-block__desc
+            width: gem(312)
+            margin-bottom: 6.9vh
+        .no-script__text-block__link
+            text-underline-offset: 0

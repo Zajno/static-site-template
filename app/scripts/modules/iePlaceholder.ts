@@ -1,5 +1,4 @@
-import 'styles/base.sass';
-import 'styles/common/ieStyles.sass';
+import 'styles/common/ie-styles.sass';
 
 // if ie.html contains images, require them here
 import '../../assets/img/iechrome.png';
