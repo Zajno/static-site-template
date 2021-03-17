@@ -13,9 +13,9 @@
 	const title = page.output.title || 'Title';
 	const description = page.output.description || 'Description';
 	const canonical = page.canonical || '/';
-	const image = combineUrlWithHostname(require('../../../assets/img/' + page.output.image) || '');
+	const image = page.output.image ? combineUrlWithHostname(require('../../../assets/img/og-image/' + page.output.image) || '') : '';
 
-	const faviconIco = require('../../../assets/img/logo.png');
+	const faviconIco = require('../../../assets/img/favicon/zajno.ico');
 %>
 
 <!DOCTYPE html>

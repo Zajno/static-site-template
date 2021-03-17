@@ -118,10 +118,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                     use: [{
                         loader: 'svgo-loader',
                         options: {
-                            plugins: [
-                                { removeViewBox: false },
-                                { collapseGroups: false },
-                            ],
+                            configFile: pathResolve('./svgo.config.js'),
                         },
                     }],
                 },

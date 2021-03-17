@@ -46,17 +46,17 @@ const Home: SitePage<HomeCopyrightShape> = {
         href: '/',
         title: 'Zajno | Digital Design Agency',
         description: 'Full-service digital design and development agency specializing in UX/UI design, crafting thought-out personalized experiences for web and mobile.',
-        image: 'logo.png',
+        image: 'zajno.png',
         locale: HomeCopyright.default,
         copy: HomeCopyright[HomeCopyright.default],
     },
 
     // TODO: Remove what is not needed
-    i18n: [ // looks similar but in future more fields can be different
-        { locale: 'en', href: '/en', path: 'en/index.html', copy: HomeCopyright.en },
-        { locale: 'ja', href: '/ja', path: 'ja/index.html', copy: HomeCopyright.ja },
-        { locale: 'ko', href: '/ko', path: 'ko/index.html', copy: HomeCopyright.ko },
-    ],
+    // i18n: [ // looks similar but in future more fields can be different
+    //     { locale: 'en', href: '/en', path: 'en/index.html', copy: HomeCopyright.en },
+    //     { locale: 'ja', href: '/ja', path: 'ja/index.html', copy: HomeCopyright.ja },
+    //     { locale: 'ko', href: '/ko', path: 'ko/index.html', copy: HomeCopyright.ko },
+    // ],
 };
 
 const pages: SitePage[] = [

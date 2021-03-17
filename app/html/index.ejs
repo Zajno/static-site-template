@@ -9,9 +9,22 @@
     const Locale = page.output.locale;
     const Strings = page.output.copy;
     const BaseUrl = page.output.href;
+
+    const logoURL = require('assets/img/logo.png');
 %>
 
 <main id="main" data-page-id="home">
+    <!-- Examples of how to use/import images -->
+
+    <img src="<%= logoURL %>" />
+    <img src="../assets/img/logo.png" />
+
+    <img src="../assets/img/zajno-logo.svg" />
+    <!-- inline SVG -->
+    <%= require('../assets/img/zajno-logo.svg?inline') %>
+
+    <!-- lazy loading -->
+    <img data-src="../assets/img/logo.png" class="lazy" />
 </main>
 
 @require('./common/footer.ejs')
