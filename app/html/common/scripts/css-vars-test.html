@@ -1,0 +1,17 @@
+
+<style>
+    html{
+        --css-variable-test: 1;
+    }
+    #css-variable-test{
+        display: none;
+        opacity: var(--css-variable-test);
+    }
+</style>
+
+<span id="css-variable-test"></span>
+
+<script>
+    "use strict";function supportsCssVars(){var s=document.getElementById("css-variable-test");if(s)return"1"===window.getComputedStyle(s,null).opacity}
+    window.supportsCssVars=supportsCssVars();
+</script>

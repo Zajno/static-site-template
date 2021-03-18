@@ -1,1 +1,1 @@
-import 'styles/base.sass';
+import 'styles/no-script.sass';

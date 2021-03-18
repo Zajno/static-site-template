@@ -1,5 +1,3 @@
-import 'styles/base.sass';
-
 import Page from 'app/core/page';
 import Lazy from 'app/components/lazy';
 

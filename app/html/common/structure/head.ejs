@@ -42,10 +42,14 @@
 	<meta property="og:image:height" content="630">
 	<meta property="og:image" content="<%= image %>">
 	<meta property="og:image:alt" content="<%= description %>">
-	<% if(!(page.id == 'noScript')){ %>
+
+	<!-- no script logic -->
+	<% if (page.id != 'noScript') { %>
 	<noscript>
 		<meta http-equiv="refresh" content="0;url=/no-script.html">
 	</noscript>
+	<% } else { %>
+	<script> window.location.href = '/' </script>
 	<% } %>
 
 	<!--Twitter-->
@@ -81,15 +85,7 @@
 	<link href="${src}" rel="stylesheet">`
       ).join("\n")
     %>
-	<style>
-		html{
-			--css-variable-test: 1;
-		}
-		#css-variable-test{
-			display: none;
-			opacity: var(--css-variable-test);
-		}
-	</style>
+
 </head>
 
 <body class="locale-<%= Locale %>">

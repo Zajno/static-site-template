@@ -51,7 +51,7 @@ const Home: SitePage<HomeCopyrightShape> = {
         copy: HomeCopyright[HomeCopyright.default],
     },
 
-    // TODO: Remove what is not needed
+    // TODO: Add what needed
     // i18n: [ // looks similar but in future more fields can be different
     //     { locale: 'en', href: '/en', path: 'en/index.html', copy: HomeCopyright.en },
     //     { locale: 'ja', href: '/ja', path: 'ja/index.html', copy: HomeCopyright.ja },
@@ -64,11 +64,26 @@ const Page404: SitePage = {
     entryPoint: './app/scripts/pages/page404.ts',
     templateName: 'app/html/page-404.ejs',
     output: {
-        path: 'page-404.html',
-        href: '/',
+        path: '404.html',
+        href: '/404',
+        title: 'Page Not Found',
+        description: '',
+        image: 'zajno.png',
+        locale: 'en',
+        copy: undefined,
+    },
+};
+
+const NotSupported: SitePage = {
+    id: 'not-supported',
+    entryPoint: './app/scripts/index.ts',
+    templateName: 'app/html/common/ie.ejs',
+    output: {
+        path: 'not-supported.html',
+        href: '/not-supported',
         title: '',
         description: '',
-        image: 'logo.png',
+        image: 'zajno.png',
         locale: 'en',
         copy: undefined,
     },
@@ -81,9 +96,9 @@ const NoScript: SitePage = {
     output: {
         path: 'no-script.html',
         href: '/',
-        title: '',
-        description: '',
-        image: 'logo.png',
+        title: 'Enable JavaScript',
+        description: 'This website requires scripts to be enabled/allowed in your browser.',
+        image: 'zajno.png',
         locale: 'en',
         copy: undefined,
     },
@@ -92,6 +107,7 @@ const NoScript: SitePage = {
 const pages: SitePage[] = [
     Home,
     Page404,
+    NotSupported,
     NoScript,
 ];
 

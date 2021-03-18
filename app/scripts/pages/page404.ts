@@ -1,5 +1,4 @@
-import 'styles/base.sass';
-import 'styles/home.sass';
+import 'styles/page-404';
 
 import Section, { SectionCtor } from 'app/core/section';
 import CommonPage from './commonPage';

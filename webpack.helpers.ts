@@ -18,7 +18,9 @@ export class HtmlBuilder {
         this.htmlMinifyOptions = minify
             ? {
                 removeAttributeQuotes: true,
-                collapseWhitespace: false,
+                collapseWhitespace: true,
+                conservativeCollapse: true,
+                preserveLineBreaks: true,
                 html5: true,
                 minifyCSS: true,
                 removeComments: true,

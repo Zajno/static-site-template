@@ -26,6 +26,8 @@ const siteConfig = (env: any): webpack.Configuration => {
     const publicPath = env.public_path_override || '/';
     const outputPath = pathResolve('./dist');
 
+    const Filename = isProd ? '[name].[contenthash:6]' : '[name]';
+
     console.log('Webpack config options:', {
         publicPath,
         outputPath,
@@ -37,14 +39,14 @@ const siteConfig = (env: any): webpack.Configuration => {
     const htmlBuilder = new helpers.HtmlBuilder(isProd);
 
     return {
-        devtool: isProd ? undefined : 'inline-source-map',
+        devtool: isProd ? undefined : 'source-map',
         entry: sitemapData.ApplicationEntryPoints,
         output: {
             publicPath: publicPath,
             path: outputPath,
-            filename: isProd ? '[name].[contenthash:6].js' : '[name].js',
-            chunkFilename: isProd ? '[chunkhash:6].[id].js' : '[name].[id].js',
-            assetModuleFilename: `assets/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+            filename: `${Filename}.js`,
+            chunkFilename: isProd ? '[name].[id].[chunkhash:6].js' : '[name].[id].js',
+            assetModuleFilename: `assets/${Filename}[ext][query]`,
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.svg', '.png', '.js', '.jsx', '.ejs', '.json', '.html', '.sass'],
@@ -60,6 +62,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 {
                     test: /\.(html|ejs)$/,
                     loader: 'underscore-template-loader',
+                    resourceQuery: { not: [/raw/] },
                     options: {
                         attributes: [
                             'img:src',
@@ -97,23 +100,35 @@ const siteConfig = (env: any): webpack.Configuration => {
                 },
                 {
                     test: /\.css$|\.sass$|\.scss$/,
+                    resourceQuery: { not: [/inline/] },
                     use: [
                         MiniCssExtractPlugin.loader,
-                        'css-loader', 'postcss-loader', 'sass-loader',
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader',
+                    ],
+                },
+                {
+                    test: /\.css$|\.sass$|\.scss$/,
+                    resourceQuery: /inline/,
+                    use: [
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader',
                     ],
                 },
                 {
                     test: /\.(png|jpg|gif|webp|ico)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/img/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+                        filename: `assets/img/${Filename}[ext][query]`,
                     },
                 },
                 {
                     test: /\.(svg)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/img/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+                        filename: `assets/img/${Filename}[ext][query]`,
                     },
                     use: [{
                         loader: 'svgo-loader',
@@ -123,28 +138,28 @@ const siteConfig = (env: any): webpack.Configuration => {
                     }],
                 },
                 {
-                    resourceQuery: /inline/,
+                    resourceQuery: /raw/,
                     type: 'asset/source',
                 },
                 {
                     test: /\.(woff|woff2|eot|ttf|otf)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/fonts/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+                        filename: `assets/fonts/${Filename}[ext][query]`,
                     },
                 },
                 {
                     test: /\.(webm|mp4|ogv)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/video/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+                        filename: `assets/video/${Filename}[ext][query]`,
                     },
                 },
                 {
                     test: /\.mp3$|\.wav$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/audio/[${isProd ? 'contenthash:6' : 'name'}][ext][query]`,
+                        filename: `assets/audio/${Filename}[ext][query]`,
                     },
                 },
                 {
@@ -155,7 +170,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                             const pp = Path.parse(path.filename);
                             const i = pp.dir.indexOf('lottie');
                             const relPath = pp.dir.substring(i);
-                            const result = Path.join('assets', relPath, `[${isProd ? 'contenthash:6' : 'name'}][ext][query]`);
+                            const result = Path.join('assets', relPath, `${Filename}[ext][query]`);
                             // console.log('LOTTIE JSON', path.filename, '=>', result);
                             return result;
                         }),
@@ -206,8 +221,8 @@ const siteConfig = (env: any): webpack.Configuration => {
                 .map(p => htmlBuilder.createHtmlPlugin(p.output.path, p.templateName, p.id, { Page: p })),
 
             new MiniCssExtractPlugin({
-                filename: isProd ? '[name].[contenthash:6].css' : '[name].css',
-                chunkFilename: isProd ? '[contenthash:6].[id].css' : '[name].[id].css',
+                filename: `${Filename}.css`,
+                chunkFilename: `${Filename}.[id].css`,
             }),
 
             new CopyWebpackPlugin({
