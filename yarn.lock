@@ -8393,7 +8393,7 @@ typescript@^4.2.3:
 
 "underscore-template-loader@git+https://github.com/idudinov/underscore-template-loader.git#webpack-5":
   version "1.1.0"
-  resolved "git+https://github.com/idudinov/underscore-template-loader.git#ff94562a20b5af5b09467945614b8921f8587975"
+  resolved "git+https://github.com/idudinov/underscore-template-loader.git#12e79a2199e4dff226ff483a13cf19942e17b7c3"
   dependencies:
     fastparse "^1.1.2"
     loader-utils "^2.0.0"
