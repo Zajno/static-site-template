@@ -1,17 +1,22 @@
 
-<style>
+<style id="css-variable-test-style">
     html{
-        --css-variable-test: 1;
+        --css-variable-test-val: 1;
     }
-    #css-variable-test{
+    #css-variable-test-el{
         display: none;
-        opacity: var(--css-variable-test);
+        opacity: var(--css-variable-test-val);
     }
 </style>
 
-<span id="css-variable-test"></span>
+<span id="css-variable-test-el"></span>
 
-<script>
-    "use strict";function supportsCssVars(){var s=document.getElementById("css-variable-test");if(s)return"1"===window.getComputedStyle(s,null).opacity}
-    window.supportsCssVars=supportsCssVars();
+<script id="css-variable-test">
+    "use strict";
+    window.supportsCssVars = (function() {
+        var s=document.getElementById("css-variable-test-el");
+        if (s) {
+            return window.getComputedStyle(s,null).opacity === '1';
+        }
+    })();
 </script>

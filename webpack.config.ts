@@ -2,12 +2,13 @@ import * as Path from 'path';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import HTMLInlineCSSWebpackPlugin from 'html-inline-css-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SitemapPlugin from 'sitemap-webpack-plugin';
 import * as helpers from './webpack.helpers';
 import * as AppConfig from './app/config';
-import * as sitemapData from './app/sitemap';
+import * as Sitemap from './app/sitemap';
 
 /* eslint-disable no-console */
 /* global process */
@@ -26,7 +27,7 @@ const siteConfig = (env: any): webpack.Configuration => {
     const publicPath = env.public_path_override || '/';
     const outputPath = pathResolve('./dist');
 
-    const Filename = isProd ? '[name].[contenthash:6]' : '[name]';
+    const getFilename = (n = '[name]') => isProd ? `${n}.[contenthash:6]` : n;
 
     console.log('Webpack config options:', {
         publicPath,
@@ -36,17 +37,17 @@ const siteConfig = (env: any): webpack.Configuration => {
         isProd,
     });
 
-    const htmlBuilder = new helpers.HtmlBuilder(isProd);
+    const htmlBuilder = new helpers.HtmlBuilder(Sitemap.DependenciesPriorities, true);
 
     return {
         devtool: isProd ? undefined : 'source-map',
-        entry: sitemapData.ApplicationEntryPoints,
+        entry: Sitemap.ApplicationEntryPoints,
         output: {
             publicPath: publicPath,
             path: outputPath,
-            filename: `${Filename}.js`,
+            filename: `${getFilename()}.js`,
             chunkFilename: isProd ? '[name].[id].[chunkhash:6].js' : '[name].[id].js',
-            assetModuleFilename: `assets/${Filename}[ext][query]`,
+            assetModuleFilename: `assets/${getFilename()}[ext][query]`,
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.svg', '.png', '.js', '.jsx', '.ejs', '.json', '.html', '.sass'],
@@ -121,14 +122,14 @@ const siteConfig = (env: any): webpack.Configuration => {
                     test: /\.(png|jpg|gif|webp|ico)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/img/${Filename}[ext][query]`,
+                        filename: `assets/img/${getFilename()}[ext][query]`,
                     },
                 },
                 {
                     test: /\.(svg)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/img/${Filename}[ext][query]`,
+                        filename: `assets/img/${getFilename()}[ext][query]`,
                     },
                     use: [{
                         loader: 'svgo-loader',
@@ -145,21 +146,21 @@ const siteConfig = (env: any): webpack.Configuration => {
                     test: /\.(woff|woff2|eot|ttf|otf)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/fonts/${Filename}[ext][query]`,
+                        filename: `assets/fonts/${getFilename()}[ext][query]`,
                     },
                 },
                 {
                     test: /\.(webm|mp4|ogv)$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/video/${Filename}[ext][query]`,
+                        filename: `assets/video/${getFilename()}[ext][query]`,
                     },
                 },
                 {
                     test: /\.mp3$|\.wav$/,
                     type: 'asset/resource',
                     generator: {
-                        filename: `assets/audio/${Filename}[ext][query]`,
+                        filename: `assets/audio/${getFilename()}[ext][query]`,
                     },
                 },
                 {
@@ -170,7 +171,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                             const pp = Path.parse(path.filename);
                             const i = pp.dir.indexOf('lottie');
                             const relPath = pp.dir.substring(i);
-                            const result = Path.join('assets', relPath, `${Filename}[ext][query]`);
+                            const result = Path.join('assets', relPath, `${getFilename()}[ext][query]`);
                             // console.log('LOTTIE JSON', path.filename, '=>', result);
                             return result;
                         }),
@@ -216,13 +217,29 @@ const siteConfig = (env: any): webpack.Configuration => {
                 },
             }),
 
-            ...sitemapData.PagesFlatten
+            ...Sitemap.PagesFlatten
                 .filter(p => !p.skipRender)
                 .map(p => htmlBuilder.createHtmlPlugin(p.output.path, p.templateName, p.id, { Page: p })),
 
             new MiniCssExtractPlugin({
-                filename: `${Filename}.css`,
-                chunkFilename: `${Filename}.[id].css`,
+                filename: `${getFilename()}.css`,
+            }),
+
+            new HTMLInlineCSSWebpackPlugin({
+                filter(fileName) {
+                    const result = Sitemap.PagesFlatten.some(p => p.inlineCss && (
+                        fileName.includes(p.id) || fileName.includes(Path.basename(p.output.path, 'html'))
+                    ));
+                    if (result && fileName.includes('css')) console.log(' HTMLInlineCSSWebpackPlugin: a CSS file is going to be inlined: ', fileName);
+                    return result;
+                },
+                styleTagFactory({ style }) {
+                    return `<style inlined type="text/css">\n${style}\n</style>`;
+                },
+                replace: {
+                    target: '@inline css here@',
+                    removeTarget: true,
+                },
             }),
 
             new CopyWebpackPlugin({
@@ -236,8 +253,8 @@ const siteConfig = (env: any): webpack.Configuration => {
                 ],
             }),
             new SitemapPlugin({
-                base: sitemapData.Hostname,
-                paths: sitemapData.SitemapInfo,
+                base: Sitemap.Hostname,
+                paths: Sitemap.SitemapInfo,
             }),
         ]),
         optimization: {

@@ -1,9 +1,12 @@
 /* eslint-disable no-console */
-import Pages, { SitePage, PageOutput } from './pages';
+import type webpack from 'webpack';
+import Pages, { Dependencies } from './pages';
 import { Hostname, combineUrlWithHostname } from './hostname';
 import { AllLocales } from './copyright';
 import { getCopyForLocale as getCommonCopyForLocale } from './common';
-import type webpack from 'webpack';
+import { PageOutput, SitePage } from './types';
+
+export { NoScriptId } from './pages';
 
 export type SitePageOutput = Omit<SitePage, 'i18n'> & {
     canonical: string,
@@ -76,19 +79,35 @@ Pages.forEach(p => {
 });
 
 const ApplicationEntryPoints = (function () {
-    const result: webpack.EntryObject = {
-        polyfills: './app/scripts/polyfills',
-    };
+    const result: webpack.EntryObject = { };
+    const criticalDeps = Dependencies.filter(dd => dd.critical).map(dd => dd.name);
+
+    Dependencies.forEach(dd => {
+        result[dd.name] = (dd.critical || !criticalDeps.length)
+            ? dd.import
+            : {
+                import: dd.import,
+                dependOn: criticalDeps,
+            };
+    });
 
     Pages.forEach(item => {
         result[`${item.id}`] = {
             import: `${item.entryPoint}`,
-            dependOn: ['polyfills'],
+            dependOn: criticalDeps,
         };
     });
 
     return result;
 })();
+
+export const DependenciesPriorities = Dependencies.reduce((res, dep, i) => {
+    res[dep.name] = dep.critical
+        ? -(Dependencies.length - i)
+        : i + 1;
+
+    return res;
+}, { } as Record<string, number>);
 
 // log only if we're in initial command line run context
 if (process.env.PATH) {
@@ -97,7 +116,7 @@ if (process.env.PATH) {
         PagesFlatten.map(pf => ({ id: pf.id, path: pf.output.path, template: pf.templateName, href: pf.output.href, locale: pf.output.locale, skip: pf.skipRender || false })),
     );
 
-    console.log('[SITEMAP] Generated the following entry points: ', ApplicationEntryPoints);
+    console.log('[SITEMAP] Generated the following entry points: ', ApplicationEntryPoints, '\nwith priorities:', DependenciesPriorities);
 }
 
 export function getPage(page: SitePageOutput) {

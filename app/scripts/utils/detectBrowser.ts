@@ -1,25 +1,14 @@
 import { detect } from 'detect-browser';
 
+// Here's why why shouldn't use this script:
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
+
 const browser = detect();
 
-function ApplyNameAndVersion(el: HTMLElement = null) {
+const version = browser?.version?.split('.', 1);
 
-    if (browser) {
-        const version = browser.version.split('.', 1);
-
-        const target = el || document.getElementById('main');
-        if (target) {
-            target.classList.add('browser-' + browser.name);
-            target.classList.add('browser-version-' + version);
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
-export {
-    browser,
-    ApplyNameAndVersion,
-};
+const target = document.body;
+target?.classList.add(
+    'browser-' + (browser?.name || '?'),
+    'browser-version-' + (version || '?'),
+);

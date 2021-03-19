@@ -1,0 +1,45 @@
+
+<!-- not supported browser fallback script -->
+<%
+    const checksVar = (typeof criticalChecks !== 'undefined' && criticalChecks)
+        ? `[${criticalChecks.map(c => `"${c}"`).join(', ')}]`
+        : `[]`;
+%>
+
+<script id="not-supported-fn">
+    "use strict";
+    var nsl = false;
+    window.loadNotSupported = function() {
+        if (nsl) return;
+        nsl = true;
+        function load(e,o){
+            var n = new XMLHttpRequest;
+            n.onload = function() {
+                o(this.responseText)
+            };
+            n.open("GET",e);
+            n.send();
+        }
+
+        var body=document.querySelector("body"),
+            elems=body.querySelectorAll("main, header, footer, #mobile-menu, #preloader");
+        elems.forEach(function(e){
+            e.parentNode.removeChild(e)
+        });
+        body.style.cursor="default";
+        var ieMain=document.createElement("main");
+        body.insertBefore(ieMain,body.firstChild).classList.add("ie__main");
+        load("/not-supported.html",function(e){
+            ieMain.innerHTML=e;
+            throw new Error("The browser is not supported. Follow links on the screen or contact site administrator.")
+        })
+    };
+
+    <%= checksVar %>.forEach(function(c) {
+        if (!window[c]) window.loadNotSupported();
+    })
+</script>
+
+<script nomodule id="not-supported">
+    window.loadNotSupported();
+</script>

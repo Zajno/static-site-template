@@ -26,6 +26,10 @@
 
 	<title><%= title %></title>
 
+<% if (page.noIndex) { %>
+	<meta name="robots" content="noindex">
+<% } else { %>
+
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="description" content="<%= description %>">
@@ -43,21 +47,23 @@
 	<meta property="og:image" content="<%= image %>">
 	<meta property="og:image:alt" content="<%= description %>">
 
-	<!-- no script logic -->
-	<% if (page.id != 'noScript') { %>
-	<noscript>
-		<meta http-equiv="refresh" content="0;url=/no-script.html">
-	</noscript>
-	<% } else { %>
-	<script> window.location.href = '/' </script>
-	<% } %>
-
 	<!--Twitter-->
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:image" content="<%= image %>">
 	<!-- <meta name="twitter:site" content="@twitter account"> -->
 	<meta name="twitter:title" content="<%= title %>">
 	<meta name="twitter:description" content="<%= description %>">
+
+<% } %>
+
+	<!-- no script logic -->
+	<% if (page.id != Sitemap.NoScriptId) { %>
+	<noscript>
+		<meta http-equiv="refresh" content="0;url=/no-script.html">
+	</noscript>
+	<% } else { %>
+	<script> window.location.href = '/' </script>
+	<% } %>
 
 	<!-- i18n alternatives for search engines -->
 	<% pageAlts.links.forEach(p => { const { lang, url } = p  %>
@@ -76,7 +82,9 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 
+<% if (page.disableScripts !== 'force') { %>
 	@require('../scripts/window.appReady.html')
+<% } %>
 
 	<%=
         // Application CSS files

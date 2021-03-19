@@ -1,6 +1,0 @@
-
-<!-- not supported browser fallback script -->
-<script nomodule id="not-supported">
-    "use strict";function load(e,o){var n=new XMLHttpRequest;n.onload=function(){o(this.responseText)},n.open("GET",e),n.send()}var body=document.querySelector("body"),elems=body.querySelectorAll("main, header, footer, #mobile-menu, #preloader");elems.forEach(function(e){e.parentNode.removeChild(e)}),body.style.cursor="default";var ieMain=document.createElement("main");body.insertBefore(ieMain,body.firstChild).classList.add("ie__main"),load("/not-supported",function(e){throw ieMain.innerHTML=e,new Error("The browser is not supported. Follow links on the screen or contact site administrator.")});
-</script>
-

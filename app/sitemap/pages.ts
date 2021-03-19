@@ -1,41 +1,8 @@
 import {
     HomeCopyright,
-    Locales,
 } from './copyright';
 import { HomeCopyrightShape } from './copyright/home';
-
-/** Page output information, can be used as a default or as localized version */
-export type PageOutput<TCopy = any> = {
-    /** output file name & path, relative to dist */
-    path: string,
-    /** how this instance should be referenced via URL, relative path */
-    href: string,
-    /** page's title, also used in meta */
-    title: string,
-    /** page's description for meta */
-    description: string,
-    /** page's meta image, relative to `assets/img` folder */
-    image: string,
-    /** page's locale */
-    locale: Locales,
-    /** page's copy, usually a structured object specific for this page type */
-    copy: TCopy,
-};
-
-export type SitePage<TCopy = any> = {
-    /** unique page ID */
-    id: string,
-    /** JS/TS entry point for this particular page, relative to project root */
-    entryPoint: string,
-    /** HTML/EJS template, relative to project root */
-    templateName: string,
-
-    /** default output */
-    output: PageOutput<TCopy>;
-
-    /** optional localized page outputs additional to default output */
-    i18n?: Partial<PageOutput<TCopy>>[],
-};
+import { PageDependency, SitePage } from './types';
 
 const Home: SitePage<HomeCopyrightShape> = {
     id: 'home',
@@ -61,7 +28,7 @@ const Home: SitePage<HomeCopyrightShape> = {
 
 const Page404: SitePage = {
     id: '404',
-    entryPoint: './app/scripts/pages/page404.ts',
+    entryPoint: './app/styles/page-404/index.sass',
     templateName: 'app/html/page-404.ejs',
     output: {
         path: '404.html',
@@ -72,6 +39,7 @@ const Page404: SitePage = {
         locale: 'en',
         copy: undefined,
     },
+    disableScripts: true,
 };
 
 const NotSupported: SitePage = {
@@ -87,11 +55,12 @@ const NotSupported: SitePage = {
         locale: 'en',
         copy: undefined,
     },
+    disableScripts: true,
 };
 
 const NoScript: SitePage = {
-    id: 'noScript',
-    entryPoint: './app/scripts/pages/noScript.ts',
+    id: 'no-script',
+    entryPoint: './app/styles/no-script.sass',
     templateName: 'app/html/no-script.ejs',
     output: {
         path: 'no-script.html',
@@ -102,7 +71,16 @@ const NoScript: SitePage = {
         locale: 'en',
         copy: undefined,
     },
+    inlineCss: true,
+    disableScripts: 'force',
+    noIndex: true,
 };
+
+export const NoScriptId = NoScript.id;
+
+export const Dependencies: PageDependency[] = [
+    { name: 'polyfills', import: './app/scripts/polyfills', critical: true },
+];
 
 const pages: SitePage[] = [
     Home,

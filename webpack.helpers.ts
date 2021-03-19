@@ -14,7 +14,7 @@ export class HtmlBuilder {
 
     readonly htmlMinifyOptions: MinifyOptions | false;
 
-    constructor(minify = false) {
+    constructor(readonly chunksPriority: Record<string, number>, minify = false) {
         this.htmlMinifyOptions = minify
             ? {
                 removeAttributeQuotes: true,
@@ -23,19 +23,25 @@ export class HtmlBuilder {
                 preserveLineBreaks: true,
                 html5: true,
                 minifyCSS: true,
+                minifyJS: true,
                 removeComments: true,
                 removeEmptyAttributes: true,
             } : false;
     }
 
     createHtmlPlugin(output: string, templatePath: string, id: string, options = {}) {
+
+        const chunks: [string, number][] = Object.entries(this.chunksPriority);
+        chunks.push([ id, 0 ]);
+        chunks.sort((c1, c2) => c1[1] - c2[1]);
+
         return new HtmlWebpackPlugin({
             filename: output,
             cache: false,
             template: templatePath,
             minify: this.htmlMinifyOptions,
             inject: false,
-            chunks: ['polyfills', `${id}`],
+            chunks: chunks.map(c => c[0]),
             chunksSortMode: 'manual',
             templateParameters: options,
         });
