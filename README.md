@@ -36,11 +36,24 @@ Code breakpoints: allows to change beahaviour whenever breakpoint changes.
 
 This package depends on some polyfills packages and helpers like `reset-css` and `detect-browser` which are either required or doesn't affect bundle size much.
 
-Big dependencies are:
+Significant dependencies are:
 
 * [GSAP](https://greensock.com/gsap/) – doesn't need introduction; 'member' version is used in this project
 * [Lottie](https://airbnb.io/lottie/#/) – for stunning SVG animations; see wrapper [`LottieComponent`](./app/scripts/components/common/lottie.ts)
-* [@zajno/common](https://github.com/Zajno/common-utils) – Zajno's custom toolbox with useful utils & helpers. It's used as a direct Github link, and planned to stay public.
+* [@zajno/common](https://github.com/Zajno/common-utils) – Zajno's custom toolbox with useful utils & helpers.
+
+#### `@zajno/*` packages
+
+This project uses some of Zajno's helper public projects (`@zajno/*`). For now they're hosted on Github and it's required to be authenticated with it.
+
+1. Get your Github token or create a new one: https://github.com/settings/tokens/new – it should have at least `read:packages` permission.
+2. Use it to tell NPM how to communicate with GH:
+
+```bash
+npm set //npm.pkg.github.com/:_authToken <YOUR_TOKEN>
+```
+
+Link: https://stackoverflow.com/a/58271202/9053142
 
 ### i18n
 

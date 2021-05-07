@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import * as Path from 'path';
 import HtmlWebpackPlugin, { MinifyOptions } from 'html-webpack-plugin';
-import { WebpackPluginInstance as Plugin } from 'webpack';
+import * as webpack from 'webpack';
 
 /* global __dirname, process */
 
@@ -71,14 +71,14 @@ export class HtmlBuilder {
 
 export type PluginOption = {
     name: string,
-    plugin: Plugin,
+    plugin: webpack.WebpackPluginInstance,
     allowedEnv?: string,
     enabled?: boolean,
 };
 
-export function wrapPlugins(plugins: (PluginOption | Plugin)[]): Plugin[] {
+export function wrapPlugins(plugins: (PluginOption | webpack.WebpackPluginInstance)[]): webpack.WebpackPluginInstance[] {
     return plugins.map(p => {
-        const pp = p as Plugin;
+        const pp = p as webpack.WebpackPluginInstance;
         const po = p as PluginOption;
 
         if (!po.name || !po.plugin) {

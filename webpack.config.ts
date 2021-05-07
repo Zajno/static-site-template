@@ -193,7 +193,7 @@ const siteConfig = (env: any): webpack.Configuration => {
         plugins: helpers.wrapPlugins([
             {
                 name: 'clean',
-                plugin: new CleanWebpackPlugin(),
+                plugin: new CleanWebpackPlugin() as any,
                 enabled: !noClear,
             },
 

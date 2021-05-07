@@ -1,14 +1,15 @@
 module.exports = {
-    "presets": [
+    presets: [
         ["@babel/preset-env", {
-            "useBuiltIns": "entry",
-            "corejs": "3.9",
-            "targets": {
-                "esmodules": true
-            }
+            useBuiltIns: "entry",
+            corejs: "3.12",
+            targets: {
+                esmodules: true,
+            },
+            loose: true,
         }]
     ],
-    "plugins": [
+    plugins: [
         "@babel/plugin-syntax-dynamic-import",
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
         ["@babel/plugin-proposal-class-properties", { "loose": true }]
