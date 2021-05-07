@@ -1735,10 +1735,10 @@
   resolved "https://npm.pkg.github.com/download/@zajno/common/1.0.11/32890af6a48f64a7b9e5fef3700f265d6a8c9a1c561b90ce27daa14dbeb53dbc#7ad57d9187d8d49ecc2ed01cc6abad55b57ec5ec"
   integrity sha512-eVCFYc+m75/PXdKHX2GCiB/T2go1nvkWA0vQzdIUIm5Ay7DjuEqWxMOmGJ/s37WyEhYRrPIcKVYOayM3EsF+dQ==
 
-"@zajno/eslint-config@^1.0.1":
-  version "1.0.1"
-  resolved "https://npm.pkg.github.com/download/@zajno/eslint-config/1.0.1/63dd94f0088f48f83be8426d4026fe2386456fe7a11cc9d955815759b85fad4c#3dcab94819d8f1e0ff653583d271cc0fe98f341e"
-  integrity sha512-h3yPSKAqeDJwFyQgnMX0vKdfxu0cE45ieMizRiZwqBkuPrqDKucoiNtWgTKlkO+zRhS0+8YogPGF4J/kFKW93w==
+"@zajno/eslint-config@^1.1.0":
+  version "1.1.0"
+  resolved "https://npm.pkg.github.com/download/@zajno/eslint-config/1.1.0/6f0648d55b8439fb62063adf1d7a85e3834808d5bbe62c99be3bfa0ab205b3ed#45460767544cb76459295c972f40612a8264232b"
+  integrity sha512-ol7dFMfhvicuGq2YpR1gElXB2IDlLydy0394qI39DvXDd4r0np6mk3QPj6KMaEBBu0O/7OJ63+FuvfGyWibh8Q==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.21.0"
     "@typescript-eslint/eslint-plugin-tslint" "^4.21.0"
