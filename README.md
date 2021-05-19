@@ -55,6 +55,37 @@ npm set //npm.pkg.github.com/:_authToken <YOUR_TOKEN>
 
 Link: https://stackoverflow.com/a/58271202/9053142
 
+### Pages
+
+Pages are manages via Sitemap. This build-time module aimed to generate corresponding output for each configured page, including:
+
+* html, js, css
+* head meta tags
+* separately configurable copyright/data
+* i18n page versions (see below)
+* `sitemap.xml` file
+
+Every page has a config, all pages configs are stored in the `app/sitemap/pages.ts` module. There are some sample pages for a reference, but the most important properties of a page are:
+
+* `id`: unique page identifier; useful mostly for the build-time.
+* `entryPoint`: path to a TS/JS file that will be included to the page; may contain all necessary front-end logic.
+* `templateName`: `ejs` or `html` template file that will be processed by HtmlWebpackPlugin.
+* `output`: all necessary output date related to a page version
+    * `path`: output filename
+    * `href`: URL pathname that may be used to reference this page
+    * `title`: HTML head title tag content
+    * `description`: OG/Twitter meta tags description
+    * `image`: OG image path relative to `./app/assets/img/og-image`
+    * `locale`: ISO 639-1 language code associated with the current output, e.g. `en`, `ja`, `ko`
+    * `copy`: object with the copyright data (i18n aware) that will be passed to the template engine
+* `i18n`: optional array of the page versions with different locales, each element is the same shape of `output`.
+
+To add a page:
+
+1. Create a template file based on the pattern used in `app/html/index.ejs`
+2. Create a new script entry point; or use a stub one: `app/scripts/index.ts`
+2. Create and export a new object of `SitePage` type in `app/sitemap/pages.ts`; reference there the new template file and entry point from above and update all other fields for this page correspondingly.
+
 ### i18n
 
 The idea behind i18n implementation is to:
@@ -72,7 +103,7 @@ In theory, a non-developer person such as content editor can go to Github web in
 
 ## Build project
 
-Requirements: [Node.js ^12](https://nodejs.org/), [yarn](https://classic.yarnpkg.com/lang/en/)
+Requirements: [Node.js ^14](https://nodejs.org/), [yarn](https://classic.yarnpkg.com/lang/en/)
 
 Output folder: `./dist`
 
@@ -95,27 +126,11 @@ Using webpack dev server
 yarn dev
 ```
 
-### Own hosted
-
-This project provides trivial Node.js app that just serves static files, additionally with:
-
-* gzip compression
-* http -> https redirection
-* basic 404 support
-* cache management
-* uses `./dist` as a root
-
-Build and start it:
-
-```bash
-yarn start
-```
-
 ### Firebase Hosting
 
-Project contains [`firebase.json`](firebase.json) with bolerplate settings for Firebase Hosting, which is much easier to use both for dev and production.
+Project contains [`firebase.json`](firebase.json) with boilerplate settings for Firebase Hosting, which is easy to use both for dev and production.
 
-To use it, fill `.firebaserc` file with your project name.
+To use it, fill `.firebaserc` file with your Firebase project name.
 
 Then, to build and deploy – use correspond commands:
 
