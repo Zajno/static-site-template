@@ -1730,10 +1730,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zajno/common@^1.0.11":
-  version "1.0.11"
-  resolved "https://npm.pkg.github.com/download/@zajno/common/1.0.11/32890af6a48f64a7b9e5fef3700f265d6a8c9a1c561b90ce27daa14dbeb53dbc#7ad57d9187d8d49ecc2ed01cc6abad55b57ec5ec"
-  integrity sha512-eVCFYc+m75/PXdKHX2GCiB/T2go1nvkWA0vQzdIUIm5Ay7DjuEqWxMOmGJ/s37WyEhYRrPIcKVYOayM3EsF+dQ==
+"@zajno/common@^1.0.16":
+  version "1.0.16"
+  resolved "https://npm.pkg.github.com/download/@zajno/common/1.0.16/f88ddc6f68361fa575a66c769907e76b6e61ede157aeed7529684e8ca7aeb6f9#90ae6c8043b91bd9f1326fa7eb753b7b1acbe0a7"
+  integrity sha512-/syvS4O/NItn9iRj2S1/4R+j21B71lYdLi48ugqTrOtQZ4Vbmg19/8MKjjuKZnPIxcALm2isBs5wjGE9QMzlmg==
 
 "@zajno/eslint-config@^1.1.0":
   version "1.1.0"

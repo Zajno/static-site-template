@@ -21,7 +21,7 @@
     "lint": "eslint \"app/**/*.ts\""
   },
   "dependencies": {
-    "@zajno/common": "^1.0.11",
+    "@zajno/common": "^1.0.16",
     "core-js": "^3.12.0",
     "detect-browser": "^5.2.0",
     "gsap": "file:./gsap-member/npm-install-this/gsap-bonus.tgz",
