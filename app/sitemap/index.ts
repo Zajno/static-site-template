@@ -93,7 +93,7 @@ const ApplicationEntryPoints = (function () {
 
     Pages.forEach(item => {
         result[`${item.id}`] = {
-            import: `${item.entryPoint}`,
+            import: item.entryPoint,
             dependOn: criticalDeps,
         };
     });

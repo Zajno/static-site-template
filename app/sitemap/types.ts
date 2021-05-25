@@ -24,7 +24,7 @@ export type SitePage<TCopy = any> = {
     /** unique page ID */
     id: string,
     /** JS/TS entry point for this particular page, relative to project root */
-    entryPoint: string,
+    entryPoint: string | string[],
     /** HTML/EJS template, relative to project root */
     templateName: string,
 

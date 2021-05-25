@@ -1,6 +1,7 @@
 import logger from '@zajno/common/lib/logger';
-import Section, { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
 import Breakpoints from 'app/core/breakpoints';
+import type { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
+import type Section from './section';
 
 export interface IPage {
     readonly width: number;
@@ -24,7 +25,7 @@ export interface PageCtor {
 
 export default abstract class Page implements IPage {
     private _root: HTMLElement = null;
-    private _sections: Section[];
+    private _sections: Section[] = null;
 
     private _width: number = 0;
     private _height: number = 0;
@@ -35,7 +36,7 @@ export default abstract class Page implements IPage {
     private _scrollDirection: 0 | -1 | 1 = -1;
 
     private _deltaY: number = 0;
-    private _wheelDirection: Directions;
+    private _wheelDirection: Directions = null;
 
     private _rem: number = 1;
 

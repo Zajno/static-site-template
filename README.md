@@ -26,13 +26,8 @@ Prepared for:
 * styles organization – responsive, colors, typography
 * some other easy effects (like linear gradient animation)
 
-### Responsiveness
 
-GEM system for CSS: built on top of `rem`s, allows to scale up or down when using `gem` sizes. See [rem.scss](app/styles/common/rem.scss) for more details.
-
-Code breakpoints: allows to change beahaviour whenever breakpoint changes.
-
-### Dependencies
+## Dependencies
 
 This package depends on some polyfills packages and helpers like `reset-css` and `detect-browser` which are either required or doesn't affect bundle size much.
 
@@ -42,20 +37,14 @@ Significant dependencies are:
 * [Lottie](https://airbnb.io/lottie/#/) – for stunning SVG animations; see wrapper [`LottieComponent`](./app/scripts/components/common/lottie.ts)
 * [@zajno/common](https://github.com/Zajno/common-utils) – Zajno's custom toolbox with useful utils & helpers.
 
-#### `@zajno/*` packages
 
-This project uses some of Zajno's helper public projects (`@zajno/*`). For now they're hosted on Github and it's required to be authenticated with it.
+## Responsiveness
 
-1. Get your Github token or create a new one: https://github.com/settings/tokens/new – it should have at least `read:packages` permission.
-2. Use it to tell NPM how to communicate with GH:
+GEM system for CSS: built on top of `rem`s, allows to scale up or down when using `gem` sizes. See [rem.scss](app/styles/common/rem.scss) for more details.
 
-```bash
-npm set //npm.pkg.github.com/:_authToken <YOUR_TOKEN>
-```
+Code breakpoints: allows to change behavior whenever breakpoint changes.
 
-Link: https://stackoverflow.com/a/58271202/9053142
-
-### Pages
+## Pages & Sitemap
 
 Pages are manages via Sitemap. This build-time module aimed to generate corresponding output for each configured page, including:
 
@@ -80,13 +69,46 @@ Every page has a config, all pages configs are stored in the `app/sitemap/pages.
     * `copy`: object with the copyright data (i18n aware) that will be passed to the template engine
 * `i18n`: optional array of the page versions with different locales, each element is the same shape of `output`.
 
-To add a page:
+### Creating a new page
 
-1. Create a template file based on the pattern used in `app/html/index.ejs`
-2. Create a new script entry point; or use a stub one: `app/scripts/index.ts`
-2. Create and export a new object of `SitePage` type in `app/sitemap/pages.ts`; reference there the new template file and entry point from above and update all other fields for this page correspondingly.
+#### 1. Create a Markup Template file.
 
-### i18n
+ This project uses `EJS` template files. Basically `.ejs` it's a `.html` file with a support of build-time run JS snippets. Those snippets are run in `webpack` and `HtmlWebpackPlugin` context. They use `underscore`-like syntax:
+
+```html
+<!-- in ejs: -->
+<span> <%= 2+3 %> </span>
+<!-- will output: -->
+<span> 5 </span>
+```
+
+Template syntax is mostly used to get page's info from the Sitemap. This allows to decouple page markup and data used in there. This way, the same template file can serve as a markup source for multiple pages, like in case of `i18n` support or dynamically generated data.
+
+Create a template file based on the pattern used in `app/html/index.ejs`
+
+#### 2. Define an Entry Point
+
+Usually in webpack, entry point is a JS/TS file that imports all necessary assets and runs run-time scripts.
+Thanks to webpack 5, now there may be multiple entry points including style files. So now there're few options to define an entry point for a page:
+
+* single or few TS files
+* combine styles and code files
+* single or few style files
+
+Currently Sitemap contains few examples of how an entry point can be defined:
+
+* `Home`: just one TS file which imports necessary styles and runs the code.
+* `Page404`: two style files (order matters)
+* `NotSupported`: default stub entry point - no code or styles are needed
+
+For convenience there is a stub entry point if you don't need neither code or styles: `app/scripts/index.ts`.
+
+
+#### 3. Export your Page object
+
+Create and export a new object of `SitePage` type in `app/sitemap/pages.ts`; don't forget to include the new template file and entry point in it, and update all other fields for this page correspondingly.
+
+#### i18n
 
 The idea behind i18n implementation is to:
 
@@ -100,6 +122,36 @@ Using this way, it's possible to update content such as copyright but not touchi
 
 In theory, a non-developer person such as content editor can go to Github web interface, find a corresponding file, replace some strings in there, create and merge a PR and hopefully deploy the update without developers involvement.
 
+## More about the run-time
+
+This project template assumes some certain run-time patterns will be used, so here they are.
+
+### Scripts
+
+By default there's no limitation on how the run-time scripts should work. But the main method we're using is a base Page class. There's a very basic example on how to use it in the [HomePage](./app/scripts/pages/homePage.ts) file.
+
+The [Page](./app/scripts/core/page.ts) class is responsible for:
+
+* Find the `main` tag and provide it as a root
+* Collect all `section` tags and:
+    * create instances with corresponding classes via abstract `sectionTypes`
+    * enable/disable section on page scroll
+    * propagate page events like scroll, resize
+* Manage and update AppBreakpoints on page resize
+
+To have a custom section code one can define it via `sectionTypes` in the derived Page, where a custom class will be created then in linked to the corresponding `section` tag. Otherwise, one can just place a default empty [`Section`](./app/scripts/core/section.ts) which will do nothing.
+
+### Styles
+
+There's a [base stylesheet](./app/styles/base.sass) that includes colors, typography, common styles and responsive settings for the project.
+
+It's highly recommended to import it separately in scripts or entry points to allow them to be splitted as a separate file.
+
+It's possible to inline styles manually when an entry point contains some, and ejs template has `@inline css here@` placeholder. For now, all css for the entry point will be included.
+
+### webpack Split chunks
+
+Currently it's configured to split chunks by their re-usage disregarding chunk size. It was a painful experience to try to set up min/max chunk size, so we've left it as it is.
 
 ## Build project
 

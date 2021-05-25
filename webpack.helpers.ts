@@ -35,7 +35,7 @@ export class HtmlBuilder {
         chunks.push([ id, 0 ]);
         chunks.sort((c1, c2) => c1[1] - c2[1]);
 
-        return new HtmlWebpackPlugin({
+        const htmlOptions: HtmlWebpackPlugin.Options = {
             filename: output,
             cache: false,
             template: templatePath,
@@ -44,7 +44,11 @@ export class HtmlBuilder {
             chunks: chunks.map(c => c[0]),
             chunksSortMode: 'manual',
             templateParameters: options,
-        });
+        };
+
+        // console.log('Creating HtmlWebpackPlugin with options', htmlOptions);
+
+        return new HtmlWebpackPlugin(htmlOptions);
     }
 
     generateHtmlPlugins(templateDir: string = './app/html/', extensions: string[] = ['html', 'ejs']) {

@@ -1,5 +1,5 @@
 /*
-This module is supposed to be used in build time only.
+    This module is supposed to be used in build time only.
 */
 
 export type Environments = 'production' | 'staging' | 'development';

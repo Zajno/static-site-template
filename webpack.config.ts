@@ -17,6 +17,10 @@ const pathResolve = helpers.pathResolve;
 
 type GeneratorFilename = webpack.Configuration['output']['assetModuleFilename'];
 
+function castPlugin<T>(plugin: T): webpack.WebpackPluginInstance {
+    return plugin as any as webpack.WebpackPluginInstance;
+}
+
 const siteConfig = (env: any): webpack.Configuration => {
     env = env || {};
 
@@ -39,7 +43,7 @@ const siteConfig = (env: any): webpack.Configuration => {
 
     const htmlBuilder = new helpers.HtmlBuilder(Sitemap.DependenciesPriorities, true);
 
-    return {
+    const config: webpack.Configuration = {
         devtool: isProd ? undefined : 'source-map',
         entry: Sitemap.ApplicationEntryPoints,
         output: {
@@ -50,7 +54,7 @@ const siteConfig = (env: any): webpack.Configuration => {
             assetModuleFilename: `assets/${getFilename()}[ext][query]`,
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.svg', '.png', '.js', '.jsx', '.ejs', '.json', '.html', '.sass'],
+            extensions: ['.ts', '.tsx', '.svg', '.png', '.js', '.jsx', '.ejs', '.json', '.html', '.sass', '.scss'],
             modules: [pathResolve('./app'), 'node_modules'],
             alias: {
                 app: pathResolve('./app/scripts/'),
@@ -193,7 +197,7 @@ const siteConfig = (env: any): webpack.Configuration => {
         plugins: helpers.wrapPlugins([
             {
                 name: 'clean',
-                plugin: new CleanWebpackPlugin() as any,
+                plugin: castPlugin(new CleanWebpackPlugin()),
                 enabled: !noClear,
             },
 
@@ -221,9 +225,9 @@ const siteConfig = (env: any): webpack.Configuration => {
                 .filter(p => !p.skipRender)
                 .map(p => htmlBuilder.createHtmlPlugin(p.output.path, p.templateName, p.id, { Page: p })),
 
-            new MiniCssExtractPlugin({
+            castPlugin(new MiniCssExtractPlugin({
                 filename: `${getFilename()}.css`,
-            }),
+            })),
 
             new HTMLInlineCSSWebpackPlugin({
                 filter(fileName) {
@@ -242,7 +246,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 },
             }),
 
-            new CopyWebpackPlugin({
+            castPlugin(new CopyWebpackPlugin({
                 patterns: [
                     {
                         from: './app/bodymovin/',
@@ -251,33 +255,30 @@ const siteConfig = (env: any): webpack.Configuration => {
                         noErrorOnMissing: true,
                     },
                 ],
-            }),
+            })),
             new SitemapPlugin({
                 base: Sitemap.Hostname,
                 paths: Sitemap.SitemapInfo,
             }),
         ]),
         optimization: {
-            runtimeChunk: 'single',
-            concatenateModules: false,
+            runtimeChunk: true,
+            // concatenateModules: false,
             minimize: isProd || fullMinify,
             minimizer: [
                 '...',
-                new CssMinimizerPlugin(),
+                castPlugin(new CssMinimizerPlugin()),
             ],
             splitChunks: {
-                maxInitialRequests: Infinity,
-                minSize: 50000,
-                maxSize: 250000,
-                chunks(chunk) {
-                    return chunk.name !== 'polyfills';
-                },
+                minSize: 0,
+                maxSize: Infinity,
+                chunks: 'all',
                 cacheGroups: {
-                    // default: false,
-                    npm: {
+                    default: {
+                        minChunks: 2,
+                        priority: -20,
                         reuseExistingChunk: true,
                     },
-                    // Merge all the CSS into one file
                     styles: {
                         name: 'styles',
                         test: /\.s?css$/,
@@ -303,6 +304,8 @@ const siteConfig = (env: any): webpack.Configuration => {
             },
         },
     };
+
+    return config;
 };
 
 export default siteConfig;

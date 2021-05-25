@@ -1,6 +1,7 @@
+/* eslint-disable proposal/class-property-no-initialized */
 import gsap from 'gsap';
 
-class MobileMenu {
+export default class MobileMenu {
 
     private body: HTMLElement;
     private items: NodeListOf<HTMLElement>;
@@ -90,7 +91,9 @@ class MobileMenu {
     };
 }
 
-const _btn = document.querySelectorAll('.mobile-menu-button') as NodeListOf<HTMLElement>;
-const _menu = document.getElementById('mobile-menu');
+export function createMobileMenu() {
+    const _btn = document.querySelectorAll('.mobile-menu-button') as NodeListOf<HTMLElement>;
+    const _menu = document.getElementById('mobile-menu');
 
-export default new MobileMenu(_menu, _btn);
+    return new MobileMenu(_menu, _btn);
+}

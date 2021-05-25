@@ -1,3 +1,4 @@
+/* eslint-disable proposal/class-property-no-initialized */
 import logger from '@zajno/common/lib/logger';
 
 import CommonPage from 'app/pages/commonPage';

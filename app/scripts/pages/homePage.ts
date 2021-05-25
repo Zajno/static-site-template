@@ -1,4 +1,6 @@
-import 'styles/home.sass';
+// import styles in the correct order:
+import 'styles/base.sass';
+import 'styles/home';
 
 import { SectionCtor } from 'app/core/section';
 import CommonPage from './commonPage';

@@ -28,7 +28,10 @@ const Home: SitePage<HomeCopyrightShape> = {
 
 const Page404: SitePage = {
     id: '404',
-    entryPoint: './app/styles/page-404/index.sass',
+    entryPoint: [
+        './app/styles/base.sass',
+        './app/styles/page404',
+    ],
     templateName: 'app/html/page-404.ejs',
     output: {
         path: '404.html',
@@ -44,7 +47,7 @@ const Page404: SitePage = {
 
 const NotSupported: SitePage = {
     id: 'not-supported',
-    entryPoint: './app/scripts/index.ts',
+    entryPoint: './app/scripts',
     templateName: 'app/html/common/ie.ejs',
     output: {
         path: 'not-supported.html',
@@ -60,7 +63,10 @@ const NotSupported: SitePage = {
 
 const NoScript: SitePage = {
     id: 'no-script',
-    entryPoint: './app/styles/no-script.sass',
+    entryPoint: [
+        './app/styles/base.sass',
+        './app/styles/noScript',
+    ],
     templateName: 'app/html/no-script.ejs',
     output: {
         path: 'no-script.html',
