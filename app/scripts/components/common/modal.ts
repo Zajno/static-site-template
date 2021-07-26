@@ -7,7 +7,7 @@ export type ModalConfig = ComponentConfig & {
     modalContent?: any | null;
     openButton: any;
     closeButton: any;
-    modalActiveClass: string;
+    modalActiveClass?: string;
 };
 
 export default class Modal extends Component<ModalConfig> {
@@ -18,7 +18,7 @@ export default class Modal extends Component<ModalConfig> {
     opened: boolean;
     closed: boolean;
 
-    protected async doSetup() {
+    public async doSetup() {
         this._body = document.querySelector('body');
 
         this._modalActiveClass = this._config.modalActiveClass || 'modal-active';
