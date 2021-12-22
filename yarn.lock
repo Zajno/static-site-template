@@ -1826,10 +1826,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zajno/common@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@zajno/common/-/common-1.1.1.tgz#75237cc712b22a6c143ff6cb4248067a24fb3f81"
-  integrity sha512-dfT5aL0jdr0B5Ie7U8FEyoZK/nPTvaD4aaULPPCDbSQH+OeF3qGUxJvPSXLxlL2Ci22Mg0UBVkGzfTp1XJS9fw==
+"@zajno/common@^1.3.5":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@zajno/common/-/common-1.3.5.tgz#86ca93d422bb3e965430649e5f00346478e41108"
+  integrity sha512-i7oqLqbS8BJwvXgKZg5v7DmMeB6jyWMJNzzMXagwHMbr3yO5ZrnlG297dlqyw/dfz4rn97vAL8lZ7zHE6Ld1iQ==
 
 "@zajno/eslint-config@^1.1.2":
   version "1.1.2"
@@ -4098,8 +4098,8 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.2.3, graceful-fs@^4.2.4:
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
 "gsap@file:./gsap-member/npm-install-this/gsap-bonus.tgz":
-  version "3.6.0"
-  resolved "file:./gsap-member/npm-install-this/gsap-bonus.tgz#3eaf348d2ace919efd3ba942cbb02879d36b3546"
+  version "3.9.0"
+  resolved "file:./gsap-member/npm-install-this/gsap-bonus.tgz#a4fe83f6000ae5afad963c2ecf71d8aa6675ac6f"
 
 gzip-size@^6.0.0:
   version "6.0.0"

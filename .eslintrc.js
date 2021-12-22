@@ -6,4 +6,7 @@ module.exports = {
         "project": "tsconfig.json",
         "sourceType": "module",
     },
+    "rules": {
+        "proposal/class-property-no-initialized": 0
+    }
 };
