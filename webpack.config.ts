@@ -249,8 +249,8 @@ const siteConfig = (env: any): webpack.Configuration => {
             castPlugin(new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from: './app/bodymovin/',
-                        to: 'assets/bodymovin/bodymovin/',
+                        from: './app/lottie/',
+                        to: 'assets/lottie/lottie/',
                         globOptions: { ignore: ['*.json'] },
                         noErrorOnMissing: true,
                     },

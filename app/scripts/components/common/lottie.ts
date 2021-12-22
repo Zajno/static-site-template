@@ -38,6 +38,8 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
 
     private _lottie: LottiePlayer;
 
+    public get animation(): AnimationItem { return this._anim; }
+
     async doSetup() {
         this.useDefaultConfig({ register: true, loop: true, hideOnDeactivate: true, autoplay: true });
 
@@ -67,7 +69,6 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
 
         this._anim = this._lottie.loadAnimation(this._params);
         this._anim.addEventListener('complete', () => {
-            // this._animBodymovin.goToAndStop(0);
             this._isCompleted = true;
         });
 
@@ -78,8 +79,6 @@ export default class LottieComponent extends LazyLoadComponent<LottieComponentCo
 
         await new Promise<void>(resolve => {
             this._anim.addEventListener('DOMLoaded', () => {
-                // logger.log('DOMLoaded', this._playPending, this._anim);
-
                 this._isLoaded = true;
                 if (this._playPending) {
 

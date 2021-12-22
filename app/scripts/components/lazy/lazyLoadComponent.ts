@@ -131,6 +131,9 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
     private _loadClasses: string[];
     private _group: LoadGroup;
 
+    private _loadingPromise: Promise<void>;
+    private _loadingPromiseResolve: () => void;
+
     protected async doSetup(): Promise<void> {
         this.loaded = false;
         this.loading = false;
@@ -138,6 +141,8 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
 
         this._loadClasses = [classes.show];
         this.populateAdditionalClasses();
+
+        this._loadingPromise = new Promise<void>(resolve => this._loadingPromiseResolve = resolve);
 
         if (this._config.register) {
             this.register();
@@ -168,15 +173,19 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
         }
     }
 
-    beginLoading() {
+    public beginLoading(): Promise<void> {
         if (this.loading || this.loaded) {
             return;
         }
 
         this.loading = true;
 
-        this._doLoading()
+        return this._doLoading()
             .then(this._finishLoading);
+    }
+
+    public waitForLoaded(): Promise<void> {
+        return this._loadingPromise;
     }
 
     protected abstract _doLoading(): Promise<void>;
@@ -190,6 +199,9 @@ export default abstract class LazyLoadComponent<TConfig extends LazyLoadConfig =
         this._group._itemLoaded(this);
 
         this.loaded = true;
+
+        this._loadingPromiseResolve();
+        this._loadingPromiseResolve = null;
     };
 }
 
