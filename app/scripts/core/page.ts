@@ -1,4 +1,4 @@
-import logger from '@zajno/common/lib/logger';
+import logger from 'app/logger';
 import Breakpoints from 'app/core/breakpoints';
 import type { SectionCtor, SectionConfig, Directions, SectionActions } from './section';
 import type Section from './section';

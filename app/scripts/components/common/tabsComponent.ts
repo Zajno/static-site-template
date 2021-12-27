@@ -1,5 +1,5 @@
 import Component , { ComponentConfig } from 'app/core/component';
-import logger from '@zajno/common/lib/logger';
+import logger from 'app/logger';
 
 import { HtmlTabItem, TabItemElement, TabItem } from './tabsComponent.tab';
 import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';

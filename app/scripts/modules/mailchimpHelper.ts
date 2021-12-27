@@ -1,5 +1,5 @@
 import { setTimeoutFramesAsync } from '@zajno/common/lib/async/timeout';
-import logger from '@zajno/common/lib/logger';
+import logger from 'app/logger';
 import { loadScript, runScript } from 'app/utils/loadScript';
 
 const URL = '//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js';

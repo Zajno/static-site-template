@@ -1,6 +1,6 @@
 import type gsap from 'gsap';
 import { TimelineMax, Power1 } from 'gsap';
-import { createLogger, ILogger } from '@zajno/common/lib/logger';
+import { createLogger, ILogger } from 'app/logger';
 import Component, { ComponentConfig } from 'app/core/component';
 
 type PathTransition = {
@@ -41,7 +41,7 @@ export default class SvgMorph extends Component<SvgMorphConfig> {
     async doSetup() {
         this._logger = this._config.enableLogs
             ? createLogger(`[SVGMorph@${this.element.nodeName}#${this.element.id}]`)
-            : createLogger('', true);
+            : createLogger('', false);
 
         this._states = {};
         this._default = null;

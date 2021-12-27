@@ -1,4 +1,4 @@
-import logger from '@zajno/common/lib/logger';
+import logger from 'app/logger';
 
 export interface ComponentConfig<T extends HTMLElement = HTMLElement> {
     el: T;

@@ -111,3 +111,21 @@ export function wrapPlugins(plugins: (PluginOption | webpack.WebpackPluginInstan
         return po.plugin;
     }).filter(pp => pp);
 }
+
+export function flattenEnvObject(obj: any, prefix = '', maxLevel: number | null = null): Record<string, string> {
+    const res: Record<string, string> = { };
+
+    Object.keys(obj).forEach((key: string) => {
+        const v = obj[key];
+        const nextPrefix = prefix ? `${prefix}.${key}` : key;
+        if ((maxLevel == null || maxLevel > 0) && typeof v === 'object') {
+            const next = flattenEnvObject(v, nextPrefix, maxLevel == null ? null : maxLevel - 1);
+            Object.assign(res, next);
+        } else {
+            res[nextPrefix] = JSON.stringify(v);
+        }
+    });
+
+    return res;
+}
+

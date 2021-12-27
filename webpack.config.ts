@@ -6,9 +6,13 @@ import HTMLInlineCSSWebpackPlugin from 'html-inline-css-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import SitemapPlugin from 'sitemap-webpack-plugin';
+import * as git from 'git-rev-sync';
 import * as helpers from './webpack.helpers';
 import * as AppConfig from './app/config';
 import * as Sitemap from './app/sitemap';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const PackageInfo = require('./package.json');
 
 /* eslint-disable no-console */
 /* global process */
@@ -33,12 +37,26 @@ const siteConfig = (env: any): webpack.Configuration => {
 
     const getFilename = (n = '[name]') => isProd ? `${n}.[contenthash:6]` : n;
 
+    const RuntimeEnvs = {
+        ...helpers.flattenEnvObject({
+            NODE_ENV: process.env.NODE_ENV || 'development',
+            APP_ENV: AppConfig.APP_ENV || 'development',
+            APP_CONFIG: AppConfig.CurrentConfig,
+            APP_VERSION: PackageInfo?.version || '0.0.1',
+            APP_NAME: PackageInfo?.name || 'app',
+            APP_HASH: process.env.APP_HASH || git.short(),
+            PUBLIC_PATH_OVERRIDE: publicPath,
+        }, 'process.env', 0),
+        process: { env: { } },
+    };
+
     console.log('Webpack config options:', {
         publicPath,
         outputPath,
         noClear,
         fullMinify,
         isProd,
+        RuntimeEnvs,
     });
 
     const htmlBuilder = new helpers.HtmlBuilder(Sitemap.DependenciesPriorities, true);
@@ -201,25 +219,7 @@ const siteConfig = (env: any): webpack.Configuration => {
                 enabled: !noClear,
             },
 
-            new webpack.DefinePlugin({
-                process: {
-                    env: {
-                        NODE_ENV: JSON.stringify(
-                            process.env.NODE_ENV || 'development',
-                        ),
-                        APP_ENV: JSON.stringify(
-                            AppConfig.APP_ENV || 'development',
-                        ),
-                        APP_CONFIG: JSON.stringify(
-                            AppConfig.CurrentConfig,
-                        ),
-                        COMMON_UTILS_LOGGER: JSON.stringify(AppConfig.CurrentConfig.EnableLogger ? 'console' : false),
-                        PUBLIC_PATH_OVERRIDE: JSON.stringify(
-                            publicPath,
-                        ),
-                    },
-                },
-            }),
+            new webpack.DefinePlugin(RuntimeEnvs),
 
             ...Sitemap.PagesFlatten
                 .filter(p => !p.skipRender)

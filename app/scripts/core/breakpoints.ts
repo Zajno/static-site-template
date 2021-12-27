@@ -1,4 +1,4 @@
-import { createLogger } from '@zajno/common/lib/logger';
+import { createLogger } from 'app/logger';
 import { Event } from '@zajno/common/lib/event';
 
 const logger = createLogger('[Breakpoints]');

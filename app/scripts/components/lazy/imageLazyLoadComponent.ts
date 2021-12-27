@@ -1,4 +1,4 @@
-import logger from '@zajno/common/lib/logger';
+import logger from 'app/logger';
 import createReadyPattern from 'app/utils/readyPattern';
 
 import LazyLoadComponent, { LazyLoadConfig } from './lazyLoadComponent';
