@@ -1,5 +1,5 @@
 
-import { BeginLoading, SetMainElememt } from './lazyLoadComponent';
+import { BeginLoading, SetMainElement } from './lazyLoadComponent';
 import ImageLazyLoadComponent from './imageLazyLoadComponent';
 
 function RegisterAllImages() {
@@ -9,5 +9,5 @@ function RegisterAllImages() {
 export default {
     RegisterAllImages,
     BeginLoading,
-    SetMainElememt,
+    SetMainElement,
 };

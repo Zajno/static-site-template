@@ -1,5 +1,7 @@
 import Page from 'app/core/page';
 import Lazy from 'app/components/lazy';
+import 'app/appBreakpoints';
+
 // import Modal from 'app/components/common/modal';
 
 /** Base page for all site pages */

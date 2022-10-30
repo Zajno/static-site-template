@@ -1,58 +1,58 @@
 @import './variables'
 
 @mixin typography($color, $font-family, $font-size, $font-weight, $letter-spacing:0, $line-height: normal)
-	color: $color
-	font-family: $font-family
-	font-size: $font-size
-	font-weight: $font-weight
-	letter-spacing: $letter-spacing
-	line-height: $line-height
+    color: $color
+    font-family: $font-family
+    font-size: $font-size
+    font-weight: $font-weight
+    letter-spacing: $letter-spacing
+    line-height: $line-height
 
 @mixin mixed-lbl($args...)
-	@include typography($args...)
+    @include typography($args...)
 
 // title h1
 @mixin title-h1
-	@include mixed-lbl(var(--color-white), var(--sub-font), var(--font-size-h1), var(--font-weight-7), var(--letter-spacing-h1), var(--line-height-h1))
+    @include mixed-lbl(var(--color-white), var(--sub-font), var(--font-size-h1), var(--font-weight-7), var(--letter-spacing-h1), var(--line-height-h1))
 
 // title h2
 @mixin title-h2
-	@include mixed-lbl(var(--color-white), var(--sub-font), var(--font-size-h2), var(--font-weight-7), var(--letter-spacing-h2), var(--line-height-h1))
+    @include mixed-lbl(var(--color-white), var(--sub-font), var(--font-size-h2), var(--font-weight-7), var(--letter-spacing-h2), var(--line-height-h1))
 
 // title h3
 @mixin title-h3
-	@include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-h3), var(--font-weight-3), var(--letter-spacing-h3), var(--line-height-h3))
+    @include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-h3), var(--font-weight-3), var(--letter-spacing-h3), var(--line-height-h3))
 
 // title h4
 @mixin title-h4
-	@include mixed-lbl(var(--color-submarine), var(--main-font), var(--font-size-h4), var(--font-weight-3), var(--letter-spacing-h4), var(--line-height-h4))
+    @include mixed-lbl(var(--color-submarine), var(--main-font), var(--font-size-h4), var(--font-weight-3), var(--letter-spacing-h4), var(--line-height-h4))
 
 // label1
 @mixin label-1
-	@include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-label1), var(--font-weight-3), var(--letter-spacing-label1), var(--line-height-label))
+    @include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-label1), var(--font-weight-3), var(--letter-spacing-label1), var(--line-height-label))
 
 // label2
 @mixin label-2
-	@include mixed-lbl(var(--color-mona-lisa), var(--main-font), var(--font-size-label2), var(--font-weight-3), var(--letter-spacing-label3), var(--line-height-label))
+    @include mixed-lbl(var(--color-mona-lisa), var(--main-font), var(--font-size-label2), var(--font-weight-3), var(--letter-spacing-label3), var(--line-height-label))
 
 // label3
 @mixin label-3
-	@include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-label3), var(--font-weight-3), var(--letter-spacing-label3), var(--line-height-label))
+    @include mixed-lbl(var(--color-white), var(--main-font), var(--font-size-label3), var(--font-weight-3), var(--letter-spacing-label3), var(--line-height-label))
 
 @mixin desc-1
-	@include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc1), var(--font-weight-3), var(--letter-spacing-desc1), var(--line-height-desc1))
+    @include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc1), var(--font-weight-3), var(--letter-spacing-desc1), var(--line-height-desc1))
 
 @mixin desc-2
-	@include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc2), var(--font-weight-3), var(--letter-spacing-desc2), var(--line-height-desc2))
+    @include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc2), var(--font-weight-3), var(--letter-spacing-desc2), var(--line-height-desc2))
 
 @mixin desc-3
-	@include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc3), var(--font-weight-3), var(--letter-spacing-desc3), var(--line-height-desc3))
+    @include mixed-lbl(var(--color-feldgrau), var(--main-font), var(--font-size-desc3), var(--font-weight-3), var(--letter-spacing-desc3), var(--line-height-desc3))
 
 @mixin quote-1
-	@include mixed-lbl(var(--color-submarine), var(--main-font), var(--font-size-quote1), var(--font-weight-3), var(--letter-spacing-quote1), var(--line-height-quote1))
+    @include mixed-lbl(var(--color-submarine), var(--main-font), var(--font-size-quote1), var(--font-weight-3), var(--letter-spacing-quote1), var(--line-height-quote1))
 
 @mixin link-text
-	@include mixed-lbl(var(--color-mineral-green), var(--main-font), var(--font-size-link), var(--font-weight-3), var(--letter-spacing-1), var(--line-height-label))
+    @include mixed-lbl(var(--color-mineral-green), var(--main-font), var(--font-size-link), var(--font-weight-3), var(--letter-spacing-1), var(--line-height-label))
 
 // title for noScript mode
 @mixin title-no-script

@@ -1,6 +1,6 @@
 import Component from 'app/core/component';
 import { setTimeoutAsync } from '@zajno/common/lib/async/timeout';
-import GSAP from 'gsap';
+import { gsap } from 'gsap';
 
 const pad = (n: number) => (n || 0).toString().padStart(2, '0');
 
@@ -9,7 +9,7 @@ export class TimerComponent extends Component {
     private _cancelation: () => void = null;
 
     protected doSetup(): void | Promise<void> {
-        GSAP.set(this.element, { autoAlpha: 0 });
+        gsap.set(this.element, { autoAlpha: 0 });
     }
 
     private renderTimer = (totalMs: number, diffMs: number) => {
@@ -29,7 +29,7 @@ export class TimerComponent extends Component {
 
     public async start(seconds: number, delay = 1000, useAnimation = true): Promise<void> {
         if (useAnimation) {
-            GSAP.to(this.element, { autoAlpha: 1, duration: 1 });
+            gsap.to(this.element, { autoAlpha: 1, duration: 1 });
         }
 
         await setTimeoutAsync(delay);
@@ -49,7 +49,7 @@ export class TimerComponent extends Component {
         }
 
         if (useAnimation) {
-            GSAP.to(this.element, { autoAlpha: 0, duration: 1 });
+            gsap.to(this.element, { autoAlpha: 0, duration: 1 });
         }
 
         this.element.textContent = '00:00.00';

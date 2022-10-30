@@ -74,7 +74,7 @@ export default abstract class Component<TConfig extends ComponentConfig = Compon
         // override me
     }
 
-    get rect() { return this.element ? this.element.getBoundingClientRect() : new ClientRect(); }
+    get rect() { return this.element ? this.element.getBoundingClientRect() : new window.DOMRect(); }
 
     get isOnScreen() {
         const r = this.rect;

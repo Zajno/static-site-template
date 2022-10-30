@@ -73,7 +73,7 @@ function srcSet(source: VideoSource, width: number) {
 export default class Video extends LazyLoadComponent<VideoConfig> {
 
     private _widthVieport: number;
-    private _state: States;
+    private _playState: States;
     private _requestedState: States;
     private _changingState: boolean;
 
@@ -85,7 +85,6 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
     private _placeHoldersLoaded: boolean;
 
     private _sources: VideoSource[];
-    private _logId: string;
 
     constructor(config: VideoConfig) {
         if (config.register == null) {
@@ -98,7 +97,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
     get video() { return this.element as HTMLVideoElement; }
 
     protected async doSetup() {
-        this._state = States.Undefined;
+        this._playState = States.Undefined;
         this._requestedState = States.Undefined;
 
         this._placeHolder = this.element.parentElement.querySelector('.video-placeholder');
@@ -115,7 +114,9 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
         this._sources = Array.from(this.element.querySelectorAll('source'));
 
-        this._logId = this.element.id;
+        if (this.element.id) {
+            this.withLogger(`[VIDEO = ${this.element.id}]`);
+        }
 
         await super.doSetup();
     }
@@ -160,7 +161,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
             const loadPromise = new Promise<void>(resolve => {
 
                 const onVideoCanPlay = () => {
-                    if (this._state <= States.LoadAllowed) {
+                    if (this._playState <= States.LoadAllowed) {
                         this.video.removeEventListener('canplay', onVideoCanPlay);
                         this._switchToState(States.Loaded);
 
@@ -210,14 +211,14 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
             throw new Error('Invalid state');
         }
 
-        if (targetState > States.Loaded && this._state < States.Loaded) {
+        if (targetState > States.Loaded && this._playState < States.Loaded) {
             this._requestedState = targetState;
-            this.log('ignoring state =', targetState, ' when current state =', this._state);
+            this.log('ignoring state =', targetState, ' when current state =', this._playState);
             return;
         }
 
         // check if we're on this state already
-        if (targetState === this._state) {
+        if (targetState === this._playState) {
             return;
         }
 
@@ -258,11 +259,11 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
         }
         this._changingState = false;
 
-        this._state = targetState;
+        this._playState = targetState;
         const nextState = this._requestedState;
         this._requestedState = null;
 
-        if (nextState && nextState !== this._state) {
+        if (nextState && nextState !== this._playState) {
             this._switchToState(nextState);
         }
     }
@@ -300,7 +301,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
         if (this._usePlaceholder === usePlaceholder) {
 
-            if (this._usePlaceholder === false && this._state > States.LoadAllowed) {
+            if (this._usePlaceholder === false && this._playState > States.LoadAllowed) {
                 if (this._checkIsSourceChanged()) {
                     this._doLoading();
                     return;
@@ -312,7 +313,7 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
         this._usePlaceholder = usePlaceholder;
 
-        if (this._state >= States.LoadAllowed) {
+        if (this._playState >= States.LoadAllowed) {
             this._load();
         }
     }
@@ -324,11 +325,5 @@ export default class Video extends LazyLoadComponent<VideoConfig> {
 
     protected _deactivate() {
         this._switchToState(States.Paused);
-    }
-
-    private log(...args: any[]) {
-        if (this._logId) {
-            logger.log(`[VIDEO = ${this._logId}]`, ...args);
-        }
     }
 }

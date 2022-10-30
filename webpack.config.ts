@@ -1,5 +1,6 @@
 import * as Path from 'path';
 import webpack from 'webpack';
+import 'webpack-dev-server';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import HTMLInlineCSSWebpackPlugin from 'html-inline-css-webpack-plugin';
@@ -10,6 +11,8 @@ import * as git from 'git-rev-sync';
 import * as helpers from './webpack.helpers';
 import * as AppConfig from './app/config';
 import * as Sitemap from './app/sitemap';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PackageInfo = require('./package.json');
@@ -31,6 +34,7 @@ const siteConfig = (env: any): webpack.Configuration => {
     const noClear = env.noclear !== undefined;
     const fullMinify = !!env.fullminify;
     const isProd = process.env.NODE_ENV === 'production';
+    const analyzBundle = !!env.analyze;
 
     const publicPath = env.public_path_override || '/';
     const outputPath = pathResolve('./dist');
@@ -58,6 +62,8 @@ const siteConfig = (env: any): webpack.Configuration => {
         isProd,
         RuntimeEnvs,
     });
+
+    const typescriptTranspileOnly = !isProd;
 
     const htmlBuilder = new helpers.HtmlBuilder(Sitemap.DependenciesPriorities, true);
 
@@ -108,7 +114,8 @@ const siteConfig = (env: any): webpack.Configuration => {
                         {
                             loader: 'ts-loader',
                             options: {
-                                configFile: 'tsconfig.json',
+                                configFile: 'tsconfig.runtime.json',
+                                transpileOnly: typescriptTranspileOnly,
                             },
                         },
                     ],
@@ -229,6 +236,8 @@ const siteConfig = (env: any): webpack.Configuration => {
                 filename: `${getFilename()}.css`,
             })),
 
+            typescriptTranspileOnly && new ForkTsCheckerWebpackPlugin() as any as webpack.WebpackPluginInstance,
+
             new HTMLInlineCSSWebpackPlugin({
                 filter(fileName) {
                     const result = Sitemap.PagesFlatten.some(p => p.inlineCss && (
@@ -260,6 +269,12 @@ const siteConfig = (env: any): webpack.Configuration => {
                 base: Sitemap.Hostname,
                 paths: Sitemap.SitemapInfo,
             }),
+
+            {
+                enabled: analyzBundle,
+                name: 'Bundle Analyzer',
+                plugin: new BundleAnalyzerPlugin(),
+            },
         ]),
         optimization: {
             runtimeChunk: true,
@@ -290,14 +305,15 @@ const siteConfig = (env: any): webpack.Configuration => {
             },
         },
         devServer: {
-            contentBase: outputPath,
             compress: true,
             host: '0.0.0.0',
             port: 8080,
-            staticOptions: {
-                extensions: [
-                    'html',
-                ],
+            static: {
+                staticOptions: {
+                    extensions: [
+                        'html',
+                    ],
+                },
             },
             headers: {
                 'Access-Control-Allow-Origin': '*',
