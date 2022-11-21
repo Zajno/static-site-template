@@ -6193,9 +6193,10 @@ typescript@^4.8.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.3.tgz#d59344522c4bc464a65a730ac695007fdb66dd88"
   integrity sha512-goMHfm00nWPa8UvR/CPSvykqf6dVV8x/dp0c5mFTMTIu0u0FlGWRioyy7Nn0PGAdHxpJZnuO/ut+PpQ8UiHAig==
 
-"underscore-template-loader@git+https://github.com/idudinov/underscore-template-loader.git#webpack-5":
-  version "1.1.0"
-  resolved "git+https://github.com/idudinov/underscore-template-loader.git#12e79a2199e4dff226ff483a13cf19942e17b7c3"
+underscore-template-loader@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/underscore-template-loader/-/underscore-template-loader-1.2.0.tgz#16e77199aba6b69aa43e9dab16fa6601f02ad830"
+  integrity sha512-PSlJNJRlF0YtxnipqMVckZMkjxG3dDnGbDWc1G7UrSWI02iFQGGNEVOAgrgGbOhswXVx1frzA9b6Uyxs627ojg==
   dependencies:
     fastparse "^1.1.2"
     loader-utils "^2.0.0"
