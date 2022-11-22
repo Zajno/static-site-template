@@ -1,6 +1,6 @@
 
 import Section from 'app/core/section';
-import TabsComponent from 'app/components/common/tabsComponent';
+import { TabsComponent } from 'app/components/common/tabs';
 
 export default class TabSection extends Section {
     private tabs: TabsComponent;

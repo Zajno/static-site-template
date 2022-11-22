@@ -1,4 +1,4 @@
-import logger, { setMode, createLogger, ILogger } from '@zajno/common/lib/logger';
+import logger, { setMode, createLogger, ILogger } from '@zajno/common/logger';
 import { EnableLogger } from './env';
 
 setMode(EnableLogger ? 'console' : false);

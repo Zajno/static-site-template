@@ -1887,15 +1887,15 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zajno/common-web@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@zajno/common-web/-/common-web-1.0.0-beta.1.tgz#d69c8bcb61b00eba976b847d3c334c1a279ae997"
-  integrity sha512-R/JfYdOUAXjs60BpYfj/4/Gts81TR7XCZej1ke+rFpiILLmR6VpgxIseUlPmSfS8NgQ/f8eOZjMnwHIzjlIXoA==
+"@zajno/common-web@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@zajno/common-web/-/common-web-1.0.0.tgz#3bb863c97916d6c12e8c3cc261a88d02269b4e9d"
+  integrity sha512-LaxSVjdgV3NdPtL4IigwTZmIEMXKIttWMxX4D/9uJBjmb1y2GgJSmwaUFxIktHOajBbaHiGjPySrjb9x7MXrPQ==
 
-"@zajno/common@^2.0.0-beta.2":
-  version "2.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@zajno/common/-/common-2.0.0-beta.2.tgz#9339d71bdef1df8dc26b1adc10211f881037cf8d"
-  integrity sha512-+GrjpFg0lUtiv4lHoGqjYyii03XWlLDdfhbKF6sJA4KqE3+sEtbz5rKzk34CXX/9Q5p2JOrlDsd9H8WCKzJvGg==
+"@zajno/common@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@zajno/common/-/common-2.0.5.tgz#d43643c095b42ca6b4d5cf959ec87fb867603c2f"
+  integrity sha512-s4ldXLK9ybjsvGJNTt5CAj/eqhAAxhmu7tQ86/1eDYD1KoOeeXEJgYegczCMqJjhAdUCtNNFAC/eMBNGSt8aFw==
 
 "@zajno/eslint-config@^2.2.0":
   version "2.2.0"
@@ -5417,10 +5417,10 @@ regenerate@^1.4.0, regenerate@^1.4.2:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.2.tgz#b9346d8827e8f5a32f7ba29637d398b69014848a"
   integrity sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==
 
-regenerator-runtime@^0.13.10:
-  version "0.13.10"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz#ed07b19616bcbec5da6274ebc75ae95634bfc2ee"
-  integrity sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==
+regenerator-runtime@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regenerator-runtime@^0.13.4:
   version "0.13.7"

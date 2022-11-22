@@ -1,5 +1,5 @@
-import creditCard from '@zajno/common/lib/validation/creditCard';
-import { ValidatorsRegExps as RE } from '@zajno/common/lib/validation/validators';
+import creditCard from '@zajno/common/validation/creditCard';
+import { ValidatorsRegExps as RE } from '@zajno/common/validation/validators';
 
 function getValueValidator(fieldName: string) {
 

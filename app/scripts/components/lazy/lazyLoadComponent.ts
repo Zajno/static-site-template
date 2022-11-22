@@ -1,5 +1,5 @@
-import logger from '@zajno/common/lib/logger';
-import { ParallelQueue } from '@zajno/common/lib/structures/queue/parallel';
+import logger from '@zajno/common/logger';
+import { ParallelQueue } from '@zajno/common/structures/queue/parallel';
 import Component, { ComponentConfig } from 'app/core/component';
 
 const classes = {

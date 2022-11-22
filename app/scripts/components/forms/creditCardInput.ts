@@ -1,5 +1,5 @@
 import Component, { ComponentConfig } from 'app/core/component';
-import creditCard from '@zajno/common/lib/validation/creditCard';
+import creditCard from '@zajno/common/validation/creditCard';
 
 function formatCCType(type) {
     return `fa-${type}`;

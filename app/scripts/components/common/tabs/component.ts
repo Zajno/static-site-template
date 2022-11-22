@@ -1,9 +1,9 @@
 import Component , { ComponentConfig } from 'app/core/component';
 import logger from 'app/logger';
 
-import { HtmlTabItem, TabItemElement, TabItem } from './tabsComponent.tab';
-import { HtmlTabLinkItem, TabLinkItem } from './tabsComponent.link';
-import { OptAwait } from '@zajno/common/lib/async/opts';
+import { HtmlTabItem, TabItemElement, TabItem } from './tab';
+import { HtmlTabLinkItem, TabLinkItem } from './link';
+import { OptAwait } from '@zajno/common/async/misc';
 
 export type ChangeCallback = (prev: TabLinkItem, next: TabLinkItem, direction: number) => void;
 
@@ -23,7 +23,7 @@ export type TabsComponentConfig = ComponentConfig & TabItemsConfig & TabLinksCon
 
 const NoOp: ChangeCallback = () => { /* no-op */ };
 
-export default class TabsComponent extends Component<TabsComponentConfig> {
+export class TabsComponent extends Component<TabsComponentConfig> {
     private _prevButton: HTMLElement;
     private _nextButton: HTMLElement;
     private syncActivate: boolean;

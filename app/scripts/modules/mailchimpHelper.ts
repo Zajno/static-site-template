@@ -1,4 +1,4 @@
-import { setTimeoutFramesAsync } from '@zajno/common/lib/async/timeout';
+import { setTimeoutFramesAsync } from '@zajno/common/async/timeout';
 import logger from 'app/logger';
 import { loadScript, runScript } from 'app/utils/loadScript';
 

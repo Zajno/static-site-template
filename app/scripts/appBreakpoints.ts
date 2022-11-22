@@ -2,7 +2,7 @@ import {
     BreakpointData as BreakpointBaseData,
     BreakpointsManager,
     ICurrentBreakpointInfo,
-} from '@zajno/common-web/lib/breakpoints';
+} from '@zajno/common-web/breakpoints';
 
 // TODO define & register additional breakpoints for your app
 
