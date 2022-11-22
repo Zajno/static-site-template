@@ -32,7 +32,6 @@ const siteConfig = (env: any): webpack.Configuration => {
     env = env || {};
 
     const noClear = env.noclear !== undefined;
-    const fullMinify = !!env.fullminify;
     const isProd = process.env.NODE_ENV === 'production';
     const analyzBundle = !!env.analyze;
 
@@ -43,7 +42,7 @@ const siteConfig = (env: any): webpack.Configuration => {
 
     const RuntimeEnvs = {
         ...helpers.flattenEnvObject({
-            NODE_ENV: process.env.NODE_ENV || 'development',
+            // NODE_ENV: process.env.NODE_ENV || 'development',
             APP_ENV: AppConfig.APP_ENV || 'development',
             APP_CONFIG: AppConfig.CurrentConfig,
             APP_VERSION: PackageInfo?.version || '0.0.1',
@@ -58,7 +57,6 @@ const siteConfig = (env: any): webpack.Configuration => {
         publicPath,
         outputPath,
         noClear,
-        fullMinify,
         isProd,
         RuntimeEnvs,
     });
@@ -277,9 +275,9 @@ const siteConfig = (env: any): webpack.Configuration => {
             },
         ]),
         optimization: {
-            runtimeChunk: true,
+            // runtimeChunk: true,
             // concatenateModules: false,
-            minimize: isProd || fullMinify,
+            minimize: isProd,
             minimizer: [
                 '...',
                 castPlugin(new CssMinimizerPlugin()),

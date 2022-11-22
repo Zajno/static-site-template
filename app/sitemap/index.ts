@@ -94,7 +94,7 @@ const ApplicationEntryPoints = (function () {
     Pages.forEach(item => {
         result[`${item.id}`] = {
             import: item.entryPoint,
-            dependOn: criticalDeps,
+            dependOn: criticalDeps.length ? criticalDeps : undefined,
         };
     });
 
